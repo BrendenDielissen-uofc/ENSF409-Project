@@ -1,0 +1,70 @@
+package edu.ucalgary.ensf409;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
+
+import static java.util.Map.entry;
+
+
+/**
+ * The type Lamp.
+ */
+public class Lamp extends Furniture {
+    /**
+     * The Base.
+     */
+    public final boolean base;
+    /**
+     * The Bulb.
+     */
+    public final boolean bulb;
+    /**
+     * The constant queryString.
+     */
+    public static final String queryString = "SELECT * FROM LAMP";
+
+    /**
+     * Instantiates a new Lamp from a SQL ResultSet.
+     *
+     * @param lampRs the lamp rs
+     */
+    public Lamp(ResultSet lampRs) {
+        super(lampRs);
+        boolean base = false;
+        boolean bulb = false;
+        try {
+            base = lampRs.getString("Base").equals("Y");
+            bulb = lampRs.getString("Bulb").equals("Y");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        this.base = base;
+        this.bulb = bulb;
+    }
+
+    /**
+     * Instantiates a new Lamp.
+     *
+     * @param id          the id
+     * @param type        the type
+     * @param price       the price
+     * @param manuId      the manu id
+     * @param queryString the query string
+     * @param base        the base
+     * @param bulb        the bulb
+     */
+    public Lamp(String id, String type, Integer price, String manuId, String queryString, boolean base, boolean bulb) {
+        super(id, type, price, manuId);
+        this.base = base;
+        this.bulb = bulb;
+    }
+
+    @Override
+    public Map<String, Boolean> getComponents() {
+        return Map.ofEntries(
+                entry("base", this.base),
+                entry("bulb", this.bulb)
+        );
+    }
+}

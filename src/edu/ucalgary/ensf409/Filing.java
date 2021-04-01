@@ -1,37 +1,79 @@
 package edu.ucalgary.ensf409;
 
-public class Filing {
-    private boolean rails;
-    private boolean drawers;
-    private boolean cabinet;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
 
-    public Filing(boolean rails, boolean drawers, boolean cabinet){
+import static java.util.Map.entry;
+
+/**
+ * The type Filing.
+ */
+public class Filing extends Furniture {
+    /**
+     * The Rails.
+     */
+    public final boolean rails;
+    /**
+     * The Drawers.
+     */
+    public final boolean drawers;
+    /**
+     * The Cabinet.
+     */
+    public final boolean cabinet;
+    /**
+     * The constant queryString.
+     */
+    public static final String queryString = "SELECT * FROM FILING";
+
+    /**
+     * Instantiates a new Filing from a SQL ResultSet.
+     *
+     * @param filingRs the filing rs
+     */
+    public Filing(ResultSet filingRs) {
+        super(filingRs);
+        boolean rails = false;
+        boolean drawers = false;
+        boolean cabinet = false;
+        try {
+            rails = filingRs.getString("Rails").equals("Y");
+            drawers = filingRs.getString("Drawers").equals("Y");
+            cabinet = filingRs.getString("Cabinet").equals("Y");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         this.rails = rails;
         this.drawers = drawers;
         this.cabinet = cabinet;
     }
 
-    public boolean isRails() {
-        return rails;
-    }
-
-    public void setRails(boolean rails) {
+    /**
+     * Instantiates a new Filing.
+     *
+     * @param id          the id
+     * @param type        the type
+     * @param price       the price
+     * @param manuId      the manu id
+     * @param queryString the query string
+     * @param rails       the rails
+     * @param drawers     the drawers
+     * @param cabinet     the cabinet
+     */
+    public Filing(String id, String type, Integer price, String manuId, String queryString, boolean rails, boolean drawers, boolean cabinet) {
+        super(id, type, price, manuId);
         this.rails = rails;
-    }
-
-    public boolean isDrawers() {
-        return drawers;
-    }
-
-    public void setDrawers(boolean drawers) {
         this.drawers = drawers;
-    }
-
-    public boolean isCabinet() {
-        return cabinet;
-    }
-
-    public void setCabinet(boolean cabinet) {
         this.cabinet = cabinet;
+    }
+
+    @Override
+    public Map<String, Boolean> getComponents() {
+        return Map.ofEntries(
+                entry("rails", this.rails),
+                entry("drawers", this.drawers),
+                entry("cabinet", this.cabinet)
+        );
     }
 }
