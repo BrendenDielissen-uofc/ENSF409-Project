@@ -14,15 +14,15 @@ public class Lamp extends Furniture {
     /**
      * The Base.
      */
-    public final boolean base;
+    private final boolean base;
     /**
      * The Bulb.
      */
-    public final boolean bulb;
+    private final boolean bulb;
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM LAMP";
+    private static final String queryString = "SELECT * FROM LAMP";
 
     /**
      * Instantiates a new Lamp from a SQL ResultSet.
@@ -59,6 +59,27 @@ public class Lamp extends Furniture {
         this.base = base;
         this.bulb = bulb;
     }
+
+    /**
+     * Has base boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasBase(){return this.base;}
+
+    /**
+     * Has bulb boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasBulb(){return this.bulb;}
+
+    /**
+     * Gets query string.
+     *
+     * @return the query string
+     */
+    public static String getQueryString() { return Lamp.queryString;}
 
     @Override
     public Map<String, Boolean> getComponents() {
