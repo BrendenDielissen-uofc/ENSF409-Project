@@ -28,7 +28,7 @@ public class Chair extends Furniture{
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM LAMP";
+    public static final String queryString = "SELECT * FROM CHAIR";
 
     /**
      * Instantiates a new Chair from a SQL ResultSet.
