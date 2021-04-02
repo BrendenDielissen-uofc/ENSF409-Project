@@ -18,6 +18,11 @@ public class Inventory {
     private String USERNAME = "";
     private String PASSWORD = "";
     
+    /**
+     * Main used for inventory and debugging. COmment this out if main is somewhere else
+     * @param args
+     * @throws SQLException
+     */
     public static void main(String[] args) throws SQLException {
     	
     	Inventory myJDBC = new Inventory("jdbc:mysql://localhost/inventory","Marasco","ensf409");
@@ -27,11 +32,6 @@ public class Inventory {
     		System.out.println(testLamp[i].getId() + " " + Boolean.toString(testLamp[i].isBase()) 
     				+ " " + Boolean.toString(testLamp[i].isBulb()));
     	}
-    	
-
-    	
-    	
-    	
 
     	
     }
@@ -73,6 +73,10 @@ public class Inventory {
     	
     }
     
+    /**
+     * Connects java program to the SQL database
+     * @throws SQLException  if SQL related error is encountered
+     */
     public void initializeConnection() throws SQLException {
     	try {
     		this.dbConnect = DriverManager.getConnection(getDBURL(), getUSERNAME(), getPASSWORD());
@@ -81,9 +85,15 @@ public class Inventory {
     	}
     }
     
+    
+    /**
+     * Proto-class that grabs furniture and its furniture type and returns a 2D-array of wanted info
+     * @param furnitureType String type of the specified furniture wanted
+     * @param furniture String furniture
+     * @return 2D Lamp[] Array
+     */
     public Lamp[] getAllLamp(String furnitureType, String furniture) {
     	ArrayList<Lamp> myLamps = new ArrayList<Lamp>();
-    	StringBuffer ret = new StringBuffer();
     	try {
     		String query = "SELECT * FROM " + furniture + " WHERE Type = ?;";
     		PreparedStatement myStmt = dbConnect.prepareStatement(query);
@@ -107,9 +117,4 @@ public class Inventory {
 		return array;   	
      	
     }
-    
-    
-   
-
-
 }
