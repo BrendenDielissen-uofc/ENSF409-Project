@@ -1,7 +1,6 @@
 package edu.ucalgary.ensf409;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
