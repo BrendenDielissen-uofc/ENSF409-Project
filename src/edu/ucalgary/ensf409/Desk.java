@@ -29,6 +29,16 @@ class Desk extends Furniture {
     private static final String queryString = "SELECT * FROM DESK";
 
     /**
+     * Default constructor for Desk.
+     */
+    public Desk() {
+        super();
+        this.legs = false;
+        this.drawers = false;
+        this.cabinet = false;
+    }
+
+    /**
      * Instantiates a new Desk from a SQL ResultSet.
      *
      * @param deskRs the desk rs
@@ -45,24 +55,6 @@ class Desk extends Furniture {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        this.legs = legs;
-        this.drawers = drawers;
-        this.cabinet = cabinet;
-    }
-
-    /**
-     * Instantiates a new Desk.
-     *
-     * @param id      the id
-     * @param type    the type
-     * @param price   the price
-     * @param manuId  the manu id
-     * @param legs    the legs
-     * @param drawers the drawers
-     * @param cabinet the cabinet
-     */
-    public Desk(String id, String type, Integer price, String manuId, boolean legs, boolean drawers, boolean cabinet) {
-        super(id, type, price, manuId);
         this.legs = legs;
         this.drawers = drawers;
         this.cabinet = cabinet;
