@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -82,10 +83,10 @@ public class Lamp extends Furniture {
     public static String getQueryString() { return Lamp.queryString;}
 
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
                 entry("base", this.base),
                 entry("bulb", this.bulb)
-        );
+        ));
     }
 }

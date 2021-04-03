@@ -1,5 +1,6 @@
 package edu.ucalgary.ensf409;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,7 +8,7 @@ import java.sql.SQLException;
 /**
  * The type Furniture.
  */
-public abstract class Furniture {
+public class Furniture {
     /**
      * The Id.
      */
@@ -93,11 +94,8 @@ public abstract class Furniture {
      */
     public String getManuId(){ return this.manuId;}
 
-    /**
-     * Gets furniture components in an easily iterable format.
-     *
-     * @return the components
-     */
-    public abstract Map<String, Boolean> getComponents();
+    public HashMap<String, Boolean> getComponents(){
+        return new HashMap<String, Boolean>();
+    }
 }
 

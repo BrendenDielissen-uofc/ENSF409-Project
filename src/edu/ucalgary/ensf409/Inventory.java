@@ -1,12 +1,9 @@
 package edu.ucalgary.ensf409;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class Inventory {
@@ -27,13 +24,16 @@ public class Inventory {
     	
     	Inventory myJDBC = new Inventory("jdbc:mysql://localhost/inventory","Marasco","ensf409");
     	myJDBC.initializeConnection();
-    	Lamp[] testLamp = myJDBC.getAllLamp("Desk", "lamp");
-    	for (int i = 0; i < testLamp.length; i++) {
-    		System.out.println(testLamp[i].getId() + " " + Boolean.toString(testLamp[i].isBase()) 
-    				+ " " + Boolean.toString(testLamp[i].isBulb()));
-    	}
-
-    	
+    	Lamp[] testLamps = myJDBC.getAllLamps("Desk", "Lamp");
+		var testMap = Arrays.stream(testLamps).map(lamp -> {return lamp.getComponents();}).toArray();
+    	System.out.println(testLamps);
+		Desk[] testDesks = myJDBC.getAllDesks("Standing", "Desk");
+		testMap = Arrays.stream(testDesks).map(desk -> {return desk.getComponents();}).toArray();
+		System.out.println(testDesks);
+//    	for (int i = 0; i < testLamp.length; i++) {
+//    		System.out.println(testLamp[i].getId() + " " + Boolean.toString(testLamp[i].hasBase())
+//    				+ " " + Boolean.toString(testLamp[i].hasBulb()));
+//    	}
     }
    
     /**
@@ -92,29 +92,55 @@ public class Inventory {
      * @param furniture String furniture
      * @return 2D Lamp[] Array
      */
-    public Lamp[] getAllLamp(String furnitureType, String furniture) {
+    public Lamp[] getAllLamps(String furnitureType, String furniture) {
     	ArrayList<Lamp> myLamps = new ArrayList<Lamp>();
     	try {
     		String query = "SELECT * FROM " + furniture + " WHERE Type = ?;";
     		PreparedStatement myStmt = dbConnect.prepareStatement(query);
-    		
+
     		myStmt.setString(1, furnitureType);
     		System.out.println(myStmt);
+    		results = myStmt.executeQuery();
         	while (results.next()) {
         		myLamps.add(new Lamp(results));
-
         	}
         
         	myStmt.close();
-
-
     	} catch (SQLException ex) {
     		ex.printStackTrace();
     	}
-    	
-    	Lamp[] array = new Lamp[myLamps.size()];
+
+		Lamp[] array = new Lamp[myLamps.size()];
     	myLamps.toArray(array);
 		return array;   	
-     	
     }
+
+	/**
+	 * Proto-class that grabs furniture and its furniture type and returns a 2D-array of wanted info
+	 * @param furnitureType String type of the specified furniture wanted
+	 * @param furniture String furniture
+	 * @return 2D Lamp[] Array
+	 */
+	public Desk[] getAllDesks(String furnitureType, String furniture) {
+		ArrayList<Desk> myLamps = new ArrayList<Desk>();
+		try {
+			String query = "SELECT * FROM " + furniture + " WHERE Type = ?;";
+			PreparedStatement myStmt = dbConnect.prepareStatement(query);
+
+			myStmt.setString(1, furnitureType);
+			System.out.println(myStmt);
+			results = myStmt.executeQuery();
+			while (results.next()) {
+				myLamps.add(new Desk(results));
+			}
+
+			myStmt.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		Desk[] array = new Desk[myLamps.size()];
+		myLamps.toArray(array);
+		return array;
+	}
 }

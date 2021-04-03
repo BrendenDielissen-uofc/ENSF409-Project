@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -72,36 +73,43 @@ class Desk extends Furniture {
      *
      * @return the boolean
      */
-    public boolean hasLegs(){return this.legs;}
+    public boolean hasLegs() {
+        return this.legs;
+    }
 
     /**
      * Get drawers boolean.
      *
      * @return the boolean
      */
-    public boolean hasDrawers(){return this.drawers;}
+    public boolean hasDrawers() {
+        return this.drawers;
+    }
 
     /**
      * Get cabinet boolean.
      *
      * @return the boolean
      */
-    public boolean hasCabinet(){ return this.cabinet;}
+    public boolean hasCabinet() {
+        return this.cabinet;
+    }
 
     /**
      * Get query string string.
      *
      * @return the string
      */
-    public static String getQueryString(){ return Desk.queryString;}
+    public static String getQueryString() {
+        return Desk.queryString;
+    }
 
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
                 entry("legs", this.legs),
                 entry("drawers", this.drawers),
                 entry("cabinet", this.cabinet)
-        );
+        ));
     }
-
 }
