@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -97,11 +98,11 @@ public class Filing extends Furniture {
     public static String getQueryString(){ return Filing.queryString;}
 
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
                 entry("rails", this.rails),
                 entry("drawers", this.drawers),
                 entry("cabinet", this.cabinet)
-        );
+        ));
     }
 }

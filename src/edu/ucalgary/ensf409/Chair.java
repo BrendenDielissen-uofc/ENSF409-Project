@@ -2,13 +2,14 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import static java.util.Map.entry;
 
 /**
  * The type Chair.
  */
-public class Chair extends Furniture{
+public class Chair extends Furniture {
     /**
      * The Legs.
      */
@@ -76,12 +77,12 @@ public class Chair extends Furniture{
     }
 
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
             entry("legs", this.legs),
             entry("arms", this.arms),
             entry("seat", this.seat),
             entry("cushion", this.cushion)
-        );
+        ));
     }
 }
