@@ -12,23 +12,23 @@ public class Chair extends Furniture{
     /**
      * The Legs.
      */
-    public final boolean legs;
+    private final boolean legs;
     /**
      * The Arms.
      */
-    public final  boolean arms;
+    private final  boolean arms;
     /**
      * The Seat.
      */
-    public final boolean seat;
+    private final boolean seat;
     /**
      * The Cushion.
      */
-    public final boolean cushion;
+    private final boolean cushion;
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM LAMP";
+    private static final String queryString = "SELECT * FROM LAMP";
 
     /**
      * Instantiates a new Chair from a SQL ResultSet.
@@ -74,6 +74,41 @@ public class Chair extends Furniture{
         this.seat = seat;
         this.cushion = cushion;
     }
+
+    /**
+     * Has legs boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasLegs(){return this.legs;}
+
+    /**
+     * Has arms boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasArms(){return this.arms;}
+
+    /**
+     * Has seat boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasSeat(){ return this.seat;}
+
+    /**
+     * Has cushion boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasCushion(){return this.cushion;}
+
+    /**
+     * Get query string string.
+     *
+     * @return the string
+     */
+    public static String getQueryString(){ return Chair.queryString;}
 
     @Override
     public Map<String, Boolean> getComponents() {

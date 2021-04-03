@@ -11,19 +11,19 @@ public abstract class Furniture {
     /**
      * The Id.
      */
-    public final String id;
+    private final String id;
     /**
      * The Type.
      */
-    public final String type;
+    private final String type;
     /**
      * The Price.
      */
-    public final Integer price;
+    private final Integer price;
     /**
      * The Manu id.
      */
-    public final String manuId;
+    private final String manuId;
 
     /**
      * Instantiates a new Furniture from a SQL ResultSet.
@@ -64,6 +64,34 @@ public abstract class Furniture {
         this.price = price;
         this.manuId = manuId;
     }
+
+    /**
+     * Get id string.
+     *
+     * @return the string
+     */
+    public String getId(){ return this.id;}
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public String getType() { return this.type;}
+
+    /**
+     * Gets price.
+     *
+     * @return the price
+     */
+    public Integer getPrice() {return this.price;}
+
+    /**
+     * Get manu id string.
+     *
+     * @return the string
+     */
+    public String getManuId(){ return this.manuId;}
 
     /**
      * Gets furniture components in an easily iterable format.
