@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -13,19 +14,19 @@ public class Filing extends Furniture {
     /**
      * The Rails.
      */
-    public final boolean rails;
+    private final boolean rails;
     /**
      * The Drawers.
      */
-    public final boolean drawers;
+    private final boolean drawers;
     /**
      * The Cabinet.
      */
-    public final boolean cabinet;
+    private final boolean cabinet;
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM FILING";
+    private static final String queryString = "SELECT * FROM FILING";
 
     /**
      * Instantiates a new Filing from a SQL ResultSet.
@@ -68,12 +69,40 @@ public class Filing extends Furniture {
         this.cabinet = cabinet;
     }
 
+    /**
+     * Get rails boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasRails(){ return this.rails;}
+
+    /**
+     * Get drawers boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasDrawers(){ return this.drawers;}
+
+    /**
+     * Get cabinet boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasCabinet(){ return this.cabinet;}
+
+    /**
+     * Get query string string.
+     *
+     * @return the string
+     */
+    public static String getQueryString(){ return Filing.queryString;}
+
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
                 entry("rails", this.rails),
                 entry("drawers", this.drawers),
                 entry("cabinet", this.cabinet)
-        );
+        ));
     }
 }

@@ -2,33 +2,34 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import static java.util.Map.entry;
 
 /**
  * The type Chair.
  */
-public class Chair extends Furniture{
+public class Chair extends Furniture {
     /**
      * The Legs.
      */
-    public final boolean legs;
+    private final boolean legs;
     /**
      * The Arms.
      */
-    public final  boolean arms;
+    private final  boolean arms;
     /**
      * The Seat.
      */
-    public final boolean seat;
+    private final boolean seat;
     /**
      * The Cushion.
      */
-    public final boolean cushion;
+    private final boolean cushion;
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM CHAIR";
+    private static final String queryString = "SELECT * FROM LAMP";
 
     /**
      * Instantiates a new Chair from a SQL ResultSet.
@@ -75,13 +76,48 @@ public class Chair extends Furniture{
         this.cushion = cushion;
     }
 
+    /**
+     * Has legs boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasLegs(){return this.legs;}
+
+    /**
+     * Has arms boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasArms(){return this.arms;}
+
+    /**
+     * Has seat boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasSeat(){ return this.seat;}
+
+    /**
+     * Has cushion boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasCushion(){return this.cushion;}
+
+    /**
+     * Get query string string.
+     *
+     * @return the string
+     */
+    public static String getQueryString(){ return Chair.queryString;}
+
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
             entry("legs", this.legs),
             entry("arms", this.arms),
             entry("seat", this.seat),
             entry("cushion", this.cushion)
-        );
+        ));
     }
 }

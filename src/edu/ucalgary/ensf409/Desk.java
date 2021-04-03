@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -13,19 +14,19 @@ class Desk extends Furniture {
     /**
      * The Legs.
      */
-    public final boolean legs;
+    private final boolean legs;
     /**
      * The Drawers.
      */
-    public final boolean drawers;
+    private final boolean drawers;
     /**
      * The Cabinet.
      */
-    public final boolean cabinet;
+    private final boolean cabinet;
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM DESK";
+    private static final String queryString = "SELECT * FROM DESK";
 
     /**
      * Instantiates a new Desk from a SQL ResultSet.
@@ -67,13 +68,48 @@ class Desk extends Furniture {
         this.cabinet = cabinet;
     }
 
+    /**
+     * Get legs boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasLegs() {
+        return this.legs;
+    }
+
+    /**
+     * Get drawers boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasDrawers() {
+        return this.drawers;
+    }
+
+    /**
+     * Get cabinet boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasCabinet() {
+        return this.cabinet;
+    }
+
+    /**
+     * Get query string string.
+     *
+     * @return the string
+     */
+    public static String getQueryString() {
+        return Desk.queryString;
+    }
+
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
                 entry("legs", this.legs),
                 entry("drawers", this.drawers),
                 entry("cabinet", this.cabinet)
-        );
+        ));
     }
-
 }
