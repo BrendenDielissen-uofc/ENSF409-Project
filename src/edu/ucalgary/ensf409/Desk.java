@@ -15,14 +15,12 @@ class Desk extends Furniture {
      * The Legs.
      */
     private final boolean legs;
+
+    private final boolean top;
     /**
      * The Drawers.
      */
     private final boolean drawer;
-    /**
-     * The Cabinet.
-     */
-    private final boolean cabinet;
     /**
      * The constant queryString.
      */
@@ -34,8 +32,8 @@ class Desk extends Furniture {
     public Desk() {
         super();
         this.legs = false;
+        this.top = false;
         this.drawer = false;
-        this.cabinet = false;
     }
 
     /**
@@ -46,18 +44,18 @@ class Desk extends Furniture {
     public Desk(ResultSet deskRs) {
         super(deskRs);
         boolean legs = false;
+        boolean top = false;
         boolean drawer = false;
-        boolean cabinet = false;
         try {
             legs = deskRs.getString("Legs").equals("Y");
             drawer = deskRs.getString("Drawer").equals("Y");
-            cabinet = deskRs.getString("Cabinet").equals("Y");
+            top = deskRs.getString("Top").equals("Y");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         this.legs = legs;
         this.drawer = drawer;
-        this.cabinet = cabinet;
+        this.top = top;
     }
 
     /**
@@ -83,8 +81,8 @@ class Desk extends Furniture {
      *
      * @return the boolean
      */
-    public boolean hasCabinet() {
-        return this.cabinet;
+    public boolean hasTop() {
+        return this.top;
     }
 
     /**
@@ -101,7 +99,7 @@ class Desk extends Furniture {
         return new HashMap<>(Map.ofEntries(
                 entry("legs", this.legs),
                 entry("drawer", this.drawer),
-                entry("cabinet", this.cabinet)
+                entry("top", this.top)
         ));
     }
 }
