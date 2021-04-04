@@ -3,6 +3,7 @@ package edu.ucalgary.ensf409;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 /**
@@ -85,6 +86,26 @@ public class Inventory {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    /**
+     * Get counting map hash map.
+     *
+     * @param furniture the furniture
+     * @return the hash map
+     */
+    public HashMap<String, Integer> getCountingMap(String furniture){
+        HashMap<String, Integer> countingMap = null;
+        if (furniture.toLowerCase().equals("lamp")) {
+            countingMap = new Lamp().getCountingMap();
+        } else if (furniture.toLowerCase().equals("desk")) {
+            countingMap = new Desk().getCountingMap();
+        } else if (furniture.toLowerCase().equals("chair")) {
+            countingMap = new Chair().getCountingMap();
+        } else if (furniture.toLowerCase().equals("filing")) {
+            countingMap = new Filing().getCountingMap();
+        }
+        return countingMap;
     }
 
     /**

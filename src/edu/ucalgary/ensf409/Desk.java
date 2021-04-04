@@ -95,6 +95,15 @@ class Desk extends Furniture {
     }
 
     @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+            entry("legs", 0),
+            entry("drawer", 0),
+            entry("top", 0)
+        ));
+    }
+
+    @Override
     public HashMap<String, Boolean> getComponents() {
         return new HashMap<>(Map.ofEntries(
                 entry("legs", this.legs),

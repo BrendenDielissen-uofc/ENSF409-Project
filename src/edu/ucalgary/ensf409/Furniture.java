@@ -94,5 +94,12 @@ public abstract class Furniture {
      * @return the components
      */
     public abstract HashMap<String, Boolean> getComponents();
+
+    /**
+     * Gets counting map.
+     *
+     * @return the counting map
+     */
+    public abstract HashMap<String, Integer> getCountingMap();
 }
 

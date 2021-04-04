@@ -75,6 +75,14 @@ public class Lamp extends Furniture {
     public static String getQueryString() { return Lamp.queryString;}
 
     @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+                entry("base", 0),
+                entry("bulb", 0)
+        ));
+    }
+
+    @Override
     public HashMap<String, Boolean> getComponents() {
         return new HashMap<>(Map.ofEntries(
                 entry("base", this.base),

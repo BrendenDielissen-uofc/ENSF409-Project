@@ -65,28 +65,45 @@ public class Filing extends Furniture {
      *
      * @return the boolean
      */
-    public boolean hasRails(){ return this.rails;}
+    public boolean hasRails() {
+        return this.rails;
+    }
 
     /**
      * Get drawers boolean.
      *
      * @return the boolean
      */
-    public boolean hasDrawers(){ return this.drawers;}
+    public boolean hasDrawers() {
+        return this.drawers;
+    }
 
     /**
      * Get cabinet boolean.
      *
      * @return the boolean
      */
-    public boolean hasCabinet(){ return this.cabinet;}
+    public boolean hasCabinet() {
+        return this.cabinet;
+    }
 
     /**
      * Get query string string.
      *
      * @return the string
      */
-    public static String getQueryString(){ return Filing.queryString;}
+    public static String getQueryString() {
+        return Filing.queryString;
+    }
+
+    @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+                entry("rails", 0),
+                entry("drawers", 0),
+                entry("cabinet", 0)
+        ));
+    }
 
     @Override
     public HashMap<String, Boolean> getComponents() {

@@ -16,8 +16,7 @@ public class ChairTest {
 		boolean arms = false;
 		boolean seat = false;
 		boolean cushion = false;
-		Chair chair = new Chair(id, type, price, manuId, legs, arms, seat, cushion);
-				
+		//Chair chair = new Chair(id, type, price, manuId, legs, arms, seat, cushion);
 	}
 
 }
