@@ -29,7 +29,7 @@ public class Chair extends Furniture {
     /**
      * The constant queryString.
      */
-    private static final String queryString = "SELECT * FROM LAMP";
+    private static final String queryString = "SELECT * FROM CHAIR";
 
     /**
      * Default constructor for Chair.
@@ -101,6 +101,16 @@ public class Chair extends Furniture {
      * @return the string
      */
     public static String getQueryString(){ return Chair.queryString;}
+
+    @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+                entry("legs", 0),
+                entry("arms", 0),
+                entry("seat", 0),
+                entry("cushion", 0)
+        ));
+    }
 
     @Override
     public HashMap<String, Boolean> getComponents() {
