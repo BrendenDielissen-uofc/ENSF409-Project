@@ -1,7 +1,6 @@
 package edu.ucalgary.ensf409;
 
 import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,42 +48,40 @@ public class OrderForm {
         ArrayList<Furniture> allFurnitureList = new ArrayList<Furniture>(Arrays.asList(inventory.getAllFurniture(furnitureType, furnitureCategory)));
         if(allFurnitureList.size() < 1)
             return -1;
-        // use this map to help ensure we have correct quantity of each component comprising the furniture item
+        // use this map to help ensure we have correct quantity of each component that the furniture item requires.
         HashMap<String, Integer> countingMap = inventory.getCountingMap(furnitureCategory);
-        // store furniture items that we want to use
-        ArrayList<Furniture> usedUpFurniture = new ArrayList<>();
-        // continue try to get values unless we have counted the correct quantity of each component comprising the furniture item
-        while(countingMap.keySet().stream().anyMatch(key -> countingMap.get(key) < quantity)){
-            // countingMap's keys correspond to all of the components necessary to build the particular furniture item.
-            // we need to loop through them all, adding to corresponding countingMap entry whenever we can add a new
-            // furniture item that has the matching component.
-            for (String component : countingMap.keySet()) {
-                // get all furniture items that have the component in them (i.e. value of true)
-                ArrayList<Furniture> availableFurniture = allFurnitureList.stream().filter(furniture -> furniture.getComponents().get(component).equals(true)).collect(Collectors.toCollection(ArrayList<Furniture>::new));
-                if(availableFurniture.size() < 1)
-                    continue;
-                // loop through all the furniture items that have the desired component to find the cheapest
-                Furniture cheapestFurniture = availableFurniture.get(0);
-                for(Furniture furniture : availableFurniture){
-                    if(furniture.getPrice() < cheapestFurniture.getPrice())
-                        cheapestFurniture = furniture;
-                }
-                // append the cheapest to our usedFurniture list
-                usedUpFurniture.add(cheapestFurniture);
-                // increase the count of that component in the counting map, corresponding to the correct component of that furniture
-                countingMap.put(component, countingMap.get(component)+1);
+        // create a linkedHashSet to store the furniture items we want to use, ensuring no duplicates can be added
+        LinkedHashSet<Furniture> furnitureLinkedHashSet = new LinkedHashSet<>();
+        // flag will be set to true if we cannot fulfill the order with the furniture currently in the database.
+        boolean flag = false;
+        // countingMap's keys correspond to all of the components necessary to build the particular furniture item.
+        // we need to loop through them all, and check if the quantities of components available will be able fulfill the requested
+        // order quantity.
+        for (String component : countingMap.keySet()) {
+            // get all furniture items that have the component in them (i.e. value of true)
+            ArrayList<Furniture> availableFurniture = allFurnitureList.stream().filter(furniture -> furniture.getComponents().get(component).equals(true)).collect(Collectors.toCollection(ArrayList<Furniture>::new));
+            // if there are not enough furniture items with the component quantities we need, set flag true, but keep going because we wanna know what we are missing!
+            if(availableFurniture.size() < quantity){
+                flag = true;
+                // add how many of these components we do have available currently, might be handy!
+                countingMap.put(component, availableFurniture.size());
+                continue;
             }
-            allFurnitureList.removeAll(usedUpFurniture);
-            if(allFurnitureList.size() < quantity)
-                break;
+            // sort them by price
+            availableFurniture.sort(Comparator.comparing(Furniture::getPrice));
+            // grab necessary amount of furniture items, from bottom of list (i.e. lowest priced items)
+            availableFurniture = new ArrayList<>(availableFurniture.subList(0, quantity));
+            // append the cheapest to our usedFurniture list
+            furnitureLinkedHashSet.addAll(availableFurniture);
+            countingMap.put(component, quantity);
         }
-        if(countingMap.keySet().stream().anyMatch(key -> countingMap.get(key) < quantity))
+        if(flag)
         {
             // this means we cannot fulfill the order
+            // countingMap should show which components we are missing!!
             return -1;
         }
         // usedFurniture -> contains the furniture for a possible solution(s), but it/they still need(s) to be found!!
-
         return 1;
     }
 
@@ -134,9 +131,9 @@ public class OrderForm {
         OrderForm orderForm = new OrderForm();
         //orderForm.getRequest();
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "chair";
-        orderForm.furnitureType = "mesh";
-        orderForm.quantity = 2;
+        orderForm.furnitureCategory = "desk";
+        orderForm.furnitureType = "standing";
+        orderForm.quantity = 1;
         var cost = orderForm.calculateOrder();
     }
 }
