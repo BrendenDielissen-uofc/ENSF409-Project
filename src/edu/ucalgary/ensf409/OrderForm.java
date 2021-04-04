@@ -30,7 +30,7 @@ public class OrderForm {
      * Instantiates a new Order form.
      */
     public OrderForm() {
-        this.inventory = new Inventory("jdbc:mysql://localhost/inventory", "Marasco", "ensf409");
+        this.inventory = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
         try {
             this.inventory.initializeConnection();
         } catch (SQLException throwables) {

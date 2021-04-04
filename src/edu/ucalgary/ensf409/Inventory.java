@@ -23,7 +23,7 @@ public class Inventory {
      * @throws SQLException the sql exception
      */
     public static void main(String[] args) throws SQLException {
-        Inventory myJDBC = new Inventory("jdbc:mysql://localhost/inventory", "Marasco", "ensf409");
+        Inventory myJDBC = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
         myJDBC.initializeConnection();
         Furniture[] testLamps = myJDBC.getAllFurniture("Desk", "Lamp");
         var testLampMap = testLamps[0].getComponents();
