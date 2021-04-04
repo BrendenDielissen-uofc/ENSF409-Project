@@ -24,6 +24,7 @@ public class OrderForm {
      */
     public int quantity;
     private final Inventory inventory;
+    ArrayList<Furniture> cheapestCombo;
 
     /**
      * Instantiates a new Order form.
@@ -46,7 +47,7 @@ public class OrderForm {
         ArrayList<ArrayList<Furniture>> allFurnitureCombos = getAllFurnitureCombos();
         // this flag will be set false once we have a valid combination of furniture for the desired quantity
         boolean flag = true;
-        ArrayList<Furniture> cheapestCombo = new ArrayList<>();
+        ArrayList<Furniture> possibleCheapCombo = new ArrayList<>();
         int lowestPrice = -1;
         // determine the lowest priced combo of furniture for the desired quantity
         for (ArrayList<Furniture> furnitureCombo : allFurnitureCombos) {
@@ -64,9 +65,9 @@ public class OrderForm {
                 // this is our initial value to compare other combos to
                 if (lowestPrice == -1) {
                     lowestPrice = sum;
-                    cheapestCombo = furnitureCombo;
+                    possibleCheapCombo = furnitureCombo;
                 } else if (sum < lowestPrice) {
-                    cheapestCombo = furnitureCombo;
+                	possibleCheapCombo = furnitureCombo;
                 }
                 flag = false;
             }
@@ -77,7 +78,15 @@ public class OrderForm {
             // countingMap should show which components we are missing!!
             return -1;
         }
-        return 1;
+        
+        this.cheapestCombo = possibleCheapCombo;
+        int price = 0;
+        for (int i = 0; i < getFurnitureList().length; i++) {
+        	System.out.println(getFurnitureList()[i].getId() + ": $" + getFurnitureList()[i].getPrice());
+        	price = price + getFurnitureList()[i].getPrice();
+        }
+        // optimize
+        return price;
     }
 
     /**
@@ -146,6 +155,12 @@ public class OrderForm {
     public void printOrder() {
 
     }
+    
+    public Furniture[] getFurnitureList() {
+    	Furniture[] array = new Furniture[this.cheapestCombo.size()];
+    	this.cheapestCombo.toArray(array);
+		return array;
+    }
 
     /**
      * Gets request.
@@ -181,9 +196,10 @@ public class OrderForm {
 //        orderForm.getRequest();
         // set dummy data for the corresponding values
         orderForm.furnitureCategory = "filing";
-        orderForm.furnitureType = "medium";
-        orderForm.quantity = 1;
+        orderForm.furnitureType = "small";
+        orderForm.quantity = 2;
         var cost = orderForm.calculateOrder();
-        System.out.println(cost);
+        System.out.println("Final cost: " + cost);
+
     }
 }

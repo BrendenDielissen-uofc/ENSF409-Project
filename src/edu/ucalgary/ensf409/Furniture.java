@@ -1,6 +1,6 @@
 package edu.ucalgary.ensf409;
 
-import java.util.Map;
+import java.util.HashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -11,19 +11,29 @@ public abstract class Furniture {
     /**
      * The Id.
      */
-    public final String id;
+    private final String id;
     /**
      * The Type.
      */
-    public final String type;
+    private final String type;
     /**
      * The Price.
      */
-    public final Integer price;
+    private final Integer price;
     /**
      * The Manu id.
      */
-    public final String manuId;
+    private final String manuId;
+
+    /**
+     * Default constructor for Furniture.
+     */
+    public Furniture() {
+        this.id = null;
+        this.price = null;
+        this.type = null;
+        this.manuId = null;
+    }
 
     /**
      * Instantiates a new Furniture from a SQL ResultSet.
@@ -51,25 +61,45 @@ public abstract class Furniture {
     }
 
     /**
-     * Instantiates a new Furniture.
+     * Get id string.
      *
-     * @param id     the id
-     * @param type   the type
-     * @param price  the price
-     * @param manuId the manu id
+     * @return the string
      */
-    public Furniture(String id, String type, Integer price, String manuId) {
-        this.id = id;
-        this.type = type;
-        this.price = price;
-        this.manuId = manuId;
-    }
+    public String getId(){ return this.id;}
 
     /**
-     * Gets furniture components in an easily iterable format.
+     * Gets type.
+     *
+     * @return the type
+     */
+    public String getType() { return this.type;}
+
+    /**
+     * Gets price.
+     *
+     * @return the price
+     */
+    public Integer getPrice() {return this.price;}
+
+    /**
+     * Get manu id string.
+     *
+     * @return the string
+     */
+    public String getManuId(){ return this.manuId;}
+
+    /**
+     * Gets components.
      *
      * @return the components
      */
-    public abstract Map<String, Boolean> getComponents();
+    public abstract HashMap<String, Boolean> getComponents();
+
+    /**
+     * Gets counting map.
+     *
+     * @return the counting map
+     */
+    public abstract HashMap<String, Integer> getCountingMap();
 }
 

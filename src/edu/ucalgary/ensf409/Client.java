@@ -9,10 +9,8 @@ public class Client {
 //  public static void main(String[] args) {
 //	  OrderForm newOrder = new OrderForm();
 //	  newOrder.getRequest();
-//	  newOrder.calculateOrder();
-//      ArrayList<Furniture> allFurnitureList = new ArrayList<Furniture>(Arrays.asList(inventory.getAllFurniture(furnitureType, furnitureCategory)));
-//	  
-//  
+//	  newOrder.calculateOrder();	  
+  
 //}
 
 }

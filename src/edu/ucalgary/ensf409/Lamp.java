@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -14,15 +15,24 @@ public class Lamp extends Furniture {
     /**
      * The Base.
      */
-    public final boolean base;
+    private final boolean base;
     /**
      * The Bulb.
      */
-    public final boolean bulb;
+    private final boolean bulb;
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM LAMP";
+    private static final String queryString = "SELECT * FROM LAMP";
+
+    /**
+     * Default constructor for Lamp.
+     */
+    public Lamp(){
+        super();
+        this.base = false;
+        this.bulb = false;
+    }
 
     /**
      * Instantiates a new Lamp from a SQL ResultSet.
@@ -44,27 +54,39 @@ public class Lamp extends Furniture {
     }
 
     /**
-     * Instantiates a new Lamp.
+     * Has base boolean.
      *
-     * @param id          the id
-     * @param type        the type
-     * @param price       the price
-     * @param manuId      the manu id
-     * @param queryString the query string
-     * @param base        the base
-     * @param bulb        the bulb
+     * @return the boolean
      */
-    public Lamp(String id, String type, Integer price, String manuId, String queryString, boolean base, boolean bulb) {
-        super(id, type, price, manuId);
-        this.base = base;
-        this.bulb = bulb;
+    public boolean hasBase(){return this.base;}
+
+    /**
+     * Has bulb boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasBulb(){return this.bulb;}
+
+    /**
+     * Gets query string.
+     *
+     * @return the query string
+     */
+    public static String getQueryString() { return Lamp.queryString;}
+
+    @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+                entry("base", 0),
+                entry("bulb", 0)
+        ));
     }
 
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
                 entry("base", this.base),
                 entry("bulb", this.bulb)
-        );
+        ));
     }
 }

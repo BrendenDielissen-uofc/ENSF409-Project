@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -13,19 +14,27 @@ class Desk extends Furniture {
     /**
      * The Legs.
      */
-    public final boolean legs;
+    private final boolean legs;
+
+    private final boolean top;
     /**
      * The Drawers.
      */
-    public final boolean drawers;
-    /**
-     * The Cabinet.
-     */
-    public final boolean cabinet;
+    private final boolean drawer;
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM DESK";
+    private static final String queryString = "SELECT * FROM DESK";
+
+    /**
+     * Default constructor for Desk.
+     */
+    public Desk() {
+        super();
+        this.legs = false;
+        this.top = false;
+        this.drawer = false;
+    }
 
     /**
      * Instantiates a new Desk from a SQL ResultSet.
@@ -35,45 +44,71 @@ class Desk extends Furniture {
     public Desk(ResultSet deskRs) {
         super(deskRs);
         boolean legs = false;
-        boolean drawers = false;
-        boolean cabinet = false;
+        boolean top = false;
+        boolean drawer = false;
         try {
             legs = deskRs.getString("Legs").equals("Y");
-            drawers = deskRs.getString("Drawers").equals("Y");
-            cabinet = deskRs.getString("Cabinet").equals("Y");
+            drawer = deskRs.getString("Drawer").equals("Y");
+            top = deskRs.getString("Top").equals("Y");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         this.legs = legs;
-        this.drawers = drawers;
-        this.cabinet = cabinet;
+        this.drawer = drawer;
+        this.top = top;
     }
 
     /**
-     * Instantiates a new Desk.
+     * Get legs boolean.
      *
-     * @param id      the id
-     * @param type    the type
-     * @param price   the price
-     * @param manuId  the manu id
-     * @param legs    the legs
-     * @param drawers the drawers
-     * @param cabinet the cabinet
+     * @return the boolean
      */
-    public Desk(String id, String type, Integer price, String manuId, boolean legs, boolean drawers, boolean cabinet) {
-        super(id, type, price, manuId);
-        this.legs = legs;
-        this.drawers = drawers;
-        this.cabinet = cabinet;
+    public boolean hasLegs() {
+        return this.legs;
+    }
+
+    /**
+     * Get drawers boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasDrawers() {
+        return this.drawer;
+    }
+
+    /**
+     * Get cabinet boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasTop() {
+        return this.top;
+    }
+
+    /**
+     * Get query string string.
+     *
+     * @return the string
+     */
+    public static String getQueryString() {
+        return Desk.queryString;
     }
 
     @Override
-    public Map<String, Boolean> getComponents() {
-        return Map.ofEntries(
-                entry("legs", this.legs),
-                entry("drawers", this.drawers),
-                entry("cabinet", this.cabinet)
-        );
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+            entry("legs", 0),
+            entry("drawer", 0),
+            entry("top", 0)
+        ));
     }
 
+    @Override
+    public HashMap<String, Boolean> getComponents() {
+        return new HashMap<>(Map.ofEntries(
+                entry("legs", this.legs),
+                entry("drawer", this.drawer),
+                entry("top", this.top)
+        ));
+    }
 }
