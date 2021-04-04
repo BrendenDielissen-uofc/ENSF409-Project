@@ -1,14 +1,13 @@
 package edu.ucalgary.ensf409;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * The type Furniture.
  */
-public class Furniture {
+public abstract class Furniture {
     /**
      * The Id.
      */
@@ -25,6 +24,16 @@ public class Furniture {
      * The Manu id.
      */
     private final String manuId;
+
+    /**
+     * Default constructor for Furniture.
+     */
+    public Furniture() {
+        this.id = null;
+        this.price = null;
+        this.type = null;
+        this.manuId = null;
+    }
 
     /**
      * Instantiates a new Furniture from a SQL ResultSet.
@@ -45,21 +54,6 @@ public class Furniture {
         catch (SQLException ex){
             ex.printStackTrace();
         }
-        this.id = id;
-        this.type = type;
-        this.price = price;
-        this.manuId = manuId;
-    }
-
-    /**
-     * Instantiates a new Furniture.
-     *
-     * @param id     the id
-     * @param type   the type
-     * @param price  the price
-     * @param manuId the manu id
-     */
-    public Furniture(String id, String type, Integer price, String manuId) {
         this.id = id;
         this.type = type;
         this.price = price;
@@ -94,8 +88,18 @@ public class Furniture {
      */
     public String getManuId(){ return this.manuId;}
 
-    public HashMap<String, Boolean> getComponents(){
-        return new HashMap<String, Boolean>();
-    }
+    /**
+     * Gets components.
+     *
+     * @return the components
+     */
+    public abstract HashMap<String, Boolean> getComponents();
+
+    /**
+     * Gets counting map.
+     *
+     * @return the counting map
+     */
+    public abstract HashMap<String, Integer> getCountingMap();
 }
 

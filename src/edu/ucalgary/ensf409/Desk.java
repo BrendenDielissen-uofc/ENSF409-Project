@@ -15,18 +15,26 @@ class Desk extends Furniture {
      * The Legs.
      */
     private final boolean legs;
+
+    private final boolean top;
     /**
      * The Drawers.
      */
-    private final boolean drawers;
-    /**
-     * The Cabinet.
-     */
-    private final boolean cabinet;
+    private final boolean drawer;
     /**
      * The constant queryString.
      */
     private static final String queryString = "SELECT * FROM DESK";
+
+    /**
+     * Default constructor for Desk.
+     */
+    public Desk() {
+        super();
+        this.legs = false;
+        this.top = false;
+        this.drawer = false;
+    }
 
     /**
      * Instantiates a new Desk from a SQL ResultSet.
@@ -36,36 +44,18 @@ class Desk extends Furniture {
     public Desk(ResultSet deskRs) {
         super(deskRs);
         boolean legs = false;
-        boolean drawers = false;
-        boolean cabinet = false;
+        boolean top = false;
+        boolean drawer = false;
         try {
             legs = deskRs.getString("Legs").equals("Y");
-            drawers = deskRs.getString("Drawer").equals("Y");
-            cabinet = deskRs.getString("Cabinet").equals("Y");
+            drawer = deskRs.getString("Drawer").equals("Y");
+            top = deskRs.getString("Top").equals("Y");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         this.legs = legs;
-        this.drawers = drawers;
-        this.cabinet = cabinet;
-    }
-
-    /**
-     * Instantiates a new Desk.
-     *
-     * @param id      the id
-     * @param type    the type
-     * @param price   the price
-     * @param manuId  the manu id
-     * @param legs    the legs
-     * @param drawers the drawers
-     * @param cabinet the cabinet
-     */
-    public Desk(String id, String type, Integer price, String manuId, boolean legs, boolean drawers, boolean cabinet) {
-        super(id, type, price, manuId);
-        this.legs = legs;
-        this.drawers = drawers;
-        this.cabinet = cabinet;
+        this.drawer = drawer;
+        this.top = top;
     }
 
     /**
@@ -83,7 +73,7 @@ class Desk extends Furniture {
      * @return the boolean
      */
     public boolean hasDrawers() {
-        return this.drawers;
+        return this.drawer;
     }
 
     /**
@@ -91,8 +81,8 @@ class Desk extends Furniture {
      *
      * @return the boolean
      */
-    public boolean hasCabinet() {
-        return this.cabinet;
+    public boolean hasTop() {
+        return this.top;
     }
 
     /**
@@ -105,8 +95,13 @@ class Desk extends Furniture {
     }
 
     @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(entry("legs", 0), entry("drawer", 0), entry("top", 0)));
+    }
+
+    @Override
     public HashMap<String, Boolean> getComponents() {
-        return new HashMap<>(Map.ofEntries(entry("legs", this.legs), entry("drawers", this.drawers),
-                entry("cabinet", this.cabinet)));
+        return new HashMap<>(
+                Map.ofEntries(entry("legs", this.legs), entry("drawer", this.drawer), entry("top", this.top)));
     }
 }

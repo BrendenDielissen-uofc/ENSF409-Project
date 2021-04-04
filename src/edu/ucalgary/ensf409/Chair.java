@@ -17,7 +17,7 @@ public class Chair extends Furniture {
     /**
      * The Arms.
      */
-    public final  boolean arms;
+    public final boolean arms;
     /**
      * The Seat.
      */
@@ -29,14 +29,25 @@ public class Chair extends Furniture {
     /**
      * The constant queryString.
      */
-    public static final String queryString = "SELECT * FROM CHAIR";
+    private static final String queryString = "SELECT * FROM CHAIR";
+
+    /**
+     * Default constructor for Chair.
+     */
+    public Chair() {
+        super();
+        this.legs = false;
+        this.arms = false;
+        this.seat = false;
+        this.cushion = false;
+    }
 
     /**
      * Instantiates a new Chair from a SQL ResultSet.
      *
      * @param chairRs the chair rs
      */
-    public Chair(ResultSet chairRs){
+    public Chair(ResultSet chairRs) {
         super(chairRs);
         boolean legs = false;
         boolean arms = false;
@@ -57,32 +68,59 @@ public class Chair extends Furniture {
     }
 
     /**
-     * Instantiates a new Chair.
+     * Has legs boolean.
      *
-     * @param id      the id
-     * @param type    the type
-     * @param price   the price
-     * @param manuId  the manu id
-     * @param legs    the legs
-     * @param arms    the arms
-     * @param seat    the seat
-     * @param cushion the cushion
+     * @return the boolean
      */
-    public Chair(String id, String type, Integer price, String manuId, boolean legs, boolean arms, boolean seat, boolean cushion){
-        super(id, type, price, manuId);
-        this.legs = legs;
-        this.arms = arms;
-        this.seat = seat;
-        this.cushion = cushion;
+    public boolean hasLegs() {
+        return this.legs;
+    }
+
+    /**
+     * Has arms boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasArms() {
+        return this.arms;
+    }
+
+    /**
+     * Has seat boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasSeat() {
+        return this.seat;
+    }
+
+    /**
+     * Has cushion boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasCushion() {
+        return this.cushion;
+    }
+
+    /**
+     * Get query string string.
+     *
+     * @return the string
+     */
+    public static String getQueryString() {
+        return Chair.queryString;
+    }
+
+    @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(
+                Map.ofEntries(entry("legs", 0), entry("arms", 0), entry("seat", 0), entry("cushion", 0)));
     }
 
     @Override
     public HashMap<String, Boolean> getComponents() {
-        return new HashMap<>(Map.ofEntries(
-            entry("legs", this.legs),
-            entry("arms", this.arms),
-            entry("seat", this.seat),
-            entry("cushion", this.cushion)
-        ));
+        return new HashMap<>(Map.ofEntries(entry("legs", this.legs), entry("arms", this.arms), entry("seat", this.seat),
+                entry("cushion", this.cushion)));
     }
 }

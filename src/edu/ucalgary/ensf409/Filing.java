@@ -29,6 +29,16 @@ public class Filing extends Furniture {
     private static final String queryString = "SELECT * FROM FILING";
 
     /**
+     * Default constructor for Filing.
+     */
+    public Filing() {
+        super();
+        this.rails = false;
+        this.drawers = false;
+        this.cabinet = false;
+    }
+
+    /**
      * Instantiates a new Filing from a SQL ResultSet.
      *
      * @param filingRs the filing rs
@@ -51,51 +61,49 @@ public class Filing extends Furniture {
     }
 
     /**
-     * Instantiates a new Filing.
-     *
-     * @param id          the id
-     * @param type        the type
-     * @param price       the price
-     * @param manuId      the manu id
-     * @param queryString the query string
-     * @param rails       the rails
-     * @param drawers     the drawers
-     * @param cabinet     the cabinet
-     */
-    public Filing(String id, String type, Integer price, String manuId, String queryString, boolean rails, boolean drawers, boolean cabinet) {
-        super(id, type, price, manuId);
-        this.rails = rails;
-        this.drawers = drawers;
-        this.cabinet = cabinet;
-    }
-
-    /**
      * Get rails boolean.
      *
      * @return the boolean
      */
-    public boolean hasRails(){ return this.rails;}
+    public boolean hasRails() {
+        return this.rails;
+    }
 
     /**
      * Get drawers boolean.
      *
      * @return the boolean
      */
-    public boolean hasDrawers(){ return this.drawers;}
+    public boolean hasDrawers() {
+        return this.drawers;
+    }
 
     /**
      * Get cabinet boolean.
      *
      * @return the boolean
      */
-    public boolean hasCabinet(){ return this.cabinet;}
+    public boolean hasCabinet() {
+        return this.cabinet;
+    }
 
     /**
      * Get query string string.
      *
      * @return the string
      */
-    public static String getQueryString(){ return Filing.queryString;}
+    public static String getQueryString() {
+        return Filing.queryString;
+    }
+
+    @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+                entry("rails", 0),
+                entry("drawers", 0),
+                entry("cabinet", 0)
+        ));
+    }
 
     @Override
     public HashMap<String, Boolean> getComponents() {
