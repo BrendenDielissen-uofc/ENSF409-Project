@@ -40,7 +40,7 @@ class Desk extends Furniture {
         boolean cabinet = false;
         try {
             legs = deskRs.getString("Legs").equals("Y");
-            drawers = deskRs.getString("Drawers").equals("Y");
+            drawers = deskRs.getString("Drawer").equals("Y");
             cabinet = deskRs.getString("Cabinet").equals("Y");
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -106,10 +106,7 @@ class Desk extends Furniture {
 
     @Override
     public HashMap<String, Boolean> getComponents() {
-        return new HashMap<>(Map.ofEntries(
-                entry("legs", this.legs),
-                entry("drawers", this.drawers),
-                entry("cabinet", this.cabinet)
-        ));
+        return new HashMap<>(Map.ofEntries(entry("legs", this.legs), entry("drawers", this.drawers),
+                entry("cabinet", this.cabinet)));
     }
 }
