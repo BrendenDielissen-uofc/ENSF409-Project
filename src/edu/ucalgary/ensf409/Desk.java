@@ -90,7 +90,8 @@ class Desk extends Furniture {
      *
      * @return the string
      */
-    public static String getQueryString() {
+    @Override
+    public String getQueryString() {
         return Desk.queryString;
     }
 

@@ -100,7 +100,8 @@ public class Chair extends Furniture {
      *
      * @return the string
      */
-    public static String getQueryString(){ return Chair.queryString;}
+    @Override
+    public String getQueryString(){ return Chair.queryString;}
 
     @Override
     public HashMap<String, Integer> getCountingMap() {

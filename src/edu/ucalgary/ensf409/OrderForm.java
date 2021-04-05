@@ -51,7 +51,7 @@ public class OrderForm {
         // determine the lowest priced combo of furniture for the desired quantity
         for (ArrayList<Furniture> furnitureCombo : allFurnitureCombos) {
             int sum = 0;
-            HashMap<String, Integer> countingMap = inventory.getCountingMap(furnitureCategory);
+            HashMap<String, Integer> countingMap = inventory.getFurnitureCountingMap(furnitureCategory);
             for (Furniture furniture : furnitureCombo) {
                 sum += furniture.getPrice();
                 HashMap<String, Boolean> componentMap = furniture.getComponents();
@@ -114,12 +114,10 @@ public class OrderForm {
         while (r > 0) {
             List<int[]> rCombinations = new ArrayList<>();
             int[] combination = new int[r];
-
             for (int i = 0; i < r; i++)
                 combination[i] = i;
             while (combination[r - 1] < n) {
                 rCombinations.add(combination.clone());
-
                 int t = r - 1;
                 while (t != 0 && combination[t] == n - r + t)
                     t--;
@@ -180,8 +178,8 @@ public class OrderForm {
         OrderForm orderForm = new OrderForm();
 //        orderForm.getRequest();
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "filing";
-        orderForm.furnitureType = "medium";
+        orderForm.furnitureCategory = "chair";
+        orderForm.furnitureType = "mesh";
         orderForm.quantity = 1;
         var cost = orderForm.calculateOrder();
     }

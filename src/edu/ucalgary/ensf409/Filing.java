@@ -92,7 +92,8 @@ public class Filing extends Furniture {
      *
      * @return the string
      */
-    public static String getQueryString() {
+    @Override
+    public  String getQueryString() {
         return Filing.queryString;
     }
 

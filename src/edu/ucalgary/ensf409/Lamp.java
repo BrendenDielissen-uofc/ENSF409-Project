@@ -72,7 +72,8 @@ public class Lamp extends Furniture {
      *
      * @return the query string
      */
-    public static String getQueryString() { return Lamp.queryString;}
+    @Override
+    public String getQueryString() { return Lamp.queryString;}
 
     @Override
     public HashMap<String, Integer> getCountingMap() {
