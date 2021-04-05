@@ -3,14 +3,14 @@ package edu.ucalgary.ensf409;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Map.entry;
 
 
+/**
+ * The type Inventory.
+ */
 public class Inventory {
 
     /**
@@ -23,15 +23,15 @@ public class Inventory {
     public static HashMap<String, Constructor> furnitureDefaultCtorMap;
 	private Connection dbConnect;
 	private ResultSet results;
-
     private String DBURL = "";
     private String USERNAME = "";
     private String PASSWORD = "";
-    
+
     /**
      * Main used for inventory and debugging. COmment this out if main is somewhere else
-     * @param args
-     * @throws SQLException
+     *
+     * @param args the input arguments
+     * @throws SQLException the sql exception
      */
     public static void main(String[] args) throws SQLException {
         Inventory myJDBC = new Inventory("jdbc:mysql://localhost/inventory", "scm", "ensf409");
@@ -45,12 +45,13 @@ public class Inventory {
         var testDeskArrayMap = Arrays.stream(testDesks).map(Furniture::getComponents).toArray();
         System.out.println(Arrays.toString(testDesks));
     }
-   
+
     /**
      * Constructor for Inventory Class
-     * @param DBURL
-     * @param USERNAME
-     * @param PASSWORD
+     *
+     * @param DBURL    the dburl
+     * @param USERNAME the username
+     * @param PASSWORD the password
      */
     public Inventory(String DBURL, String USERNAME, String PASSWORD) {
     	this.DBURL = DBURL;
@@ -75,35 +76,39 @@ public class Inventory {
             furnitureDefaultCtorMap = null;
         }
     }
-    
+
     /**
      * Getter method for DBURL
+     *
      * @return String DBURL
      */
     public String getDBURL() {
     	return this.DBURL;
     }
-    
+
     /**
      * Getter method for username
+     *
      * @return String USERNAME
      */
     public String getUSERNAME() {
     	return this.USERNAME;
     }
-    
+
     /**
      * Getter method for password
+     *
      * @return String PASSWORD
      */
     public String getPASSWORD() {
     	return this.PASSWORD;
     	
     }
-    
+
     /**
      * Connects java program to the SQL database
-     * @throws SQLException  if SQL related error is encountered
+     *
+     * @throws SQLException if SQL related error is encountered
      */
     public void initializeConnection() throws SQLException {
     	try {
@@ -112,47 +117,34 @@ public class Inventory {
     		ex.printStackTrace();
     	}
     }
-    
+
     /**
      * Deletes listed furniture
-     * @param furniture
+     *
+     * @param furniture the furniture
      */
     public void deleteFurniture(Furniture[] furniture) {
-    	String furnitureCat = null;
-    	
-    	// Looks at the first char of ID. Sets furnitureCat depending on what it sees.
-    	switch(furniture[0].getId().charAt(0))
-    	{
-    	case 'L':
-        	furnitureCat = "LAMP";
-    	case 'F':
-    		furnitureCat = "FILING";
-    	case 'C':
-    		furnitureCat = "CHAIR";
-    	case 'D':
-    		furnitureCat = "DESK";
-    	}
-    	
     	// iterates through each furniture object and deletes in from db
-    	for (int i = 0; i < furniture.length; i++) {
-        	try {
-        		String query = "DELETE FROM " + furnitureCat + " where ID = ?";
-        		PreparedStatement myStmt = dbConnect.prepareStatement(query);
-        		
-        		myStmt.setString(1, furniture[i].getId());
-        		
+        for (Furniture value : furniture) {
+            try {
+                String furnitureCat = value.getClass().getSimpleName().toUpperCase();
+                String query = "DELETE FROM " + furnitureCat + " where ID = ?";
+                PreparedStatement myStmt = dbConnect.prepareStatement(query);
+
+                myStmt.setString(1, value.getId());
+
                 int rowCount = myStmt.executeUpdate();
                 System.out.println("Deleting Furniture. Rows affected: " + rowCount);
-                
+
                 myStmt.close();
 
-        	} catch (SQLException ex) {
-        		ex.printStackTrace();
-        	} 
-    	}
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
 
     }
-    
+
     /**
      * Close database connections after everything is done
      */

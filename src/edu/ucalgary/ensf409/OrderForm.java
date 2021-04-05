@@ -24,6 +24,10 @@ public class OrderForm {
      */
     public int quantity;
     private final Inventory inventory;
+    /**
+     * The Cheapest combo.
+     */
+    ArrayList<Furniture> cheapestCombo;
 
     /**
      * Instantiates a new Order form.
@@ -46,7 +50,7 @@ public class OrderForm {
         ArrayList<ArrayList<Furniture>> allFurnitureCombos = getAllFurnitureCombos();
         // this flag will be set false once we have a valid combination of furniture for the desired quantity
         boolean flag = true;
-        ArrayList<Furniture> cheapestCombo = new ArrayList<>();
+        ArrayList<Furniture> possibleCheapCombo = new ArrayList<>();
         int lowestPrice = -1;
         // determine the lowest priced combo of furniture for the desired quantity
         for (ArrayList<Furniture> furnitureCombo : allFurnitureCombos) {
@@ -64,9 +68,9 @@ public class OrderForm {
                 // this is our initial value to compare other combos to
                 if (lowestPrice == -1) {
                     lowestPrice = sum;
-                    cheapestCombo = furnitureCombo;
+                    possibleCheapCombo = furnitureCombo;
                 } else if (sum < lowestPrice) {
-                    cheapestCombo = furnitureCombo;
+                    possibleCheapCombo = furnitureCombo;
                 }
                 flag = false;
             }
@@ -77,7 +81,8 @@ public class OrderForm {
             // countingMap should show which components we are missing!!
             return -1;
         }
-        return 1;
+        this.cheapestCombo = possibleCheapCombo;
+        return lowestPrice;
     }
 
     /**
