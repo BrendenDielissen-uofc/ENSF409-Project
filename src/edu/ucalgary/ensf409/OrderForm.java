@@ -1,6 +1,6 @@
 package edu.ucalgary.ensf409;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -111,6 +111,53 @@ public class OrderForm {
 
     }
 
+    public String orderCombinations() {
+        StringBuffer allOrders = new StringBuffer();
+        String query = "SELECT CONCAT(l1.ID, ',', l2.ID) AS Combination, CASE WHEN l1.ID = l2.ID THEN l1.Price ELSE l1.Price + l2.Price END AS TotalPrice FROM (SELECT l1.ID, l1.Price FROM LAMP AS l1 WHERE l1.Bulb = 'Y' and l1.Type = 'Desk') AS l1 CROSS JOIN (SELECT l2.ID, l2.Price FROM LAMP AS l2 WHERE l2.Base = 'Y' AND l2.Type = 'Desk') AS l2 ORDER BY TotalPrice ASC";
+
+        int orders = 3;
+
+        LinkedHashMap<String, String> combinationMap = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> completed = new LinkedHashMap<String, String>();
+
+        try {
+            Statement allDeskLampsQuery = this.inventory.initializeConnection().createStatement();
+            ResultSet results = allDeskLampsQuery.executeQuery(query);
+
+            // put key value pairs
+            while (results.next()) {
+                combinationMap.put(results.getString("Combination"), results.getString("TotalPrice"));
+                allOrders.append(results.getString("Combination") + " | " + results.getString("TotalPrice") + "\n");
+            }
+
+            for (Map.Entry<String, String> mapElement : combinationMap.entrySet()) {
+                String key = (String) mapElement.getKey();
+                System.out.println(key + " : " + (String) mapElement.getValue());
+
+            }
+
+            while (combinationMap.entrySet().iterator().hasNext()) {
+                if (combinationMap.size() != orders) {
+                    if (combinationMap)
+                }
+            }
+
+            // for (int i = 0; i < orders; i++) {
+            //     if (completed.isEmpty()) {
+            //         completed.put(combinationMap.entrySet().stream().findFirst().get().getKey().split(",")[0],
+            //                 combinationMap.entrySet().stream().findFirst().get().getKey().split(",")[1]);
+            //     }
+            // }
+            results.close();
+            allDeskLampsQuery.close();
+            System.out.println(completed.toString());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allOrders.toString().trim();
+    }
+
     /**
      * Gets request.
      */
@@ -147,5 +194,6 @@ public class OrderForm {
         orderForm.furnitureType = "standing";
         orderForm.quantity = 1;
         var cost = orderForm.calculateOrder();
+        orderForm.orderCombinations();
     }
 }

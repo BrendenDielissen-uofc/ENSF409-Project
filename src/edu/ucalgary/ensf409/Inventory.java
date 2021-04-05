@@ -26,13 +26,15 @@ public class Inventory {
         Inventory myJDBC = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
         myJDBC.initializeConnection();
         Furniture[] testLamps = myJDBC.getAllFurniture("Desk", "Lamp");
-        var testLampMap = testLamps[0].getComponents();
-        var testLampArrayMap = Arrays.stream(testLamps).map(Furniture::getComponents).toArray();
-        System.out.println(Arrays.toString(testLamps));
-        Furniture[] testDesks = myJDBC.getAllFurniture("Standing", "Desk");
-        var testDeskMap = testDesks[0].getComponents();
-        var testDeskArrayMap = Arrays.stream(testDesks).map(Furniture::getComponents).toArray();
-        System.out.println(Arrays.toString(testDesks));
+        // var testLampMap = testLamps[0].getComponents();
+        // var testLampArrayMap =
+        // Arrays.stream(testLamps).map(Furniture::getComponents).toArray();
+        // System.out.println(Arrays.toString(testLamps));
+        // Furniture[] testDesks = myJDBC.getAllFurniture("Standing", "Desk");
+        // var testDeskMap = testDesks[0].getComponents();
+        // var testDeskArrayMap =
+        // Arrays.stream(testDesks).map(Furniture::getComponents).toArray();
+        // System.out.println(Arrays.toString(testDesks));
     }
 
     /**
@@ -80,12 +82,13 @@ public class Inventory {
      *
      * @throws SQLException if SQL related error is encountered
      */
-    public void initializeConnection() throws SQLException {
+    public Connection initializeConnection() throws SQLException {
         try {
             this.dbConnect = DriverManager.getConnection(getDBURL(), getUSERNAME(), getPASSWORD());
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return this.dbConnect;
     }
 
     /**
