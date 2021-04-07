@@ -89,11 +89,11 @@ public abstract class Furniture {
     public String getManuId(){ return this.manuId;}
 
     /**
-     * Gets components.
+     * Gets query string.
      *
-     * @return the components
+     * @return the query string
      */
-    public abstract HashMap<String, Boolean> getComponents();
+    public abstract String getQueryString();
 
     /**
      * Gets counting map.
@@ -101,5 +101,12 @@ public abstract class Furniture {
      * @return the counting map
      */
     public abstract HashMap<String, Integer> getCountingMap();
+
+    /**
+     * Gets components.
+     *
+     * @return the components
+     */
+    public abstract HashMap<String, Boolean> getComponents();
 }
 

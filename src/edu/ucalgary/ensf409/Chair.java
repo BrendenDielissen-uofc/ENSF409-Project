@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import static java.util.Map.entry;
@@ -10,6 +11,19 @@ import static java.util.Map.entry;
  * The type Chair.
  */
 public class Chair extends Furniture {
+    public static ArrayList<String> TYPES = new ArrayList<>(){{
+        add("KNEELING");
+        add("TASK");
+        add("MESH");
+        add("EXECUTIVE");
+        add("ERGONOMIC");
+    }};
+    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>(){{
+        add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
+        add(new Manufacturer("003", "Chairs R Us", "705-667-9481", "ON"));
+        add(new Manufacturer("004", "Furniture Goods", "306-512-5508", "SK"));
+        add(new Manufacturer("005", "Fine Office Supplies", "403-980-9876", "AB"));
+    }};
     /**
      * The Legs.
      */
@@ -100,7 +114,8 @@ public class Chair extends Furniture {
      *
      * @return the string
      */
-    public static String getQueryString(){ return Chair.queryString;}
+    @Override
+    public String getQueryString(){ return Chair.queryString;}
 
     @Override
     public HashMap<String, Integer> getCountingMap() {
