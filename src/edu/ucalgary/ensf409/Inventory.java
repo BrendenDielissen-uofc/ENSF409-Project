@@ -28,11 +28,11 @@ public class Inventory {
     /**
      * The Furniture result set ctor map.
      */
-    public static HashMap<String, Constructor> furnitureResultSetCtorMap;
+    public HashMap<String, Constructor> furnitureResultSetCtorMap;
     /**
      * The Furniture default ctor map.
      */
-    public static HashMap<String, Constructor> furnitureDefaultCtorMap;
+    public HashMap<String, Constructor> furnitureDefaultCtorMap;
 	private Connection dbConnect;
 	private ResultSet results;
     private String DBURL = "";
@@ -71,16 +71,16 @@ public class Inventory {
     	this.PASSWORD = PASSWORD;
         try {
             furnitureResultSetCtorMap = new HashMap<>(Map.ofEntries(
-                    entry("desk", Desk.class.getConstructor(ResultSet.class)),
-                    entry("filing", Filing.class.getConstructor(ResultSet.class)),
-                    entry("lamp", Lamp.class.getConstructor(ResultSet.class)),
-                    entry("chair", Chair.class.getConstructor(ResultSet.class))
+                    entry("DESK", Desk.class.getConstructor(ResultSet.class)),
+                    entry("FILING", Filing.class.getConstructor(ResultSet.class)),
+                    entry("LAMP", Lamp.class.getConstructor(ResultSet.class)),
+                    entry("CHAIR", Chair.class.getConstructor(ResultSet.class))
             ));
             furnitureDefaultCtorMap = new HashMap<>(Map.ofEntries(
-                    entry("desk", Desk.class.getConstructor()),
-                    entry("filing", Filing.class.getConstructor()),
-                    entry("lamp", Lamp.class.getConstructor()),
-                    entry("chair", Chair.class.getConstructor())
+                    entry("DESK", Desk.class.getConstructor()),
+                    entry("FILING", Filing.class.getConstructor()),
+                    entry("LAMP", Lamp.class.getConstructor()),
+                    entry("CHAIR", Chair.class.getConstructor())
             ));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -178,7 +178,7 @@ public class Inventory {
     public HashMap<String, Integer> getFurnitureCountingMap(String furnitureCategory){
         HashMap<String, Integer> temp = null;
         try {
-            Furniture furniture = (Furniture) Inventory.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
+            Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory.toUpperCase()).newInstance();
             temp = furniture.getCountingMap();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -196,7 +196,7 @@ public class Inventory {
     public Furniture[] getAllFurniture(String furnitureType, String furniture) {
         Furniture tempFurniture = null;
         try {
-            tempFurniture = (Furniture) Inventory.furnitureDefaultCtorMap.get(furniture).newInstance();
+            tempFurniture = (Furniture) this.furnitureDefaultCtorMap.get(furniture).newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -211,7 +211,7 @@ public class Inventory {
             System.out.println(myStmt);
             results = myStmt.executeQuery();
             while (results.next()) {
-                Furniture furnitureItem = (Furniture) Inventory.furnitureResultSetCtorMap.get(furniture).newInstance(results);
+                Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furniture).newInstance(results);
                 myFurniture.add(furnitureItem);
             }
 

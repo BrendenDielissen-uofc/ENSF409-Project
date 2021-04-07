@@ -151,7 +151,7 @@ public class OrderForm {
     }
 
     public void printManufacturers(){
-        var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory.toUpperCase());
+        var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
         StringBuilder builder = new StringBuilder();
         for(Manufacturer manufacturer : furnitureManufacturers)
             builder.append(String.format("%s, ", manufacturer.name));
@@ -168,16 +168,16 @@ public class OrderForm {
         System.out.println("---------------------------------------\n");
 
         System.out.println("Enter furniture category: ");
-        furnitureCategory = scanner.nextLine();
+        furnitureCategory = scanner.nextLine().toUpperCase();
         System.out.println("Enter furniture type: ");
-        furnitureType = scanner.nextLine();
+        furnitureType = scanner.nextLine().toUpperCase();
         System.out.println("Enter number of items needed: ");
         quantity = scanner.nextInt();
 
-        if(!new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory.toUpperCase()))
+        if(!new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory))
             throw new IllegalArgumentException(String.format("Furniture category \"%s\" is invalid.", furnitureCategory));
-        var test = Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase());
-        if(!Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase()).contains(furnitureType.toUpperCase()))
+        var test = Inventory.furnitureTypesMap.get(furnitureCategory);
+        if(!Inventory.furnitureTypesMap.get(furnitureCategory).contains(furnitureType))
             throw new IllegalArgumentException(String.format("Furniture type \"%s\" is invalid.", furnitureType));
         if(quantity < 0)
             throw new IllegalArgumentException(String.format("Number of items \"%d\" is invalid.", quantity));
@@ -197,11 +197,11 @@ public class OrderForm {
      */
     public static void main(String[] args) {
         OrderForm orderForm = new OrderForm();
-//        orderForm.getRequest();
+        orderForm.getRequest();
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "desk";
-        orderForm.furnitureType = "traditional";
-        orderForm.quantity = 1;
+//        orderForm.furnitureCategory = "Lamp";
+//        orderForm.furnitureType = "Desk";
+        //orderForm.quantity = 1;
         orderForm.printManufacturers();
         var cost = orderForm.calculateOrder();
     }
