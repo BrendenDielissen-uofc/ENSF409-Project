@@ -12,11 +12,11 @@ import static java.util.Map.entry;
  */
 public class Chair extends Furniture {
     public static ArrayList<String> TYPES = new ArrayList<>(){{
-        add("Kneeling");
-        add("Task");
-        add("Mesh");
-        add("Executive");
-        add("Ergonomic");
+        add("KNEELING");
+        add("TASK");
+        add("MESH");
+        add("EXECUTIVE");
+        add("ERGONOMIC");
     }};
     public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>(){{
         add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));

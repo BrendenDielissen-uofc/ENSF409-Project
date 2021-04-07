@@ -46,7 +46,7 @@ public class OrderForm {
         Furniture[] furnitureCombo = this.inventory.getCheapestOrder(this.furnitureType, this.furnitureCategory, this.quantity);
         ArrayList<Furniture> cheapestFurnitureCombo = furnitureCombo != null ? new ArrayList<Furniture>(Arrays.asList(furnitureCombo)) : new ArrayList<>();
 
-        if(cheapestFurnitureCombo.size() < 1)
+        if (cheapestFurnitureCombo.size() < 1)
             return -1;
 
         int sum = 0;
@@ -70,33 +70,32 @@ public class OrderForm {
      */
     private void fulfillOrder() {
         int cost = this.calculateOrder();
-        if(cost == -1)
-        {
+        if (cost == -1) {
             this.printManufacturers();
-            return;
+        } else {
+            Furniture[] array = new Furniture[cheapestCombo.size()];
+            cheapestCombo.toArray(array);
+
+            // UNCOMMENT TO TEST DELETION
+            //this.inventory.deleteFurniture(array);
+
+            System.out.println("Furniture Order Form \n");
+            System.out.println("Faculty Name: ");
+            System.out.println("Contact: ");
+            System.out.println("Date: \n");
+            System.out.println("Original Request: " + this.furnitureType + " "
+                    + this.furnitureCategory + ", " + this.quantity + "\n");
+            System.out.println("Items Ordered");
+            for (Furniture furniture : cheapestCombo) {
+                System.out.println("ID: " + furniture.getId());
+            }
+            System.out.println();
+            System.out.println("Total Price: " + cost);
         }
-
-        Furniture[] array = new Furniture[cheapestCombo.size()];
-        cheapestCombo.toArray(array);
-
-        // UNCOMMENT TO TEST DELETION
-        //this.inventory.deleteFurniture(array);
-
-        System.out.println("Furniture Order Form \n");
-        System.out.println("Faculty Name: ");
-        System.out.println("Contact: ");
-        System.out.println("Date: \n");
-        System.out.println("Original Request: " + this.furnitureType + " "
-                + this.furnitureCategory + ", " + this.quantity + "\n");
-        System.out.println("Items Ordered");
-        for(Furniture furniture : cheapestCombo){
-            System.out.println("ID: " + furniture.getId());
-        }
-        System.out.println();
-        System.out.println("Total Price: " + cost);
+        this.inventory.closeConnection();
     }
 
-    private void printManufacturers(){
+    private void printManufacturers() {
         var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
         String[] manufacturerNames = (String[]) furnitureManufacturers.stream().map(manufacturer -> manufacturer.name).toArray();
 
@@ -120,20 +119,24 @@ public class OrderForm {
         System.out.println("\tUofC Used Furniture Request Form");
         System.out.println("---------------------------------------\n");
 
-        System.out.println("Enter furniture category: ");
-        furnitureCategory = scanner.nextLine();
-        System.out.println("Enter furniture type: ");
-        furnitureType = scanner.nextLine();
-        System.out.println("Enter number of items needed: ");
-        quantity = scanner.nextInt();
+        try {
+            System.out.println("Enter furniture category: ");
+            furnitureCategory = scanner.nextLine().toUpperCase().trim();
+            System.out.println("Enter furniture type: ");
+            furnitureType = scanner.nextLine().toUpperCase().trim();
+            System.out.println("Enter number of items needed: ");
+            quantity = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            throw new IllegalArgumentException("Category and type must be strings, number of items must be an integer number.");
+        }
 
-        if(!new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory))
+        if (!furnitureCategory.chars().allMatch(Character::isLetter) || !new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory))
             throw new IllegalArgumentException(String.format("Furniture category \"%s\" is invalid.", furnitureCategory));
         var test = Inventory.furnitureTypesMap.get(furnitureCategory);
-        if(!Inventory.furnitureTypesMap.get(furnitureCategory).contains(furnitureType))
+        if (!furnitureType.chars().allMatch(Character::isLetter) || !Inventory.furnitureTypesMap.get(furnitureCategory).contains(furnitureType))
             throw new IllegalArgumentException(String.format("Furniture type \"%s\" is invalid.", furnitureType));
-        if(quantity < 0)
-            throw new IllegalArgumentException(String.format("Number of items \"%d\" is invalid.", quantity));
+        if (quantity < 1)
+            throw new IllegalArgumentException("Number of items must be greater than 0.");
 
         System.out.println("\n\tRequest received for:");
         System.out.println("---------------------------------------\n");
@@ -152,11 +155,11 @@ public class OrderForm {
      */
     public static void main(String[] args) {
         OrderForm orderForm = new OrderForm();
-//        orderForm.requestOrder();
+        orderForm.requestOrder();
 
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "Chair";
-        orderForm.furnitureType = "Mesh";
-        orderForm.quantity = 2;
+//        orderForm.furnitureCategory = "Chair";
+//        orderForm.furnitureType = "Mesh";
+//        orderForm.quantity = 2;
     }
 }

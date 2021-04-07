@@ -14,9 +14,9 @@ import static java.util.Map.entry;
  */
 public class Lamp extends Furniture {
     public static ArrayList<String> TYPES = new ArrayList<>(){{
-        add("Desk");
-        add("Study");
-        add("Swing Arm");
+        add("DESK");
+        add("STUDY");
+        add("SWING ARM");
     }};
     public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>(){{
         add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));

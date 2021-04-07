@@ -13,9 +13,9 @@ import static java.util.Map.entry;
  */
 class Desk extends Furniture {
     public static ArrayList<String> TYPES = new ArrayList<>() {{
-        add("Standing");
-        add("Adjustable");
-        add("Traditional");
+        add("STANDING");
+        add("ADJUSTABLE");
+        add("TRADITIONAL");
     }};
     public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {{
         add(new Manufacturer("001", "Academic Desks", "236-145-2542", "BC"));

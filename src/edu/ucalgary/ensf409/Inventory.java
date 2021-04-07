@@ -17,19 +17,19 @@ public class Inventory {
      * The constant furnitureTypesMap.
      */
     public static HashMap<String, List<String>> furnitureTypesMap = new HashMap<>(Map.ofEntries(
-            entry("Desk",  Desk.TYPES),
-            entry("Filing", Filing.TYPES),
-            entry("Lamp", Lamp.TYPES),
-            entry("Chair", Chair.TYPES)
+            entry("DESK", Desk.TYPES),
+            entry("FILING", Filing.TYPES),
+            entry("LAMP", Lamp.TYPES),
+            entry("CHAIR", Chair.TYPES)
     ));
     /**
      * The constant furnitureManufacturersMap.
      */
     public static HashMap<String, List<Manufacturer>> furnitureManufacturersMap = new HashMap<>(Map.ofEntries(
-            entry("Desk", Desk.MANUFACTURERS),
-            entry("Filing", Filing.MANUFACTURERS),
-            entry("Lamp", Lamp.MANUFACTURERS),
-            entry("Chair", Chair.MANUFACTURERS)
+            entry("DESK", Desk.MANUFACTURERS),
+            entry("FILING", Filing.MANUFACTURERS),
+            entry("LAMP", Lamp.MANUFACTURERS),
+            entry("CHAIR", Chair.MANUFACTURERS)
     ));
     /**
      * The Furniture result set ctor map.
@@ -39,8 +39,8 @@ public class Inventory {
      * The Furniture default ctor map.
      */
     public HashMap<String, Constructor> furnitureDefaultCtorMap;
-	private Connection dbConnect;
-	private ResultSet results;
+    private Connection dbConnect;
+    private ResultSet results;
     private String DBURL = "";
     private String USERNAME = "";
     private String PASSWORD = "";
@@ -72,21 +72,21 @@ public class Inventory {
      * @param PASSWORD the password
      */
     public Inventory(String DBURL, String USERNAME, String PASSWORD) {
-    	this.DBURL = DBURL;
-    	this.USERNAME = USERNAME;
-    	this.PASSWORD = PASSWORD;
+        this.DBURL = DBURL;
+        this.USERNAME = USERNAME;
+        this.PASSWORD = PASSWORD;
         try {
             furnitureResultSetCtorMap = new HashMap<>(Map.ofEntries(
-                    entry("Desk", Desk.class.getConstructor(ResultSet.class)),
-                    entry("Filing", Filing.class.getConstructor(ResultSet.class)),
-                    entry("Lamp", Lamp.class.getConstructor(ResultSet.class)),
-                    entry("Chair", Chair.class.getConstructor(ResultSet.class))
+                    entry("DESK", Desk.class.getConstructor(ResultSet.class)),
+                    entry("FILING", Filing.class.getConstructor(ResultSet.class)),
+                    entry("LAMP", Lamp.class.getConstructor(ResultSet.class)),
+                    entry("CHAIR", Chair.class.getConstructor(ResultSet.class))
             ));
             furnitureDefaultCtorMap = new HashMap<>(Map.ofEntries(
-                    entry("Desk", Desk.class.getConstructor()),
-                    entry("Filing", Filing.class.getConstructor()),
-                    entry("Lamp", Lamp.class.getConstructor()),
-                    entry("Chair", Chair.class.getConstructor())
+                    entry("DESK", Desk.class.getConstructor()),
+                    entry("FILING", Filing.class.getConstructor()),
+                    entry("LAMP", Lamp.class.getConstructor()),
+                    entry("CHAIR", Chair.class.getConstructor())
             ));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -101,7 +101,7 @@ public class Inventory {
      * @return String DBURL
      */
     public String getDBURL() {
-    	return this.DBURL;
+        return this.DBURL;
     }
 
     /**
@@ -110,7 +110,7 @@ public class Inventory {
      * @return String USERNAME
      */
     public String getUSERNAME() {
-    	return this.USERNAME;
+        return this.USERNAME;
     }
 
     /**
@@ -119,8 +119,8 @@ public class Inventory {
      * @return String PASSWORD
      */
     public String getPASSWORD() {
-    	return this.PASSWORD;
-    	
+        return this.PASSWORD;
+
     }
 
     /**
@@ -129,11 +129,11 @@ public class Inventory {
      * @throws SQLException if SQL related error is encountered
      */
     public void initializeConnection() throws SQLException {
-    	try {
-    		this.dbConnect = DriverManager.getConnection(getDBURL(), getUSERNAME(), getPASSWORD());
-    	} catch (SQLException ex) {
-    		ex.printStackTrace();
-    	}
+        try {
+            this.dbConnect = DriverManager.getConnection(getDBURL(), getUSERNAME(), getPASSWORD());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -142,9 +142,9 @@ public class Inventory {
      * @param furniture the furniture
      */
     public void deleteFurniture(Furniture[] furniture) {
-    	// iterates through each furniture object and deletes in from db
-        for (Furniture value : furniture) {
-            try {
+        // iterates through each furniture object and deletes in from db
+        try {
+            for (Furniture value : furniture) {
                 String furnitureCat = value.getClass().getSimpleName().toUpperCase();
                 String query = "DELETE FROM " + furnitureCat + " where ID = ?";
                 PreparedStatement myStmt = dbConnect.prepareStatement(query);
@@ -152,13 +152,13 @@ public class Inventory {
                 myStmt.setString(1, value.getId());
 
                 int rowCount = myStmt.executeUpdate();
-                System.out.println("Deleting Furniture. Rows affected: " + rowCount);
+                //System.out.println("Deleting Furniture. Rows affected: " + rowCount);
 
                 myStmt.close();
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            this.closeConnection();
         }
     }
 
@@ -166,12 +166,12 @@ public class Inventory {
      * Close database connections after everything is done
      */
     public void closeConnection() {
-    	try {
-    		this.results.close();
-    		this.dbConnect.close();
-    	} catch (SQLException e) {
-    		e.printStackTrace();
-    	}
+        try {
+            this.results.close();
+            this.dbConnect.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -180,7 +180,7 @@ public class Inventory {
      * @param furnitureCategory the furniture category
      * @return the hash map
      */
-    public HashMap<String, Integer> getFurnitureCountingMap(String furnitureCategory){
+    public HashMap<String, Integer> getFurnitureCountingMap(String furnitureCategory) {
         HashMap<String, Integer> temp = null;
         try {
             Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
@@ -213,7 +213,7 @@ public class Inventory {
             PreparedStatement myStmt = dbConnect.prepareStatement(query);
 
             myStmt.setString(1, furnitureType);
-            System.out.println(myStmt);
+            //System.out.println(myStmt);
             results = myStmt.executeQuery();
             while (results.next()) {
                 Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furnitureCategory).newInstance(results);
@@ -223,6 +223,7 @@ public class Inventory {
             myStmt.close();
         } catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
             ex.printStackTrace();
+            this.closeConnection();
         }
 
         Furniture[] array = new Furniture[myFurniture.size()];
@@ -239,7 +240,7 @@ public class Inventory {
      * @param quantity          the quantity
      * @return the furniture [ ]
      */
-    public Furniture[] getCheapestOrder(String furnitureType, String furnitureCategory, int quantity){
+    public Furniture[] getCheapestOrder(String furnitureType, String furnitureCategory, int quantity) {
         HashSet<String> completed = new HashSet<String>();
         boolean filled = true;
 
@@ -252,7 +253,7 @@ public class Inventory {
             HashMap<String, String> combinationsQueryMap = furniture.getAllCombinationsQueryMap();
 
             String createTable = combinationsQueryMap.get("createTable");
-            System.out.println(createTable);
+            //System.out.println(createTable);
             String numberOfPartsTable = combinationsQueryMap.get("numberOfPartsTable");
             String getOrder = combinationsQueryMap.get("getOrder");
             int numberOfParts = furniture.getComponents().size();
@@ -300,15 +301,15 @@ public class Inventory {
 
         } catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException throwables) {
             throwables.printStackTrace();
+            this.closeConnection();
         }
-        if(filled){
+        if (filled) {
             ArrayList<Furniture> cheapestCombo = new ArrayList<Furniture>(Arrays.asList(this.getAllFurniture(furnitureType, furnitureCategory)));
             cheapestCombo = (ArrayList<Furniture>) cheapestCombo.stream().filter(item -> completed.contains(item.getId())).collect(Collectors.toList());
             Furniture[] array = new Furniture[cheapestCombo.size()];
             cheapestCombo.toArray(array);
             return array;
-        }
-        else
+        } else
             return null;
     }
 }

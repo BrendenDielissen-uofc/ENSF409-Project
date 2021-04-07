@@ -13,9 +13,9 @@ import static java.util.Map.entry;
  */
 public class Filing extends Furniture {
     public static ArrayList<String> TYPES = new ArrayList<>(){{
-        add("Small");
-        add("Medium");
-        add("Large");
+        add("SMALL");
+        add("MEDIUM");
+        add("LARGE");
     }};
     public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>(){{
         add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
