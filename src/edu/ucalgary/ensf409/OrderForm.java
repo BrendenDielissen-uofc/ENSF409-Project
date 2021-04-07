@@ -1,273 +1,287 @@
 package edu.ucalgary.ensf409;
 
 import java.sql.SQLException;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.Scanner;
+import java.sql.*;
 import java.util.*;
 
-/**
- * The type Order form.
- */
 public class OrderForm {
-    /**
-     * The Furniture id.
-     */
-    public String[] furnitureID = new String[10];
-    /**
-     * The Furniture category.
-     */
-    public String furnitureCategory;
-    /**
-     * The Furniture type.
-     */
-    public String furnitureType;
-    /**
-     * The Quantity.
-     */
-    public int quantity;
-    private final Inventory inventory;
-    /**
-     * The Cheapest combo.
-     */
-    public ArrayList<Furniture> cheapestCombo;
-    public String order;
+	public String furnitureCategory;
+	public String furnitureType;
+	public int quantity;
+	private final Inventory inventory = new Inventory(
+			"jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
 
-    /**
-     * Instantiates a new Order form.
-     */
-    public OrderForm() {
-        this.inventory = new Inventory("jdbc:mysql://localhost/inventory", "Marasco", "ensf409");
-        try {
-            this.inventory.initializeConnection();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+	public void getOrder() throws SQLException {
+
+		int numberOfParts = 0;
+		HashSet<String> completed = new HashSet<String>();
+		boolean filled = true;
+		String createTable = "";
+
+		try {
+			// drop temporary table if exists
+			Statement dropTableQuery = this.inventory.initializeConnection()
+					.createStatement();
+			dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
+			
+			
+
+			// make temporary table, all combinations, sort by price in
+			// ascending
+			if (this.furnitureCategory.equalsIgnoreCase("lamp")) {
+				createTable = "CREATE TABLE T AS SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+						+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+						+ "ELSE l1.Price + l2.Price\r\n"
+						+ "END AS TotalPrice\r\n"
+						+ "FROM (SELECT l1.ID, l1.Price\r\n"
+						+ "FROM LAMP as l1\r\n"
+						+ "WHERE l1.Bulb = 'Y' and l1.Type = ?) AS l1\r\n"
+						+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+						+ "FROM LAMP as l2\r\n"
+						+ "WHERE l2.Base = 'Y' and l2.Type = ?) AS l2\r\n"
+						+ "ORDER BY TotalPrice ASC;";
+				numberOfParts = 2;
+			} else if (this.furnitureCategory.equalsIgnoreCase("filing")) {
+				createTable = "CREATE TABLE T AS SELECT c0, c1, l3.ID AS c2, CASE\r\n"
+						+ "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
+						+ "ELSE l.Price + l3.Price\r\n"
+						+ "END AS TotalPrice\r\n"
+						+ "FROM (SELECT l3.ID, l3.Price\r\n"
+						+ "FROM FILING as l3\r\n"
+						+ "WHERE l3.Rails = 'Y' and l3.Type = ?) AS l3\r\n"
+						+ "CROSS JOIN\r\n"
+						+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+						+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+						+ "ELSE l1.Price + l2.Price\r\n" + "END AS Price\r\n"
+						+ "FROM (SELECT l1.ID, l1.Price\r\n"
+						+ "FROM FILING as l1\r\n"
+						+ "WHERE l1.Drawers = 'Y' and l1.Type = ?) AS l1\r\n"
+						+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+						+ "FROM FILING as l2\r\n"
+						+ "WHERE l2.Cabinet = 'Y' and l2.Type = ?) AS l2) AS l\r\n"
+						+ "ORDER BY TotalPrice ASC;";
+				numberOfParts = 3;
+			} else if (this.furnitureCategory.equalsIgnoreCase("desk")) {
+				createTable = "CREATE TABLE T AS SELECT c0, c1, l3.ID AS c2, CASE\r\n"
+						+ "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
+						+ "ELSE l.Price + l3.Price\r\n"
+						+ "END AS TotalPrice\r\n"
+						+ "FROM (SELECT l3.ID, l3.Price\r\n"
+						+ "FROM DESK as l3\r\n"
+						+ "WHERE l3.Drawer = 'Y' and l3.Type = ?) AS l3\r\n"
+						+ "CROSS JOIN\r\n"
+						+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+						+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+						+ "ELSE l1.Price + l2.Price\r\n" + "END AS Price\r\n"
+						+ "FROM (SELECT l1.ID, l1.Price\r\n"
+						+ "FROM DESK as l1\r\n"
+						+ "WHERE l1.Legs = 'Y' and l1.Type =?) AS l1\r\n"
+						+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+						+ "FROM DESK as l2\r\n"
+						+ "WHERE l2.Top = 'Y' and l2.Type = ?) AS l2) AS l\r\n"
+						+ "ORDER BY TotalPrice ASC;";
+				numberOfParts = 3;
+			} else {
+				createTable = "CREATE TABLE T AS SELECT c0, c1, c2, l4.ID AS c3, CASE\r\n"
+						+ "WHEN l4.ID = c0 OR l4.ID = c1 OR l4.ID = c2 THEN f.Price\r\n"
+						+ "ELSE f.Price + l4.Price\r\n"
+						+ "END AS TotalPrice\r\n"
+						+ "FROM (SELECT l4.ID, l4.Price\r\n"
+						+ "FROM CHAIR as l4\r\n"
+						+ "WHERE l4.Cushion = 'Y' and l4.Type = ?) AS l4\r\n"
+						+ "CROSS JOIN\r\n"
+						+ "(SELECT c0, c1, l3.ID AS c2, CASE\r\n"
+						+ "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
+						+ "ELSE l.Price + l3.Price\r\n" + "END AS Price\r\n"
+						+ "FROM (SELECT l3.ID, l3.Price\r\n"
+						+ "FROM CHAIR as l3\r\n"
+						+ "WHERE l3.Seat = 'Y' and l3.Type = ?) AS l3\r\n"
+						+ "CROSS JOIN\r\n"
+						+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+						+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+						+ "ELSE l1.Price + l2.Price\r\n" + "END AS Price\r\n"
+						+ "FROM (SELECT l1.ID, l1.Price\r\n"
+						+ "FROM CHAIR as l1\r\n"
+						+ "WHERE l1.Legs = 'Y' and l1.Type = ?) AS l1\r\n"
+						+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+						+ "FROM CHAIR as l2\r\n"
+						+ "WHERE l2.Arms = 'Y' and l2.Type = ?) AS l2) AS l) AS f\r\n"
+						+ "ORDER BY TotalPrice ASC;";
+				numberOfParts = 4;
+			}
+			
+			dropTableQuery.close();
+			PreparedStatement query = this.inventory.initializeConnection()
+					.prepareStatement(createTable);
+			for (int i = 0; i < numberOfParts; i++) {
+				query.setString(i + 1, this.furnitureType);
+			}
+
+			query.executeUpdate();
+			query.close();
+
+			String[] currentPart = new String[numberOfParts];
+
+			// get set based on number of orders
+			Statement resultsQuery = this.inventory.initializeConnection()
+					.createStatement();
+			for (int counter = 0; counter < this.quantity; counter++) {
+				// get one set
+				ResultSet results = resultsQuery
+						.executeQuery("SELECT * FROM T LIMIT 1");
+				// no set returned, cannot fill order
+				if (!results.isBeforeFirst()) {
+					filled = false;
+					results.close();
+					resultsQuery.close();
+					break;
+				}
+				// one set found
+				Statement deleteQuery = this.inventory
+						.initializeConnection().createStatement();
+				while (results.next()) {
+					// place in completed and currentPart
+					for (int i = 0; i < numberOfParts; i++) {
+						completed.add(results.getString("c" + i));
+						currentPart[i] = results.getString("c" + i);
+					}
+					// delete statement based on set taken
+					String delete = "DELETE FROM T WHERE c0 = '"
+							+ currentPart[0] + "'";
+					for (int i = 1; i < numberOfParts; i++) {
+						delete += " OR c" + i + " = '" + currentPart[i] + "'";
+					}
+					// delete from temporary table row components
+
+					deleteQuery.executeUpdate(delete);
+				}
+				results.close();
+				deleteQuery.close();
+			}
+			
+			resultsQuery.close();
+			dropTableQuery = this.inventory.initializeConnection()
+					.createStatement();
+			dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
+			
+			dropTableQuery.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (filled) {
+			orderFilled(completed);
+		} else {
+			orderNotFilled();
+		}
+	}
+
+	public void orderNotFilled() {
+        String[] lampsAndFilingManufacturers = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] deskManufacturers = { "Academic Desks", "Office Furnishings", "Furniture Goods",
+                "Fine Office Supplies" };
+        String[] chairManufacturers = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies",
+                "Chairs R Us" };
+        System.out.println("_____________________________________________");
+        System.out.println("Furniture Order Form \n");
+		System.out.println("Faculty Name: ");
+		System.out.println("Contact: ");
+		System.out.println("Date: \n");
+		System.out.println("Original Request: " + this.furnitureType + " "
+				+ this.furnitureCategory + ", " + this.quantity + "\n");
+		System.out.println("Order cannot be fulfilled based on current inventory. Suggested manufacturers:");
+		
+        if (this.furnitureCategory.equalsIgnoreCase("lamp")) {
+            System.out.println(String.join(", ", lampsAndFilingManufacturers));
+
+        } else if (this.furnitureCategory.equalsIgnoreCase("desk")) {
+            System.out.println(String.join(", ", deskManufacturers));
+
+        } else if (this.furnitureCategory.equalsIgnoreCase("filing")) {
+            System.out.println(String.join(", ", lampsAndFilingManufacturers));
+
+        } else if (this.furnitureCategory.equalsIgnoreCase("chair")) {
+            System.out.println(String.join(", ", chairManufacturers));
         }
     }
 
-    /**
-     * Calculate order int.
-     *
-     * @return the int
-     */
-    public int calculateOrder() {
-        ArrayList<ArrayList<Furniture>> allFurnitureCombos = getAllFurnitureCombos();
-        // this flag will be set false once we have a valid combination of furniture for the desired quantity
-        boolean flag = true;
-        ArrayList<Furniture> possibleCheapCombo = new ArrayList<>();
-        int lowestPrice = -1;
-        // determine the lowest priced combo of furniture for the desired quantity
-        for (ArrayList<Furniture> furnitureCombo : allFurnitureCombos) {
-            int sum = 0;
-            HashMap<String, Integer> countingMap = inventory.getFurnitureCountingMap(furnitureCategory);
-            for (Furniture furniture : furnitureCombo) {
-                sum += furniture.getPrice();
-                HashMap<String, Boolean> componentMap = furniture.getComponents();
-                for (String component : countingMap.keySet()) {
-                    if (componentMap.get(component).equals(true))
-                        countingMap.put(component, countingMap.get(component) + 1);
-                }
-            }
-            if (!countingMap.entrySet().stream().anyMatch(entry -> entry.getValue() < quantity)) {
-                // this is our initial value to compare other combos to
-                if (lowestPrice == -1) {
-                    lowestPrice = sum;
-                    possibleCheapCombo = furnitureCombo;
-                } else if (sum < lowestPrice) {
-                    possibleCheapCombo = furnitureCombo;
-                    lowestPrice = sum;
-                }
-                flag = false;
-            }
-        }
-        // this means we cannot fulfill the order
-        // countingMap should show which components we are missing (if we wanted to get fancy)
-        if (flag)
-            return -1;
+	public void orderFilled(HashSet<String> completed) throws SQLException {
+		String sum = ""; // total price variable
+		try {
+			List<String> components = new ArrayList<String>(completed);
+			// delete query to delete furniture taken
+			String delete = "DELETE FROM " + furnitureCategory + " WHERE ID = '"
+					+ components.get(0) + "'";
+			// summing query to get total price of all furniture taken
+			String totalPrice = "SELECT SUM(Price) FROM " + furnitureCategory
+					+ " WHERE ID = '" + components.get(0) + "'";
+			// iterate over unique ids
+			for (int i = 1; i < components.size(); i++) {
+				delete += " OR ID = '" + components.get(i) + "'";
+				totalPrice += " OR ID = '" + components.get(i) + "'";
+			}
+			// get total price
+			Statement priceQuery = this.inventory.initializeConnection()
+					.createStatement();
+			ResultSet price = priceQuery.executeQuery(totalPrice);
+			while (price.next()) {
+				sum = price.getString("SUM(Price)");
+			}
+			price.close();
+			priceQuery.close();
 
-        this.cheapestCombo = possibleCheapCombo;
-        return lowestPrice;
-    }
+			
 
-    /**
-     * Get all possible furniture combos of the furniture type requested.
-     *
-     * @return the array list
-     */
-    private ArrayList<ArrayList<Furniture>> getAllFurnitureCombos() {
-        // get all relevant furniture items from database
-        ArrayList<Furniture> allFurnitureList = new ArrayList<Furniture>(Arrays.asList(inventory.getAllFurniture(furnitureType, furnitureCategory)));
-        if (allFurnitureList.size() < 1)
-            return null;
-        // generate the indexes for all possible combinations
-        List<int[]> indexLists = generateIndexLists(allFurnitureList.size());
-        // map furniture items to the index lists
-        ArrayList<ArrayList<Furniture>> allFurnitureCombos = new ArrayList<>();
-        for (int[] indexArr : indexLists) {
-            ArrayList<Furniture> furnitureList = new ArrayList<>();
-            for (int index : indexArr)
-                furnitureList.add(allFurnitureList.get(index));
-            allFurnitureCombos.add(furnitureList);
-        }
-        return allFurnitureCombos;
-    }
+			// delete furniture taken
+			Statement deleteQuery = this.inventory.initializeConnection()
+					.createStatement();
+			deleteQuery.executeUpdate(delete);
+			
+			deleteQuery.close();
 
-    private List<int[]> generateIndexLists(int n) {
-        // DO NOT USE FOR A DATABASE WITH 30+ FURNITURE ITEMS PER CATEGORY -> NOT ENOUGH HEAP MEMORY
-        // this method generates a list of arrays, corresponding to all possible combinations
-        // of an n-lengthed array that is comprised of elements 0 to (n-1)
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-        // example: generateIndexLists(2) -> List( [0], [1], [0, 1], [1, 0] )
-        int r = n;
-        List<int[]> allCombinations = new ArrayList<>();
-        while (r > 0) {
-            List<int[]> rCombinations = new ArrayList<>();
-            int[] combination = new int[r];
-            for (int i = 0; i < r; i++)
-                combination[i] = i;
-            while (combination[r - 1] < n) {
-                rCombinations.add(combination.clone());
-                int t = r - 1;
-                while (t != 0 && combination[t] == n - r + t)
-                    t--;
-                combination[t]++;
-                for (int i = t + 1; i < r; i++)
-                    combination[i] = combination[i - 1] + 1;
-            }
-            allCombinations.addAll(rCombinations);
-            r--;
-        }
-        return allCombinations;
-    }
+		System.out.println("Furniture Order Form \n");
+		System.out.println("Faculty Name: ");
+		System.out.println("Contact: ");
+		System.out.println("Date: \n");
+		System.out.println("Original Request: " + this.furnitureType + " "
+				+ this.furnitureCategory + ", " + this.quantity + "\n");
+		System.out.println("Items Ordered");
+		for(String item:completed){
+			System.out.println("ID: " + item);
+		}
+		System.out.println();
+		System.out.println("Total Price: $" + sum);
+	}
 
-    /**
-     * Gets order.
-     */
-    public void getOrder() {
+	public void getRequest() throws SQLException {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Used Furniture Request Form");
 
-    }
-    
-    /**
-     * Sets the order into a singular String for easy writing into file
-     * FUTURE: If cost is valid, deletes the items in the database. Code is currently commented out.
-     * @param cost integer the total cost of the order
-     */
-    public void setOrder(int cost) {
-    	
-        Furniture[] furnitureCombo = getFurnitureList();
-        
-        String order = "Furniture Order Form\n\nFaculty Name: \nContact: \nDate: \n\n";
-        
-        order = order + "Original Request: " + furnitureType + " " + furnitureCategory + ", " + Integer.toString(quantity) + "\n\nItems Ordered:\n";
-        for (int i = 0; i < furnitureCombo.length; i++) {
-        	order = order + "ID: " + furnitureCombo[i].getId() + " $" + furnitureCombo[i].getPrice() + "\n";
-        }
-        order = order + "\nTotal Price: $" + Integer.toString(cost);
-        
-        System.out.println(order);
-        this.order = order;
-        //inventory.deleteFurniture(furnitureCombo);
-    }
+		System.out.println("Enter furniture category: ");
+		this.furnitureCategory = scanner.nextLine();
 
-    /**
-     * Creates a file and writes the order statement in it. File is overwritten if "orderform.txt" already exists"
-     */
-    public void printOrder() {
-    	
-    	// Creating the file
-    	try {
-    		File orderFile = new File("orderform.txt");
-    		if(orderFile.createNewFile()) {
-    			System.out.println("File created: " + orderFile.getName());
-    			
-    		} else {
-    			System.out.println("File already exists.");
-    		}
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-    	
-    	
-    	// Writing to the file
-    	try {
-    		FileWriter orderWrite = new FileWriter("orderform.txt");
-    		orderWrite.write(this.order);
-    		orderWrite.close();
-    		System.out.println("Succesfully wrote to the file");
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-    	
+		System.out.println("Enter furniture type: ");
+		this.furnitureType = scanner.nextLine();
 
-    }
-    
-    public Furniture[] getFurnitureList() {
-    	Furniture[] array = new Furniture[this.cheapestCombo.size()];
-    	this.cheapestCombo.toArray(array);
-		return array;
-    }
+		System.out.println("Enter number of items needed: ");
+		this.quantity = scanner.nextInt();
 
-    public void printManufacturers(){
-        var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory.toUpperCase());
-        StringBuilder builder = new StringBuilder();
-        for(Manufacturer manufacturer : furnitureManufacturers)
-            builder.append(String.format("%s, ", manufacturer.name));
-        builder.deleteCharAt(builder.length()-2);
-        System.out.printf("Suggested manufacturers are: %s%n", builder.toString());
-    }
+		System.out.println("Request received");
+		System.out.println("Furniture Category: " + this.furnitureCategory);
+		System.out.println("Furniture Type: " + this.furnitureType);
+		System.out.println("Quantity: " + this.quantity);
+		scanner.close();
+		getOrder();
+	}
 
-    /**
-     * Gets request.
-     */
-    public void getRequest() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("\tUofC Used Furniture Request Form");
-        System.out.println("---------------------------------------\n");
-
-        System.out.println("Enter furniture category: ");
-        furnitureCategory = scanner.nextLine();
-        System.out.println("Enter furniture type: ");
-        furnitureType = scanner.nextLine();
-        System.out.println("Enter number of items needed: ");
-        quantity = scanner.nextInt();
-
-        if(!new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory.toUpperCase()))
-            throw new IllegalArgumentException(String.format("Furniture category \"%s\" is invalid.", furnitureCategory));
-        var test = Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase());
-        if(!Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase()).contains(furnitureType.toUpperCase()))
-            throw new IllegalArgumentException(String.format("Furniture type \"%s\" is invalid.", furnitureType));
-        if(quantity < 0)
-            throw new IllegalArgumentException(String.format("Number of items \"%d\" is invalid.", quantity));
-
-        System.out.println("\n\tRequest received for:");
-        System.out.println("---------------------------------------\n");
-        System.out.println("Furniture Category: " + furnitureCategory);
-        System.out.println("Furniture Type: " + furnitureType);
-        System.out.println("Quantity: " + quantity);
-        scanner.close();
-    }
-
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
-    public static void main(String[] args) {
-
-        OrderForm orderForm = new OrderForm();
-//        orderForm.getRequest();
-        // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "lamp";
-        orderForm.furnitureType = "desk";
-        orderForm.quantity = 2;
-        int cost = orderForm.calculateOrder();
-        if (cost == -1) {
-        	System.out.println("You messed up");
-        } else {
-            orderForm.setOrder(cost);
-            orderForm.printOrder();
-        }
- 
-        
-    }
+	public static void main(String[] args) throws SQLException {
+		OrderForm orderForm = new OrderForm();
+		orderForm.getRequest();
+		orderForm.inventory.closeConnection();
+	}
 }
