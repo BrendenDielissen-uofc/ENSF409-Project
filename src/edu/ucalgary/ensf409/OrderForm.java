@@ -17,7 +17,7 @@ public class OrderForm {
 
 
 	public void getOrder() throws SQLException {
-		String confFile = "lamp_query.conf";
+		String confFile = String.format("%s_query.conf", this.furnitureCategory.toLowerCase());
 		
         Properties prop = new Properties();
         try {
@@ -28,7 +28,7 @@ public class OrderForm {
             e1.printStackTrace();
         }
 
-        String query = prop.getProperty("LAMP_SQL");
+        String query = prop.getProperty(String.format("%s_SQL", this.furnitureCategory.toLowerCase()));
 
         int orders = 2;
         int numberOfParts = 2;
@@ -49,7 +49,7 @@ public class OrderForm {
             lampsQuery.executeUpdate();
             
             //get set based on number of orders
-            for(int counter = 0; counter < orders; counter ++) {
+            for(int counter = 0; counter < this.quantity; counter ++) {
             	//get one set
             	Statement resultsQuery = this.inventory.initializeConnection().createStatement();
             	ResultSet results = resultsQuery.executeQuery("SELECT * FROM T LIMIT 1");
