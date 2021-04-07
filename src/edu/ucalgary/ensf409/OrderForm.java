@@ -28,7 +28,7 @@ public class OrderForm {
             e1.printStackTrace();
         }
 
-        String query = prop.getProperty(String.format("%s_SQL", this.furnitureCategory.toLowerCase()));
+        String query = prop.getProperty(String.format("%s_SQL", this.furnitureCategory.toUpperCase()));
 
         int orders = 2;
         int numberOfParts = 2;
