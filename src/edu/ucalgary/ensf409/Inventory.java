@@ -13,6 +13,18 @@ import static java.util.Map.entry;
  */
 public class Inventory {
 
+    public static HashMap<String, List<String>> furnitureTypesMap = new HashMap<>(Map.ofEntries(
+            entry("DESK",  Desk.TYPES),
+            entry("FILING", Filing.TYPES),
+            entry("LAMP", Lamp.LAMP_TYPES),
+            entry("CHAIR", Chair.TYPES)
+    ));
+    public static HashMap<String, List<Manufacturer>> furnitureManufacturersMap = new HashMap<>(Map.ofEntries(
+            entry("DESK", Desk.MANUFACTURERS),
+            entry("FILING", Filing.MANUFACTURERS),
+            entry("LAMP", Lamp.MANUFACTURERS),
+            entry("CHAIR", Chair.MANUFACTURERS)
+    ));
     /**
      * The Furniture result set ctor map.
      */

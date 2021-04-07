@@ -27,7 +27,7 @@ public class OrderForm {
     /**
      * The Cheapest combo.
      */
-    ArrayList<Furniture> cheapestCombo;
+    public ArrayList<Furniture> cheapestCombo;
 
     /**
      * Instantiates a new Order form.
@@ -75,12 +75,11 @@ public class OrderForm {
                 flag = false;
             }
         }
-
-        if (flag) {
-            // this means we cannot fulfill the order
-            // countingMap should show which components we are missing!!
+        // this means we cannot fulfill the order
+        // countingMap should show which components we are missing (if we wanted to get fancy)
+        if (flag)
             return -1;
-        }
+
         this.cheapestCombo = possibleCheapCombo;
         return lowestPrice;
     }
@@ -90,7 +89,7 @@ public class OrderForm {
      *
      * @return the array list
      */
-    public ArrayList<ArrayList<Furniture>> getAllFurnitureCombos() {
+    private ArrayList<ArrayList<Furniture>> getAllFurnitureCombos() {
         // get all relevant furniture items from database
         ArrayList<Furniture> allFurnitureList = new ArrayList<Furniture>(Arrays.asList(inventory.getAllFurniture(furnitureType, furnitureCategory)));
         if (allFurnitureList.size() < 1)
@@ -150,26 +149,43 @@ public class OrderForm {
 
     }
 
+    public void printManufacturers(){
+        var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory.toUpperCase());
+        StringBuilder builder = new StringBuilder();
+        for(Manufacturer manufacturer : furnitureManufacturers)
+            builder.append(String.format("%s, ", manufacturer.name));
+        builder.deleteCharAt(builder.length()-2);
+        System.out.printf("Suggested manufacturers are: %s%n", builder.toString());
+    }
+
     /**
      * Gets request.
      */
     public void getRequest() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Used Furniture Request Form");
+        System.out.println("\tUofC Used Furniture Request Form");
+        System.out.println("---------------------------------------\n");
 
         System.out.println("Enter furniture category: ");
-        this.furnitureCategory = scanner.nextLine();
-
+        furnitureCategory = scanner.nextLine();
         System.out.println("Enter furniture type: ");
-        this.furnitureType = scanner.nextLine();
-
+        furnitureType = scanner.nextLine();
         System.out.println("Enter number of items needed: ");
-        this.quantity = scanner.nextInt();
+        quantity = scanner.nextInt();
 
-        System.out.println("Request received for:");
-        System.out.println("Furniture Category: " + this.furnitureCategory);
-        System.out.println("Furniture Type: " + this.furnitureType);
-        System.out.println("Quantity: " + this.quantity);
+        if(!new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory.toUpperCase()))
+            throw new IllegalArgumentException(String.format("Furniture category \"%s\" is invalid.", furnitureCategory));
+        var test = Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase());
+        if(!Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase()).contains(furnitureType.toUpperCase()))
+            throw new IllegalArgumentException(String.format("Furniture type \"%s\" is invalid.", furnitureType));
+        if(quantity < 0)
+            throw new IllegalArgumentException(String.format("Number of items \"%d\" is invalid.", quantity));
+
+        System.out.println("\n\tRequest received for:");
+        System.out.println("---------------------------------------\n");
+        System.out.println("Furniture Category: " + furnitureCategory);
+        System.out.println("Furniture Type: " + furnitureType);
+        System.out.println("Quantity: " + quantity);
         scanner.close();
     }
 
@@ -179,13 +195,13 @@ public class OrderForm {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-
         OrderForm orderForm = new OrderForm();
 //        orderForm.getRequest();
         // set dummy data for the corresponding values
         orderForm.furnitureCategory = "chair";
         orderForm.furnitureType = "mesh";
         orderForm.quantity = 1;
+        orderForm.printManufacturers();
         var cost = orderForm.calculateOrder();
     }
 }

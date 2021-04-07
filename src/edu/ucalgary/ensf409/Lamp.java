@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,16 @@ import static java.util.Map.entry;
  * The type Lamp.
  */
 public class Lamp extends Furniture {
+    public static ArrayList<String> LAMP_TYPES = new ArrayList<>(){{
+        add("DESK");
+        add("STUDY");
+        add("SWING ARM");
+    }};
+    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>(){{
+        add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
+        add(new Manufacturer("004", "Furniture Goods", "306-512-5508", "SK"));
+        add(new Manufacturer("005", "Fine Office Supplies", "403-980-9876", "AB"));
+    }};
     /**
      * The Base.
      */
