@@ -8,12 +8,11 @@ import java.util.*;
 import java.util.Properties;
 
 public class OrderForm {
-	public String[] furnitureID = new String[10];
 	public String furnitureCategory;
 	public String furnitureType;
 	public int quantity;
 	private final Inventory inventory = new Inventory(
-			"jdbc:mysql://localhost:3306/inventory", "root", "Bfluff3!");;
+			"jdbc:mysql://localhost:3306/inventory", "root", "Bfluff3!");
 
 
 	public void getOrder() throws SQLException {
@@ -28,12 +27,9 @@ public class OrderForm {
             e1.printStackTrace();
         }
 
-        String query = prop.getProperty(String.format("%s_SQL", this.furnitureCategory.toUpperCase()));
+        String query = prop.getProperty(String.format("%s_SQL", this.furnitureCategory.toUpperCase()));        
 
-        int orders = 2;
-        int numberOfParts = 2;
-        String furnitureType = "Study";
-        String[] currentPart = new String[numberOfParts];
+        int numberOfParts = 0;
         HashSet<String> completed = new HashSet<String>();
         boolean filled = true;
 
@@ -43,11 +39,26 @@ public class OrderForm {
         	dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
             
         	//make temporary table, all combinations, sort by price in ascending
-            PreparedStatement lampsQuery = this.inventory.initializeConnection().prepareStatement(query);
-            lampsQuery.setString(1, furnitureType);
-            lampsQuery.setString(2, furnitureType);
-            lampsQuery.executeUpdate();
+            PreparedStatement furnitureQuery = this.inventory.initializeConnection().prepareStatement(query);
+            if (this.furnitureCategory.equalsIgnoreCase("lamp")) {
+                numberOfParts = 2;
+            } else if (this.furnitureCategory.equalsIgnoreCase("desk") || this.furnitureCategory.equalsIgnoreCase("filing")) {
+                numberOfParts = 3;
+            } else if (this.furnitureCategory.equalsIgnoreCase("chair")) {
+                numberOfParts = 4;
+            }
+            for(int i = 0; i < numberOfParts; i++) {
+            	furnitureQuery.setString(i + 1, this.furnitureType);
+            }
             
+            furnitureQuery.executeUpdate();
+
+            for(int i = 0; i < numberOfParts; i++) {
+            	furnitureQuery.setString(i + 1, this.furnitureType);
+            }
+            
+            String[] currentPart = new String[numberOfParts];
+
             //get set based on number of orders
             for(int counter = 0; counter < this.quantity; counter ++) {
             	//get one set
@@ -92,12 +103,22 @@ public class OrderForm {
 		
 	}
 	
-	public void orderFilled(HashSet<String> completed) {
+	public void orderFilled(HashSet<String> completed) throws SQLException {
+		String sum = "";
     	List<String> components = new ArrayList<String>(completed);
-    	String delete = "DELETE FROM " + furnitureCategory + " WHERE ID = " + components.get(0) + "'";
+    	String delete = "DELETE FROM " + furnitureCategory + " WHERE ID = '" + components.get(0) + "'";
+    	String totalPrice = "SELECT SUM(Price) FROM " + furnitureCategory + " WHERE ID = '" + components.get(0) + "'";
     	for(int i = 1; i < components.size(); i++) {
 			delete += " OR ID = '" + components.get(i) + "'";
+			totalPrice += " OR ID = '" + components.get(i) + "'";
 		}
+    	Statement priceQuery = this.inventory.initializeConnection().createStatement();
+    	ResultSet price = priceQuery.executeQuery(totalPrice);
+    	while(price.next()) {
+    		sum = price.getString("SUM(Price)");
+    	}
+    	System.out.println(totalPrice);
+    	System.out.println(sum);
     	System.out.println(delete);
 	}
 
@@ -105,7 +126,7 @@ public class OrderForm {
 
 	}
 
-	public void getRequest() {
+	public void getRequest() throws SQLException {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Used Furniture Request Form");
 
@@ -123,10 +144,11 @@ public class OrderForm {
 		System.out.println("Furniture Type: " + this.furnitureType);
 		System.out.println("Quantity: " + this.quantity);
 		scanner.close();
+		getOrder();
 	}
 
 	public static void main(String[] args) throws SQLException {
 		OrderForm orderForm = new OrderForm();
-		orderForm.getOrder();
+		orderForm.getRequest();
 	}
 }
