@@ -2,10 +2,8 @@ package edu.ucalgary.ensf409;
 
 import java.sql.SQLException;
 import java.util.Scanner;
-import java.io.*;
 import java.sql.*;
 import java.util.*;
-import java.util.Properties;
 
 public class OrderForm {
 	public String furnitureCategory;
@@ -16,22 +14,11 @@ public class OrderForm {
 
 
 	public void getOrder() throws SQLException {
-		String confFile = String.format("%s_query.conf", this.furnitureCategory.toLowerCase());
 		
-        Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream(confFile));
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
-        String query = prop.getProperty(String.format("%s_SQL", this.furnitureCategory.toUpperCase()));        
-
         int numberOfParts = 0;
         HashSet<String> completed = new HashSet<String>();
         boolean filled = true;
+        String createTable = "";
 
         try {
             // drop temporary table if exists
@@ -39,23 +26,95 @@ public class OrderForm {
         	dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
             
         	//make temporary table, all combinations, sort by price in ascending
-            PreparedStatement furnitureQuery = this.inventory.initializeConnection().prepareStatement(query);
             if (this.furnitureCategory.equalsIgnoreCase("lamp")) {
+            	createTable = "CREATE TABLE T AS SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+            			+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+            			+ "ELSE l1.Price + l2.Price\r\n"
+            			+ "END AS TotalPrice\r\n"
+            			+ "FROM (SELECT l1.ID, l1.Price\r\n"
+            			+ "FROM LAMP as l1\r\n"
+            			+ "WHERE l1.Bulb = 'Y' and l1.Type = ?) AS l1\r\n"
+            			+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+            			+ "FROM LAMP as l2\r\n"
+            			+ "WHERE l2.Base = 'Y' and l2.Type = ?) AS l2\r\n"
+            			+ "ORDER BY TotalPrice ASC;";
                 numberOfParts = 2;
-            } else if (this.furnitureCategory.equalsIgnoreCase("desk") || this.furnitureCategory.equalsIgnoreCase("filing")) {
+            } else if (this.furnitureCategory.equalsIgnoreCase("filing")){
+            	createTable = "CREATE TABLE T AS SELECT c0, c1, l3.ID AS c2, CASE\r\n"
+            			+ "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
+            			+ "ELSE l.Price + l3.Price\r\n"
+            			+ "END AS TotalPrice\r\n"
+            			+ "FROM (SELECT l3.ID, l3.Price\r\n"
+            			+ "FROM FILING as l3\r\n"
+            			+ "WHERE l3.Rails = 'Y' and l3.Type = ?) AS l3\r\n"
+            			+ "CROSS JOIN\r\n"
+            			+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+            			+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+            			+ "ELSE l1.Price + l2.Price\r\n"
+            			+ "END AS Price\r\n"
+            			+ "FROM (SELECT l1.ID, l1.Price\r\n"
+            			+ "FROM FILING as l1\r\n"
+            			+ "WHERE l1.Drawers = 'Y' and l1.Type = ?) AS l1\r\n"
+            			+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+            			+ "FROM FILING as l2\r\n"
+            			+ "WHERE l2.Cabinet = 'Y' and l2.Type = ?) AS l2) AS l\r\n"
+            			+ "ORDER BY TotalPrice ASC;";
                 numberOfParts = 3;
-            } else if (this.furnitureCategory.equalsIgnoreCase("chair")) {
+            } else if (this.furnitureCategory.equalsIgnoreCase("desk")) {
+            	createTable = "CREATE TABLE T AS SELECT c0, c1, l3.ID AS c2, CASE\r\n"
+            			+ "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
+            			+ "ELSE l.Price + l3.Price\r\n"
+            			+ "END AS TotalPrice\r\n"
+            			+ "FROM (SELECT l3.ID, l3.Price\r\n"
+            			+ "FROM DESK as l3\r\n"
+            			+ "WHERE l3.Drawer = 'Y' and l3.Type = ?) AS l3\r\n"
+            			+ "CROSS JOIN\r\n"
+            			+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+            			+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+            			+ "ELSE l1.Price + l2.Price\r\n"
+            			+ "END AS Price\r\n"
+            			+ "FROM (SELECT l1.ID, l1.Price\r\n"
+            			+ "FROM DESK as l1\r\n"
+            			+ "WHERE l1.Legs = 'Y' and l1.Type =?) AS l1\r\n"
+            			+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+            			+ "FROM DESK as l2\r\n"
+            			+ "WHERE l2.Top = 'Y' and l2.Type = ?) AS l2) AS l\r\n"
+            			+ "ORDER BY TotalPrice ASC;";
+                numberOfParts = 3;
+            } else {
+            	createTable = "CREATE TABLE T AS SELECT c0, c1, c2, l4.ID AS c4, CASE\r\n"
+            			+ "WHEN l4.ID = c0 OR l4.ID = c1 OR l4.ID = c2 THEN l.Price\r\n"
+            			+ "ELSE l.Price + l4.Price\r\n"
+            			+ "END AS TotalPrice\r\n"
+            			+ "FROM (SELECT l4.ID, l4.Price\r\n"
+            			+ "FROM CHAIR as l4\r\n"
+            			+ "WHERE l4.Cushion = 'Y' and l4.Type = ?) AS l4\r\n"
+            			+ "CROSS JOIN\r\n"
+            			+ "(SELECT l1.ID AS c0, l2.ID AS c1, l3.ID AS c2, CASE\r\n"
+            			+ "WHEN l1.ID != l2.ID and l2.ID != l3.ID THEN l1.Price + l2.Price + l3.Price\r\n"
+            			+ "WHEN l1.ID != l2.ID and l1.ID = l3.ID THEN l1.Price + l2.Price \r\n"
+            			+ "WHEN l1.ID = l2.ID and l2.ID != l3.ID THEN l1.Price + l3.Price\r\n"
+            			+ "WHEN l1.ID != l2.ID and l2.ID = l3.ID THEN l1.Price + l2.Price\r\n"
+            			+ "ELSE l1.Price\r\n"
+            			+ "END AS Price\r\n"
+            			+ "FROM (SELECT l1.ID, l1.Price\r\n"
+            			+ "FROM CHAIR as l1\r\n"
+            			+ "WHERE l1.Legs = 'Y' and l1.Type = ?) AS l1\r\n"
+            			+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
+            			+ "FROM CHAIR as l2\r\n"
+            			+ "WHERE l2.Arms = 'Y' and l2.Type = ?) AS l2\r\n"
+            			+ "CROSS JOIN (SELECT l3.ID, l3.Price\r\n"
+            			+ "FROM CHAIR as l3\r\n"
+            			+ "WHERE l3.Seat = 'Y' and l3.Type = ?) AS l3) AS l\r\n"
+            			+ "ORDER BY TotalPrice ASC";
                 numberOfParts = 4;
             }
+            PreparedStatement query = this.inventory.initializeConnection().prepareStatement(createTable);
             for(int i = 0; i < numberOfParts; i++) {
-            	furnitureQuery.setString(i + 1, this.furnitureType);
+            	query.setString(i + 1, this.furnitureType);
             }
-            
-            furnitureQuery.executeUpdate();
 
-            for(int i = 0; i < numberOfParts; i++) {
-            	furnitureQuery.setString(i + 1, this.furnitureType);
-            }
+            query.executeUpdate();
             
             String[] currentPart = new String[numberOfParts];
 
