@@ -71,6 +71,7 @@ public class OrderForm {
                     possibleCheapCombo = furnitureCombo;
                 } else if (sum < lowestPrice) {
                     possibleCheapCombo = furnitureCombo;
+                    lowestPrice = sum;
                 }
                 flag = false;
             }
@@ -198,8 +199,8 @@ public class OrderForm {
         OrderForm orderForm = new OrderForm();
 //        orderForm.getRequest();
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "chair";
-        orderForm.furnitureType = "mesh";
+        orderForm.furnitureCategory = "desk";
+        orderForm.furnitureType = "traditional";
         orderForm.quantity = 1;
         orderForm.printManufacturers();
         var cost = orderForm.calculateOrder();
