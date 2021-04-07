@@ -11,6 +11,8 @@ public class OrderForm {
 	public int quantity;
 	private final Inventory inventory = new Inventory(
 			"jdbc:mysql://localhost:3306/inventory", "root", "Bfluff3!");
+//	private final Inventory inventory = new Inventory(
+//			"jdbc:mysql://localhost/inventory", "scm", "ensf409!");
 
 
 	public void getOrder() throws SQLException {
@@ -167,22 +169,35 @@ public class OrderForm {
 	}
 	
 	public void orderFilled(HashSet<String> completed) throws SQLException {
-		String sum = "";
-    	List<String> components = new ArrayList<String>(completed);
-    	String delete = "DELETE FROM " + furnitureCategory + " WHERE ID = '" + components.get(0) + "'";
-    	String totalPrice = "SELECT SUM(Price) FROM " + furnitureCategory + " WHERE ID = '" + components.get(0) + "'";
-    	for(int i = 1; i < components.size(); i++) {
-			delete += " OR ID = '" + components.get(i) + "'";
-			totalPrice += " OR ID = '" + components.get(i) + "'";
-		}
-    	Statement priceQuery = this.inventory.initializeConnection().createStatement();
-    	ResultSet price = priceQuery.executeQuery(totalPrice);
-    	while(price.next()) {
-    		sum = price.getString("SUM(Price)");
-    	}
-    	System.out.println(totalPrice);
-    	System.out.println(sum);
-    	System.out.println(delete);
+		String sum = ""; //total price variable
+		try {
+	    	List<String> components = new ArrayList<String>(completed);
+	    	//delete query to delete furniture taken
+	    	String delete = "DELETE FROM " + furnitureCategory + " WHERE ID = '" + components.get(0) + "'";
+	    	//summing query to get total price of all furniture taken
+	    	String totalPrice = "SELECT SUM(Price) FROM " + furnitureCategory + " WHERE ID = '" + components.get(0) + "'";
+	    	//iterate over unique ids
+	    	for(int i = 1; i < components.size(); i++) {
+				delete += " OR ID = '" + components.get(i) + "'";
+				totalPrice += " OR ID = '" + components.get(i) + "'";
+			}
+	    	//get total price
+	    	Statement priceQuery = this.inventory.initializeConnection().createStatement();
+	    	ResultSet price = priceQuery.executeQuery(totalPrice);
+	    	while(price.next()) {
+	    		sum = price.getString("SUM(Price)");
+	    	}
+	    	
+	    	//delete furniture taken
+	    	Statement deleteQuery = this.inventory.initializeConnection().createStatement();
+	    	deleteQuery.executeUpdate(delete);
+	    	
+	    	System.out.println(totalPrice);
+	    	System.out.println(sum);
+	    	System.out.println(delete);
+		} catch (SQLException e) {
+            e.printStackTrace();
+        }	
 	}
 
 	public void printOrder() {
