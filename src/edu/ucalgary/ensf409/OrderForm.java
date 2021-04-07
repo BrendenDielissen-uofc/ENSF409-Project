@@ -1,8 +1,10 @@
 package edu.ucalgary.ensf409;
 
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Properties;
 
 /**
  * The type Order form.
@@ -113,44 +115,63 @@ public class OrderForm {
 
     public String orderCombinations() {
         StringBuffer allOrders = new StringBuffer();
-        String query = "SELECT CONCAT(l1.ID, ',', l2.ID) AS Combination, CASE WHEN l1.ID = l2.ID THEN l1.Price ELSE l1.Price + l2.Price END AS TotalPrice FROM (SELECT l1.ID, l1.Price FROM LAMP AS l1 WHERE l1.Bulb = 'Y' and l1.Type = 'Desk') AS l1 CROSS JOIN (SELECT l2.ID, l2.Price FROM LAMP AS l2 WHERE l2.Base = 'Y' AND l2.Type = 'Desk') AS l2 ORDER BY TotalPrice ASC";
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream("lamp_query.conf"));
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
 
-        int orders = 3;
+        String query = prop.getProperty("LAMP_SQL");
+
+        int orders = 2;
+        String furnitureType = "Study";
 
         LinkedHashMap<String, String> combinationMap = new LinkedHashMap<String, String>();
         LinkedHashMap<String, String> completed = new LinkedHashMap<String, String>();
 
         try {
-            Statement allDeskLampsQuery = this.inventory.initializeConnection().createStatement();
-            ResultSet results = allDeskLampsQuery.executeQuery(query);
+            PreparedStatement lampsQuery = this.inventory.initializeConnection().prepareStatement(query);
+            lampsQuery.setString(1, furnitureType);
+            lampsQuery.setString(2, furnitureType);
+            ResultSet results = lampsQuery.executeQuery();
 
-            // put key value pairs
+            // put key value pairs from result set into a hash map that retains insertion
+            // order
             while (results.next()) {
                 combinationMap.put(results.getString("Combination"), results.getString("TotalPrice"));
                 allOrders.append(results.getString("Combination") + " | " + results.getString("TotalPrice") + "\n");
             }
 
-            for (Map.Entry<String, String> mapElement : combinationMap.entrySet()) {
-                String key = (String) mapElement.getKey();
-                System.out.println(key + " : " + (String) mapElement.getValue());
+            // loop through result set hash map and set aside unique component combinations
+            // depending on the number of orders
+            for (Map.Entry<String, String> entry : combinationMap.entrySet()) {
+                if (completed.size() != orders) {
+                    if (!completed.containsKey(entry.getKey().split(",")[0])
+                            && !completed.containsValue(entry.getKey().split(",")[1])) {
 
-            }
-
-            while (combinationMap.entrySet().iterator().hasNext()) {
-                if (combinationMap.size() != orders) {
-                    if (combinationMap)
+                        completed.put(entry.getKey().split(",")[0], entry.getKey().split(",")[1]);
+                    }
                 }
             }
 
-            // for (int i = 0; i < orders; i++) {
-            //     if (completed.isEmpty()) {
-            //         completed.put(combinationMap.entrySet().stream().findFirst().get().getKey().split(",")[0],
-            //                 combinationMap.entrySet().stream().findFirst().get().getKey().split(",")[1]);
-            //     }
-            // }
+            // Retrieve the unique order combination prices and sum the order total
+            int orderTotal = 0;
+            StringBuffer components = new StringBuffer();
+            for (Map.Entry<String, String> entry : completed.entrySet()) {
+                if (combinationMap.containsKey(entry.getKey() + "," + entry.getValue())) {
+                    orderTotal += Integer.parseInt(combinationMap.get(entry.getKey() + "," + entry.getValue()));
+                    components.append(entry.getKey() + "," + entry.getValue() + "\n");
+                }
+            }
+
             results.close();
-            allDeskLampsQuery.close();
-            System.out.println(completed.toString());
+            lampsQuery.close();
+            // System.out.println(completed.toString());
+            System.out.println(orderTotal);
+            System.out.println(components.toString());
 
         } catch (SQLException e) {
             e.printStackTrace();
