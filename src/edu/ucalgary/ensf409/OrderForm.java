@@ -10,9 +10,7 @@ public class OrderForm {
 	public String furnitureType;
 	public int quantity;
 	private final Inventory inventory = new Inventory(
-			"jdbc:mysql://localhost:3306/inventory", "root", "Bfluff3!");
-//	private final Inventory inventory = new Inventory(
-//			"jdbc:mysql://localhost/inventory", "scm", "ensf409!");
+			"jdbc:mysql://localhost/inventory", "scm", "ensf409");
 
 
 	public void getOrder() throws SQLException {
@@ -217,7 +215,7 @@ public class OrderForm {
 		System.out.println("Enter number of items needed: ");
 		this.quantity = scanner.nextInt();
 
-		System.out.println("Request received for:");
+		System.out.println("Request received");
 		System.out.println("Furniture Category: " + this.furnitureCategory);
 		System.out.println("Furniture Type: " + this.furnitureType);
 		System.out.println("Quantity: " + this.quantity);
