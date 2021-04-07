@@ -26,6 +26,15 @@ public class Lamp extends Furniture {
     private static final String queryString = "SELECT * FROM LAMP";
 
     /**
+     * Default constructor for Lamp.
+     */
+    public Lamp(){
+        super();
+        this.base = false;
+        this.bulb = false;
+    }
+
+    /**
      * Instantiates a new Lamp from a SQL ResultSet.
      *
      * @param lampRs the lamp rs
@@ -40,23 +49,6 @@ public class Lamp extends Furniture {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        this.base = base;
-        this.bulb = bulb;
-    }
-
-    /**
-     * Instantiates a new Lamp.
-     *
-     * @param id          the id
-     * @param type        the type
-     * @param price       the price
-     * @param manuId      the manu id
-     * @param queryString the query string
-     * @param base        the base
-     * @param bulb        the bulb
-     */
-    public Lamp(String id, String type, Integer price, String manuId, String queryString, boolean base, boolean bulb) {
-        super(id, type, price, manuId);
         this.base = base;
         this.bulb = bulb;
     }
@@ -81,6 +73,14 @@ public class Lamp extends Furniture {
      * @return the query string
      */
     public static String getQueryString() { return Lamp.queryString;}
+
+    @Override
+    public HashMap<String, Integer> getCountingMap() {
+        return new HashMap<String, Integer>(Map.ofEntries(
+                entry("base", 0),
+                entry("bulb", 0)
+        ));
+    }
 
     @Override
     public HashMap<String, Boolean> getComponents() {
