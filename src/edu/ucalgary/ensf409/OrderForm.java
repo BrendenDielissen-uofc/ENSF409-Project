@@ -82,31 +82,33 @@ public class OrderForm {
             			+ "ORDER BY TotalPrice ASC;";
                 numberOfParts = 3;
             } else {
-            	createTable = "CREATE TABLE T AS SELECT c0, c1, c2, l4.ID AS c4, CASE\r\n"
-            			+ "WHEN l4.ID = c0 OR l4.ID = c1 OR l4.ID = c2 THEN l.Price\r\n"
-            			+ "ELSE l.Price + l4.Price\r\n"
+            	createTable = "CREATE TABLE T AS SELECT c0, c1, c2, l4.ID AS c3, CASE\r\n"
+            			+ "WHEN l4.ID = c0 OR l4.ID = c1 OR l4.ID = c2 THEN f.Price\r\n"
+            			+ "ELSE f.Price + l4.Price\r\n"
             			+ "END AS TotalPrice\r\n"
             			+ "FROM (SELECT l4.ID, l4.Price\r\n"
             			+ "FROM CHAIR as l4\r\n"
             			+ "WHERE l4.Cushion = 'Y' and l4.Type = ?) AS l4\r\n"
             			+ "CROSS JOIN\r\n"
-            			+ "(SELECT l1.ID AS c0, l2.ID AS c1, l3.ID AS c2, CASE\r\n"
-            			+ "WHEN l1.ID != l2.ID and l2.ID != l3.ID THEN l1.Price + l2.Price + l3.Price\r\n"
-            			+ "WHEN l1.ID != l2.ID and l1.ID = l3.ID THEN l1.Price + l2.Price \r\n"
-            			+ "WHEN l1.ID = l2.ID and l2.ID != l3.ID THEN l1.Price + l3.Price\r\n"
-            			+ "WHEN l1.ID != l2.ID and l2.ID = l3.ID THEN l1.Price + l2.Price\r\n"
-            			+ "ELSE l1.Price\r\n"
+            			+ "(SELECT c0, c1, l3.ID AS c2, CASE\r\n"
+            			+ "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
+            			+ "ELSE l.Price + l3.Price\r\n"
+            			+ "END AS Price\r\n"
+            			+ "FROM (SELECT l3.ID, l3.Price\r\n"
+            			+ "FROM CHAIR as l3\r\n"
+            			+ "WHERE l3.Seat = 'Y' and l3.Type = ?) AS l3\r\n"
+            			+ "CROSS JOIN\r\n"
+            			+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
+            			+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+            			+ "ELSE l1.Price + l2.Price\r\n"
             			+ "END AS Price\r\n"
             			+ "FROM (SELECT l1.ID, l1.Price\r\n"
             			+ "FROM CHAIR as l1\r\n"
             			+ "WHERE l1.Legs = 'Y' and l1.Type = ?) AS l1\r\n"
             			+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
             			+ "FROM CHAIR as l2\r\n"
-            			+ "WHERE l2.Arms = 'Y' and l2.Type = ?) AS l2\r\n"
-            			+ "CROSS JOIN (SELECT l3.ID, l3.Price\r\n"
-            			+ "FROM CHAIR as l3\r\n"
-            			+ "WHERE l3.Seat = 'Y' and l3.Type = ?) AS l3) AS l\r\n"
-            			+ "ORDER BY TotalPrice ASC";
+            			+ "WHERE l2.Arms = 'Y' and l2.Type = ?) AS l2) AS l) AS f\r\n"
+            			+ "ORDER BY TotalPrice ASC;";
                 numberOfParts = 4;
             }
             PreparedStatement query = this.inventory.initializeConnection().prepareStatement(createTable);
