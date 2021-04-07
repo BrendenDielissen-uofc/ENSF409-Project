@@ -1,13 +1,18 @@
 package edu.ucalgary.ensf409;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 /**
  * The type Furniture.
  */
 public abstract class Furniture {
+    private HashMap<String, String> allCombinationsQueryMap;
     /**
      * The Id.
      */
@@ -94,6 +99,8 @@ public abstract class Furniture {
      * @return the query string
      */
     public abstract String getQueryString();
+
+    public abstract HashMap<String, String> getAllCombinationsQueryMap();
 
     /**
      * Gets counting map.

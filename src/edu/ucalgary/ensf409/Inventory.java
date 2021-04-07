@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
 
@@ -12,18 +13,23 @@ import static java.util.Map.entry;
  * The type Inventory.
  */
 public class Inventory {
-
+    /**
+     * The constant furnitureTypesMap.
+     */
     public static HashMap<String, List<String>> furnitureTypesMap = new HashMap<>(Map.ofEntries(
-            entry("DESK",  Desk.TYPES),
-            entry("FILING", Filing.TYPES),
-            entry("LAMP", Lamp.LAMP_TYPES),
-            entry("CHAIR", Chair.TYPES)
+            entry("Desk",  Desk.TYPES),
+            entry("Filing", Filing.TYPES),
+            entry("Lamp", Lamp.TYPES),
+            entry("Chair", Chair.TYPES)
     ));
+    /**
+     * The constant furnitureManufacturersMap.
+     */
     public static HashMap<String, List<Manufacturer>> furnitureManufacturersMap = new HashMap<>(Map.ofEntries(
-            entry("DESK", Desk.MANUFACTURERS),
-            entry("FILING", Filing.MANUFACTURERS),
-            entry("LAMP", Lamp.MANUFACTURERS),
-            entry("CHAIR", Chair.MANUFACTURERS)
+            entry("Desk", Desk.MANUFACTURERS),
+            entry("Filing", Filing.MANUFACTURERS),
+            entry("Lamp", Lamp.MANUFACTURERS),
+            entry("Chair", Chair.MANUFACTURERS)
     ));
     /**
      * The Furniture result set ctor map.
@@ -71,16 +77,16 @@ public class Inventory {
     	this.PASSWORD = PASSWORD;
         try {
             furnitureResultSetCtorMap = new HashMap<>(Map.ofEntries(
-                    entry("DESK", Desk.class.getConstructor(ResultSet.class)),
-                    entry("FILING", Filing.class.getConstructor(ResultSet.class)),
-                    entry("LAMP", Lamp.class.getConstructor(ResultSet.class)),
-                    entry("CHAIR", Chair.class.getConstructor(ResultSet.class))
+                    entry("Desk", Desk.class.getConstructor(ResultSet.class)),
+                    entry("Filing", Filing.class.getConstructor(ResultSet.class)),
+                    entry("Lamp", Lamp.class.getConstructor(ResultSet.class)),
+                    entry("Chair", Chair.class.getConstructor(ResultSet.class))
             ));
             furnitureDefaultCtorMap = new HashMap<>(Map.ofEntries(
-                    entry("DESK", Desk.class.getConstructor()),
-                    entry("FILING", Filing.class.getConstructor()),
-                    entry("LAMP", Lamp.class.getConstructor()),
-                    entry("CHAIR", Chair.class.getConstructor())
+                    entry("Desk", Desk.class.getConstructor()),
+                    entry("Filing", Filing.class.getConstructor()),
+                    entry("Lamp", Lamp.class.getConstructor()),
+                    entry("Chair", Chair.class.getConstructor())
             ));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -154,7 +160,6 @@ public class Inventory {
                 ex.printStackTrace();
             }
         }
-
     }
 
     /**
@@ -170,7 +175,7 @@ public class Inventory {
     }
 
     /**
-     * Get counting map hash map.
+     * Gets corresponding furniture's hash map that can be used to count the amount of components per order.
      *
      * @param furnitureCategory the furniture category
      * @return the hash map
@@ -178,7 +183,7 @@ public class Inventory {
     public HashMap<String, Integer> getFurnitureCountingMap(String furnitureCategory){
         HashMap<String, Integer> temp = null;
         try {
-            Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory.toUpperCase()).newInstance();
+            Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
             temp = furniture.getCountingMap();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -187,16 +192,16 @@ public class Inventory {
     }
 
     /**
-     * Proto-class that grabs furniture and its furniture type and returns a 2D-array of wanted info
+     * Grabs all furniture corresponding to the type and category.
      *
-     * @param furnitureType String type of the specified furniture wanted
-     * @param furniture     String furniture
+     * @param furnitureType     String type of the specified furniture wanted
+     * @param furnitureCategory the furniture category
      * @return Furniture[] Array
      */
-    public Furniture[] getAllFurniture(String furnitureType, String furniture) {
+    public Furniture[] getAllFurniture(String furnitureType, String furnitureCategory) {
         Furniture tempFurniture = null;
         try {
-            tempFurniture = (Furniture) this.furnitureDefaultCtorMap.get(furniture).newInstance();
+            tempFurniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -211,7 +216,7 @@ public class Inventory {
             System.out.println(myStmt);
             results = myStmt.executeQuery();
             while (results.next()) {
-                Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furniture).newInstance(results);
+                Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furnitureCategory).newInstance(results);
                 myFurniture.add(furnitureItem);
             }
 
@@ -223,5 +228,87 @@ public class Inventory {
         Furniture[] array = new Furniture[myFurniture.size()];
         myFurniture.toArray(array);
         return array;
+    }
+
+    /**
+     * Utilizes SQL queries to get the cheapest order available for the desired furniture type and category. Returns null if order
+     * cannot be completed.
+     *
+     * @param furnitureType     the furniture type
+     * @param furnitureCategory the furniture category
+     * @param quantity          the quantity
+     * @return the furniture [ ]
+     */
+    public Furniture[] getCheapestOrder(String furnitureType, String furnitureCategory, int quantity){
+        HashSet<String> completed = new HashSet<String>();
+        boolean filled = true;
+
+        try {
+            Statement dropTableQuery = this.dbConnect.createStatement();
+            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
+            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS C");
+
+            Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
+            HashMap<String, String> combinationsQueryMap = furniture.getAllCombinationsQueryMap();
+
+            String createTable = combinationsQueryMap.get("createTable");
+            System.out.println(createTable);
+            String numberOfPartsTable = combinationsQueryMap.get("numberOfPartsTable");
+            String getOrder = combinationsQueryMap.get("getOrder");
+            int numberOfParts = furniture.getComponents().size();
+
+            Statement tableQuery = this.dbConnect.createStatement();
+            tableQuery.executeUpdate(numberOfPartsTable);
+
+            PreparedStatement query = this.dbConnect.prepareStatement(createTable);
+            for (int i = 0; i < numberOfParts; i++)
+                query.setString(i + 1, furnitureType);
+            query.executeUpdate();
+
+            String[] currentPart = new String[numberOfParts];
+
+            for (int counter = 0; counter < quantity; counter++) {
+                // get one set
+                Statement resultsQuery = this.dbConnect.createStatement();
+                ResultSet results = resultsQuery
+                        .executeQuery(getOrder);
+                // no set returned, cannot fill order
+                if (!results.isBeforeFirst()) {
+                    filled = false;
+                    break;
+                }
+                // one set found
+                while (results.next()) {
+                    // place in completed and currentPart
+                    for (int i = 0; i < numberOfParts; i++) {
+                        completed.add(results.getString("c" + i));
+                        currentPart[i] = results.getString("c" + i);
+                    }
+                    // delete statement based on set taken
+                    String delete = "DELETE FROM T WHERE c0 = '"
+                            + currentPart[0] + "'";
+                    for (int i = 1; i < numberOfParts; i++) {
+                        delete += " OR c" + i + " = '" + currentPart[i] + "'";
+                    }
+                    // delete from temporary table row components
+                    Statement deleteQuery = this.dbConnect.createStatement();
+                    deleteQuery.executeUpdate(delete);
+                }
+            }
+            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
+            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS C");
+
+        } catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException throwables) {
+            throwables.printStackTrace();
+        }
+        if(filled){
+            ArrayList<Furniture> cheapestCombo = new ArrayList<Furniture>(Arrays.asList(this.getAllFurniture(furnitureType, furnitureCategory)));
+            cheapestCombo = (ArrayList<Furniture>) cheapestCombo.stream().filter(item -> completed.contains(item.getId())).collect(Collectors.toList());
+            Furniture[] array = new Furniture[cheapestCombo.size()];
+            cheapestCombo.toArray(array);
+            return array;
+        }
+        else
+            return null;
     }
 }
