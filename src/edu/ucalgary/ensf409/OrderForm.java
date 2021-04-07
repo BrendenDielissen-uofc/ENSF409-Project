@@ -148,6 +148,8 @@ public class OrderForm {
             	}
             	
             }
+            dropTableQuery = this.inventory.initializeConnection().createStatement();
+        	dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
      
         } catch (SQLException e) {
             e.printStackTrace();
