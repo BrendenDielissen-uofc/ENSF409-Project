@@ -3,7 +3,7 @@ package edu.ucalgary.ensf409;
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.io.*;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 public class InventoryTest {
@@ -19,18 +19,43 @@ public class InventoryTest {
      * Pre- and Post-test processes
      */
     @Before
+    // Delete all data from database, reload fresh database
     public void start() {
-        removeAllData(DIR);
+        dropDb();
+        createDb();
     }
 
     @After
     public void end() {
-        removeAllData(DIR);
+        dropDb();
+        createDb();
     }
 
     /*
      * Utility methods to perform common routines
      */
+
+    //
+    public void dropDb() {
+        Inventory testJDBC = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
+        Connection testDbConnect = null;
+        ResultSet results = null;
+
+        try {
+            testDbConnect = testJDBC.initializeConnection();
+            Statement dropDbQuery = testDbConnect.createStatement();
+            results = dropDbQuery.executeQuery("DROP DATABASE INVENTORY IF EXISTS");
+
+            results.close();
+            dropDbQuery.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createDb() {
+
+    }
 
     // Add a directory path to a file
     public String addPath(String file) {
@@ -94,9 +119,37 @@ public class InventoryTest {
 
     }
 
+    // Testing User input
     @Test
-    public void testValidUserInput() {
+    public void testGetRequest_AllValidUserInputs_ReturnsUserInput() {
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Desk";
+        testOrder.quantity = 1;
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetRequest_InvalidFurnitureCategory_ExceptionThrown() {
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Bed";
+        testOrder.furnitureType = "Standing";
+        testOrder.quantity = 2;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetRequest_InvalidFurnitureType_ExceptionThrown() {
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Standing";
+        testOrder.quantity = 2;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetRequest_InvalidFurnitureQuantity_ExceptionThrown() {
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Desk";
+        testOrder.quantity = -1;
     }
 
     @Test
