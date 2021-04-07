@@ -14,27 +14,6 @@ public class Inventory {
     private String DBURL = "";
     private String USERNAME = "";
     private String PASSWORD = "";
-    
-    /**
-     * Main used for inventory and debugging. COmment this out if main is somewhere else
-     * @param args
-     * @throws SQLException
-     */
-    public static void main(String[] args) throws SQLException {
-    	
-    	Inventory myJDBC = new Inventory("jdbc:mysql://localhost/inventory","Marasco","ensf409");
-    	myJDBC.initializeConnection();
-    	Lamp[] testLamps = myJDBC.getAllLamps("Desk", "Lamp");
-		var testMap = Arrays.stream(testLamps).map(lamp -> {return lamp.getComponents();}).toArray();
-    	System.out.println(testLamps);
-		Desk[] testDesks = myJDBC.getAllDesks("Standing", "Desk");
-		testMap = Arrays.stream(testDesks).map(desk -> {return desk.getComponents();}).toArray();
-		System.out.println(testDesks);
-//    	for (int i = 0; i < testLamp.length; i++) {
-//    		System.out.println(testLamp[i].getId() + " " + Boolean.toString(testLamp[i].hasBase())
-//    				+ " " + Boolean.toString(testLamp[i].hasBulb()));
-//    	}
-    }
    
     /**
      * Constructor for Inventory Class

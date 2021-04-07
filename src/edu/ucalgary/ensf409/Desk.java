@@ -40,7 +40,7 @@ class Desk extends Furniture {
         boolean cabinet = false;
         try {
             legs = deskRs.getString("Legs").equals("Y");
-            drawers = deskRs.getString("Drawers").equals("Y");
+            drawers = deskRs.getString("Drawer").equals("Y");
             cabinet = deskRs.getString("Cabinet").equals("Y");
         } catch (SQLException ex) {
             ex.printStackTrace();
