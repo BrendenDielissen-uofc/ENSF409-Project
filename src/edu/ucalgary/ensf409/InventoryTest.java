@@ -279,119 +279,350 @@ public class InventoryTest {
     // Testing swing arm lamp orders
     @Test
     public void testGetOrder_1LampSwingArm_OutputOrderForm() {
-
+        // Placing one swing arm lamp order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Swing Arm";
+        testOrder.quantity = 1;
     }
 
     @Test
     public void testGetOrder_2LampSwingArm_OutputOrderForm() {
-
+        // Placing two swing arm lamp orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Swing Arm";
+        testOrder.quantity = 2;
     }
 
     // Check for manufacturer list output
     @Test
     public void testGetOrder_ManyLampSwingArm_OutputOrderForm() {
-
+        // Placing many swing arm lamp orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Swing Arm";
+        testOrder.quantity = 4;
     }
 
     // Testing small filing cabinet orders
     @Test
     public void testGetOrder_1FilingSmall_OutputOrderForm() {
-
+        // Placing one small filing cabinet order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Small";
+        testOrder.quantity = 1;
     }
 
     @Test
     public void testGetOrder_2FilingSmall_OutputOrderForm() {
-
+        // Place two small filing cabinet orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Small";
+        testOrder.quantity = 2;
     }
 
     // Check for manufacturer list output
     @Test
     public void testGetOrder_ManyFilingSmall_OutputOrderForm() {
-
+        // Place many small filing cabinet orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Small";
+        testOrder.quantity = 4;
     }
 
     // Testing medium filing cabinet orders
     @Test
     public void testGetOrder_1FilingMedium_OutputOrderForm() {
-
+        // Placing one medium filing cabinet order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Medium";
+        testOrder.quantity = 1;
     }
 
     @Test
     public void testGetOrder_2FilingMedium_OutputOrderForm() {
-
+        // Placing two medium filing cabinet orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Medium";
+        testOrder.quantity = 2;
     }
 
     // Check for manufacturer list output
     @Test
     public void testGetOrder_ManyFilingMedium_OutputOrderForm() {
-
+        // Placing many medium filing cabinet orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Medium";
+        testOrder.quantity = 4;
     }
 
     // Testing large filing cabinet orders
     @Test
     public void testGetOrder_1FilingLarge_OutputOrderForm() {
-
+        // Placing one large filing cabinet order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Large";
+        testOrder.quantity = 1;
     }
 
     @Test
     public void testGetOrder_2FilingLarge_OutputOrderForm() {
-
+        // Placing two large filing cabinet order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Large";
+        testOrder.quantity = 2;
     }
 
     // Check for manufacturer list output
     @Test
     public void testGetOrder_ManyFilingLarge_OutputOrderForm() {
-
+        // Placing many large filing cabinet order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Filing";
+        testOrder.furnitureType = "Large";
+        testOrder.quantity = 4;
     }
 
     // Testing adjustable desk orders
     @Test
     public void testGetOrder_1DeskAdjustable_OutputOrderForm() {
-
+        // Placing one adjustable desk order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Adjustable";
+        testOrder.quantity = 1;
     }
 
     @Test
     public void testGetOrder_2DeskAdjustable_OutputOrderForm() {
-
+        // Placing two adjustable desk orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Adjustable";
+        testOrder.quantity = 2;
     }
 
     // Check for manufacturer list output
     @Test
     public void testGetOrder_ManyDeskAdjustable_OutputOrderForm() {
-
+        // Placing many adjustable desk orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Adjustable";
+        testOrder.quantity = 4;
     }
 
     // Testing standing desk orders
     @Test
     public void testGetOrder_1DeskStanding_OutputOrderForm() {
-
+        // Placing one standing desk order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Standing";
+        testOrder.quantity = 1;
     }
 
     @Test
     public void testGetOrder_2DeskStanding_OutputOrderForm() {
-
+        // Placing two standing desk orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Standing";
+        testOrder.quantity = 2;
     }
 
     // Check for manufacturer list output
     @Test
     public void testGetOrder_ManyDeskStanding_OutputOrderForm() {
-
+        // Placing many standing desk orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Standing";
+        testOrder.quantity = 4;
     }
 
-    // Check for traditional desk orders
+    // Testing traditional desk orders
     @Test
     public void testGetOrder_1DeskTraditional_OutputOrderForm() {
-
+        // Placing one traditional desk order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Traditional";
+        testOrder.quantity = 1;
     }
 
     @Test
     public void testGetOrder_2DeskTraditional_OutputOrderForm() {
-
+        // Placing two traditional desk order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Traditional";
+        testOrder.quantity = 2;
     }
 
     // Check for manufacturer list output
     @Test
     public void testGetOrder_ManyDeskTraditional_OutputOrderForm() {
+        // Placing many traditional desk orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Desk";
+        testOrder.furnitureType = "Traditional";
+        testOrder.quantity = 4;
 
+    }
+
+    // Testing ergonomic chair orders
+    @Test
+    public void testGetOrder_1ChairErgonomic_OutputOrderForm() {
+        // Placing one ergonomic chair order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Ergonomic";
+        testOrder.quantity = 1;
+    }
+
+    @Test
+    public void testGetOrder_2ChairErgonomic_OutputOrderForm() {
+        // Placing two ergonomic chair order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Ergonomic";
+        testOrder.quantity = 2;
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyChairErgonomic_OutputOrderForm() {
+        // Placing many ergonomic chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Ergonomic";
+        testOrder.quantity = 4;
+    }
+
+    // Testing executive chair orders
+    @Test
+    public void testGetOrder_1ChairExecutive_OutputOrderForm() {
+        // Placing one executive chair order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Executive";
+        testOrder.quantity = 1;
+    }
+
+    @Test
+    public void testGetOrder_2ChairExecutive_OutputOrderForm() {
+        // Placing two executive chair order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Executive";
+        testOrder.quantity = 2;
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyChairExecutive_OutputOrderForm() {
+        // Placing many executive chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Executive";
+        testOrder.quantity = 4;
+    }
+
+    // Testing kneeling chair orders
+    @Test
+    public void testGetOrder_1ChairKneeling_OutputOrderForm() {
+        // Placing one kneeling chair order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Kneeling";
+        testOrder.quantity = 1;
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_2ChairKneeling_OutputOrderForm() {
+        // Placing two kneeling chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Kneeling";
+        testOrder.quantity = 2;
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyChairKneeling_OutputOrderForm() {
+        // Placing many kneeling chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Kneeling";
+        testOrder.quantity = 4;
+    }
+
+    // Testing mesh chair orders
+    @Test
+    public void testGetOrder_1ChairMesh_OutputOrderForm() {
+        // Placing one mesh chair order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Mesh";
+        testOrder.quantity = 1;
+    }
+
+    @Test
+    public void testGetOrder_2ChairMesh_OutputOrderForm() {
+        // Placing two mesh chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Mesh";
+        testOrder.quantity = 2;
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyChairMesh_OutputOrderForm() {
+        // Placing many mesh chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Mesh";
+        testOrder.quantity = 4;
+    }
+
+    // Testing task chair orders
+    @Test
+    public void testGetOrder_1ChairTask_OutputOrderForm() {
+        // Placing one task chair order
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Task";
+        testOrder.quantity = 1;
+    }
+
+    @Test
+    public void testGetOrder_2ChairTask_OutputOrderForm() {
+        // Placing two task chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Task";
+        testOrder.quantity = 2;
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyChairTask_OutputOrderForm() {
+        // Placing many task chair orders
+        OrderForm testOrder = new OrderForm();
+        testOrder.furnitureCategory = "Chair";
+        testOrder.furnitureType = "Task";
+        testOrder.quantity = 4;
     }
 }
