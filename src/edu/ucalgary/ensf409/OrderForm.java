@@ -3,6 +3,7 @@ package edu.ucalgary.ensf409;
 import java.sql.SQLException;
 import java.util.*;
 import java.io.*;
+import java.util.stream.Collectors;
 
 /**
  * The type Order form.
@@ -30,7 +31,7 @@ public class OrderForm {
      * Instantiates a new Order form.
      */
     public OrderForm() {
-        this.inventory = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
+        this.inventory = new Inventory("jdbc:mysql://localhost/INVENTORY", "Marasco", "ensf409");
         try {
             this.inventory.initializeConnection();
         } catch (SQLException throwables) {
@@ -136,9 +137,8 @@ public class OrderForm {
      * Prints out list of manufacturers if order cannot be fulfilled
      */
     private void printManufacturers() {
-        var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
-        String[] manufacturerNames = (String[]) furnitureManufacturers.stream().map(manufacturer -> manufacturer.name)
-                .toArray();
+        List<Manufacturer> furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
+        List<String> manufacturerNames = furnitureManufacturers.stream().map(manufacturer -> manufacturer.name).collect(Collectors.toList());
 
         System.out.println("_____________________________________________");
         System.out.println("Furniture Order Form \n");
@@ -210,11 +210,12 @@ public class OrderForm {
      */
     public static void main(String[] args) {
         OrderForm orderForm = new OrderForm();
-        orderForm.requestOrder();
+//        orderForm.requestOrder();
 
         // set dummy data for the corresponding values
-        // orderForm.furnitureCategory = "Chair";
-        // orderForm.furnitureType = "Mesh";
-        // orderForm.quantity = 2;
+         orderForm.furnitureCategory = "LAMP";
+         orderForm.furnitureType = "DESK";
+         orderForm.quantity = 4;
+         orderForm.fulfillOrder();
     }
 }
