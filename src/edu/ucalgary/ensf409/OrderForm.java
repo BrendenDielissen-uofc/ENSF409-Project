@@ -100,7 +100,7 @@ public class OrderForm {
             order = order + "Total Price: $" + cost;
             printOrder(order);
         }
-        this.inventory.closeConnection();
+        // this.inventory.closeConnection();
     }
 
     /**
@@ -141,16 +141,30 @@ public class OrderForm {
         List<String> manufacturerNames = furnitureManufacturers.stream().map(manufacturer -> manufacturer.name)
                 .collect(Collectors.toList());
 
-        System.out.println("_____________________________________________");
-        System.out.println("Furniture Order Form \n");
-        System.out.println("Faculty Name: ");
-        System.out.println("Contact: ");
-        System.out.println("Date: \n");
-        System.out.println(
-                "Original Request: " + this.furnitureType + " " + this.furnitureCategory + ", " + this.quantity + "\n");
-        System.out.println("Order cannot be fulfilled based on current inventory. Suggested manufacturers:");
+        String order = "_____________________________________________\n";
+        order = order + "Furniture Order Form \n\n";
+        order = order + "Faculty Name: \n";
+        order = order + "Contact: \n";
+        order = order + "Date: \n\n";
+        order = order + "Original Request: " + this.furnitureType + " " + this.furnitureCategory + ", " + this.quantity
+                + "\n\n";
+        order = order + "Order cannot be fulfilled based on current inventory. Suggested manufacturers:\n";
+        order = order + String.join(", ", manufacturerNames);
 
-        System.out.println(String.join(", ", manufacturerNames));
+        printOrder(order);
+
+        // System.out.println("_____________________________________________");
+        // System.out.println("Furniture Order Form \n");
+        // System.out.println("Faculty Name: ");
+        // System.out.println("Contact: ");
+        // System.out.println("Date: \n");
+        // System.out.println(
+        // "Original Request: " + this.furnitureType + " " + this.furnitureCategory + ",
+        // " + this.quantity + "\n");
+        // System.out.println("Order cannot be fulfilled based on current inventory.
+        // Suggested manufacturers:");
+
+        // System.out.println(String.join(", ", manufacturerNames));
     }
 
     /**
@@ -211,11 +225,11 @@ public class OrderForm {
      */
     public static void main(String[] args) {
         OrderForm orderForm = new OrderForm();
-        // orderForm.requestOrder();
+        orderForm.requestOrder();
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "LAMP";
-        orderForm.furnitureType = "DESK";
-        orderForm.quantity = 1;
-        System.out.println(orderForm.calculateOrder());
+        // orderForm.furnitureCategory = "LAMP";
+        // orderForm.furnitureType = "DESK";
+        // orderForm.quantity = 1;
+        // System.out.println(orderForm.calculateOrder());
     }
 }
