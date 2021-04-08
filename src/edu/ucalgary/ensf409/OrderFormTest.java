@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class InventoryTest {
+public class OrderFormTest {
     public final static String DIR = "order";
     public final static String FILE = "orderform.txt";
     private Inventory testJDBC = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
@@ -35,22 +35,6 @@ public class InventoryTest {
     /*
      * Utility methods to perform common routines
      */
-
-    public void dropDb() {
-        try {
-            testDbConnect = testJDBC.initializeConnection();
-            Statement dropDbQuery = testDbConnect.createStatement();
-            results = dropDbQuery.executeQuery("DROP DATABASE INVENTORY IF EXISTS");
-
-            results.close();
-            dropDbQuery.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void createDb() {
-    }
 
     // Add a directory path to a file
     public String addPath(String file) {
@@ -111,6 +95,9 @@ public class InventoryTest {
         testOrder.furnitureCategory = "Lamp";
         testOrder.furnitureType = "Desk";
         testOrder.quantity = 1;
+        int orderPrice = testOrder.calculateOrder();
+        System.out.println(orderPrice);
+        assertEquals("20", String.valueOf(orderPrice));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -147,25 +134,7 @@ public class InventoryTest {
         testOrder.furnitureType = "Desk";
         testOrder.quantity = 1;
 
-        // Check if ID is removed from lamp table
-        boolean removed = false;
-        try {
-            testOrder.getOrder();
-            testDbConnect = testJDBC.initializeConnection();
-            Statement resultsQuery = testDbConnect.createStatement();
-            results = resultsQuery.executeQuery("SELECT * FROM LAMP WHERE ID='L564'");
-
-            if (!results.isBeforeFirst()) {
-                removed = true;
-            }
-
-            results.close();
-            resultsQuery.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assertTrue("L564 was removed from inventory", removed);
+        testOrder.fulfillOrder();
     }
 
     @Test
@@ -176,25 +145,6 @@ public class InventoryTest {
         testOrder.furnitureType = "Desk";
         testOrder.quantity = 2;
 
-        // Check if ID is removed from lamp table
-        boolean removed = false;
-        try {
-            testOrder.getOrder();
-            testDbConnect = testJDBC.initializeConnection();
-            Statement resultsQuery = testDbConnect.createStatement();
-            results = resultsQuery.executeQuery("SELECT * FROM LAMP WHERE ID='L013' OR ID='L342'");
-
-            if (!results.isBeforeFirst()) {
-                removed = true;
-            }
-
-            results.close();
-            resultsQuery.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assertTrue("L013 and L342 were removed from inventory", removed);
     }
 
     @Test
@@ -216,25 +166,6 @@ public class InventoryTest {
         testOrder.furnitureType = "Study";
         testOrder.quantity = 1;
 
-        // Check if ID is removed from lamp table
-        boolean removed = false;
-        try {
-            testOrder.getOrder();
-            testDbConnect = testJDBC.initializeConnection();
-            Statement resultsQuery = testDbConnect.createStatement();
-            results = resultsQuery.executeQuery("SELECT * FROM LAMP WHERE ID='L928'");
-
-            if (!results.isBeforeFirst()) {
-                removed = true;
-            }
-
-            results.close();
-            resultsQuery.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assertTrue("L928 was removed from inventory", removed);
     }
 
     @Test
@@ -245,25 +176,6 @@ public class InventoryTest {
         testOrder.furnitureType = "Study";
         testOrder.quantity = 2;
 
-        // Check if ID is removed from lamp table
-        boolean removed = false;
-        try {
-            testOrder.getOrder();
-            testDbConnect = testJDBC.initializeConnection();
-            Statement resultsQuery = testDbConnect.createStatement();
-            results = resultsQuery.executeQuery("SELECT * FROM LAMP WHERE ID='L982' OR ID='L980'");
-
-            if (!results.isBeforeFirst()) {
-                removed = true;
-            }
-
-            results.close();
-            resultsQuery.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assertTrue("L928 and L980 was removed from inventory", removed);
     }
 
     // Check for manufacturer list output
