@@ -60,9 +60,6 @@ public class Inventory {
         return this.dbConnect;
     }
     
-    /**
-     * Closes the connection from the java program to the SQL database
-     */
     public void closeConnection() {
     	try {
     		this.dbConnect.close();
