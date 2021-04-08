@@ -226,9 +226,12 @@ public class OrderForm {
         OrderForm orderForm = new OrderForm();
         // orderForm.requestOrder();
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "CHAIR";
-        orderForm.furnitureType = "TASK";
-        orderForm.quantity = 3;
-        orderForm.fulfillOrder();
+		/*
+		 * orderForm.furnitureCategory = "DESK"; orderForm.furnitureType =
+		 * "TRADITIONAL"; orderForm.quantity = 2;
+		 * System.out.println(orderForm.calculateOrder());
+		 */
+        
+        orderForm.requestOrder();
     }
 }
