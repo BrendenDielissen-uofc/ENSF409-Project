@@ -1,19 +1,15 @@
 package edu.ucalgary.ensf409;
 
-import java.sql.SQLException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
  * The type Order form.
  */
 public class OrderForm {
-    /**
-     * The Furniture id.
-     */
-    public String[] furnitureID = new String[10];
     /**
      * The Furniture category.
      */
@@ -31,7 +27,6 @@ public class OrderForm {
      * The Cheapest combo.
      */
     public ArrayList<Furniture> cheapestCombo;
-    public String order;
 
     /**
      * Instantiates a new Order form.
@@ -46,134 +41,65 @@ public class OrderForm {
     }
 
     /**
-     * Calculate order int.
+     * Calculates the total cost of the order
      *
      * @return the int
      */
-    public int calculateOrder() {
-        ArrayList<ArrayList<Furniture>> allFurnitureCombos = getAllFurnitureCombos();
-        // this flag will be set false once we have a valid combination of furniture for the desired quantity
-        boolean flag = true;
-        ArrayList<Furniture> possibleCheapCombo = new ArrayList<>();
-        int lowestPrice = -1;
-        // determine the lowest priced combo of furniture for the desired quantity
-        for (ArrayList<Furniture> furnitureCombo : allFurnitureCombos) {
-            int sum = 0;
-            HashMap<String, Integer> countingMap = inventory.getFurnitureCountingMap(furnitureCategory);
-            for (Furniture furniture : furnitureCombo) {
-                sum += furniture.getPrice();
-                HashMap<String, Boolean> componentMap = furniture.getComponents();
-                for (String component : countingMap.keySet()) {
-                    if (componentMap.get(component).equals(true))
-                        countingMap.put(component, countingMap.get(component) + 1);
-                }
-            }
-            if (!countingMap.entrySet().stream().anyMatch(entry -> entry.getValue() < quantity)) {
-                // this is our initial value to compare other combos to
-                if (lowestPrice == -1) {
-                    lowestPrice = sum;
-                    possibleCheapCombo = furnitureCombo;
-                } else if (sum < lowestPrice) {
-                    possibleCheapCombo = furnitureCombo;
-                    lowestPrice = sum;
-                }
-                flag = false;
-            }
-        }
-        // this means we cannot fulfill the order
-        // countingMap should show which components we are missing (if we wanted to get fancy)
-        if (flag)
+    private int calculateOrder() {
+        Furniture[] furnitureCombo = this.inventory.getCheapestOrder(this.furnitureType, this.furnitureCategory, this.quantity);
+        ArrayList<Furniture> cheapestFurnitureCombo = furnitureCombo != null ? new ArrayList<Furniture>(Arrays.asList(furnitureCombo)) : new ArrayList<>();
+
+        if (cheapestFurnitureCombo.size() < 1)
             return -1;
 
-        this.cheapestCombo = possibleCheapCombo;
-        return lowestPrice;
-    }
-
-    /**
-     * Get all possible furniture combos of the furniture type requested.
-     *
-     * @return the array list
-     */
-    private ArrayList<ArrayList<Furniture>> getAllFurnitureCombos() {
-        // get all relevant furniture items from database
-        ArrayList<Furniture> allFurnitureList = new ArrayList<Furniture>(Arrays.asList(inventory.getAllFurniture(furnitureType, furnitureCategory)));
-        if (allFurnitureList.size() < 1)
-            return null;
-        // generate the indexes for all possible combinations
-        List<int[]> indexLists = generateIndexLists(allFurnitureList.size());
-        // map furniture items to the index lists
-        ArrayList<ArrayList<Furniture>> allFurnitureCombos = new ArrayList<>();
-        for (int[] indexArr : indexLists) {
-            ArrayList<Furniture> furnitureList = new ArrayList<>();
-            for (int index : indexArr)
-                furnitureList.add(allFurnitureList.get(index));
-            allFurnitureCombos.add(furnitureList);
-        }
-        return allFurnitureCombos;
-    }
-
-    private List<int[]> generateIndexLists(int n) {
-        // DO NOT USE FOR A DATABASE WITH 30+ FURNITURE ITEMS PER CATEGORY -> NOT ENOUGH HEAP MEMORY
-        // this method generates a list of arrays, corresponding to all possible combinations
-        // of an n-lengthed array that is comprised of elements 0 to (n-1)
-
-        // example: generateIndexLists(2) -> List( [0], [1], [0, 1], [1, 0] )
-        int r = n;
-        List<int[]> allCombinations = new ArrayList<>();
-        while (r > 0) {
-            List<int[]> rCombinations = new ArrayList<>();
-            int[] combination = new int[r];
-            for (int i = 0; i < r; i++)
-                combination[i] = i;
-            while (combination[r - 1] < n) {
-                rCombinations.add(combination.clone());
-                int t = r - 1;
-                while (t != 0 && combination[t] == n - r + t)
-                    t--;
-                combination[t]++;
-                for (int i = t + 1; i < r; i++)
-                    combination[i] = combination[i - 1] + 1;
+        int sum = 0;
+        // counting map stores the individual component count for the items, so this could be mentioned as an expandable feature we have ( display missing items
+        // that were need to fulfill an order or something)
+        HashMap<String, Integer> countingMap = inventory.getFurnitureCountingMap(this.furnitureCategory);
+        for (Furniture furniture : cheapestFurnitureCombo) {
+            sum += furniture.getPrice();
+            HashMap<String, Boolean> componentMap = furniture.getComponents();
+            for (String component : countingMap.keySet()) {
+                if (componentMap.get(component).equals(true))
+                    countingMap.put(component, countingMap.get(component) + 1);
             }
-            allCombinations.addAll(rCombinations);
-            r--;
         }
-        return allCombinations;
+        this.cheapestCombo = cheapestFurnitureCombo;
+        return sum;
     }
 
     /**
-     * Gets order.
+     * Print order.
      */
-    public void getOrder() {
+    private void fulfillOrder() {
+        int cost = this.calculateOrder();
+        if (cost == -1) {
+            this.printManufacturers();
+        } else {
+            Furniture[] array = new Furniture[cheapestCombo.size()];
+            cheapestCombo.toArray(array);
 
-    }
-    
-    /**
-     * Sets the order into a singular String for easy writing into file
-     * FUTURE: If cost is valid, deletes the items in the database. Code is currently commented out.
-     * @param cost integer the total cost of the order
-     */
-    public void setOrder(int cost) {
-    	
-        Furniture[] furnitureCombo = getFurnitureList();
-        
-        String order = "Furniture Order Form\n\nFaculty Name: \nContact: \nDate: \n\n";
-        
-        order = order + "Original Request: " + furnitureType + " " + furnitureCategory + ", " + Integer.toString(quantity) + "\n\nItems Ordered:\n";
-        for (int i = 0; i < furnitureCombo.length; i++) {
-        	order = order + "ID: " + furnitureCombo[i].getId() + " $" + furnitureCombo[i].getPrice() + "\n";
+            // UNCOMMENT TO TEST DELETION
+            //this.inventory.deleteFurniture(array);
+            
+    		// Parsing order
+    		String order= "";
+    		order = order + "Furniture Order Form \n\n";
+    		order = order + "Faculty Name: \n";
+    		order = order + "Contact: \n";
+    		order = order + "Date: \n\n";
+    		order = order + "Original Request: " + this.furnitureType + " "
+    				+ this.furnitureCategory + ", " + this.quantity + "\n\n";
+    		for(Furniture furniture:cheapestCombo){
+    			order = order + "ID: " + furniture.getId() + "\n";
+    		}
+    		order = order + "\n";
+    		order = order + "Total Price: $" + cost;
+    		printOrder(order);
         }
-        order = order + "\nTotal Price: $" + Integer.toString(cost);
-        
-        System.out.println(order);
-        this.order = order;
-        //inventory.deleteFurniture(furnitureCombo);
+        this.inventory.closeConnection();
     }
-
-    /**
-     * Creates a file and writes the order statement in it. File is overwritten if "orderform.txt" already exists"
-     */
-    public void printOrder() {
-    	
+	private void printOrder(String order) {
     	// Creating the file
     	try {
     		File orderFile = new File("orderform.txt");
@@ -191,60 +117,67 @@ public class OrderForm {
     	// Writing to the file
     	try {
     		FileWriter orderWrite = new FileWriter("orderform.txt");
-    		orderWrite.write(this.order);
+    		orderWrite.write(order);
     		orderWrite.close();
     		System.out.println("Succesfully wrote to the file");
     	} catch (IOException e) {
     		e.printStackTrace();
-    	}
-    	
+    	}		
+	}
 
-    }
-    
-    public Furniture[] getFurnitureList() {
-    	Furniture[] array = new Furniture[this.cheapestCombo.size()];
-    	this.cheapestCombo.toArray(array);
-		return array;
-    }
+    private void printManufacturers() {
+        var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
+        String[] manufacturerNames = (String[]) furnitureManufacturers.stream().map(manufacturer -> manufacturer.name).toArray();
 
-    public void printManufacturers(){
-        var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory.toUpperCase());
-        StringBuilder builder = new StringBuilder();
-        for(Manufacturer manufacturer : furnitureManufacturers)
-            builder.append(String.format("%s, ", manufacturer.name));
-        builder.deleteCharAt(builder.length()-2);
-        System.out.printf("Suggested manufacturers are: %s%n", builder.toString());
+        System.out.println("_____________________________________________");
+        System.out.println("Furniture Order Form \n");
+        System.out.println("Faculty Name: ");
+        System.out.println("Contact: ");
+        System.out.println("Date: \n");
+        System.out.println("Original Request: " + this.furnitureType + " "
+                + this.furnitureCategory + ", " + this.quantity + "\n");
+        System.out.println("Order cannot be fulfilled based on current inventory. Suggested manufacturers:");
+
+        System.out.println(String.join(", ", manufacturerNames));
     }
 
     /**
      * Gets request.
      */
-    public void getRequest() {
+    public void requestOrder() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\tUofC Used Furniture Request Form");
         System.out.println("---------------------------------------\n");
 
-        System.out.println("Enter furniture category: ");
-        furnitureCategory = scanner.nextLine();
-        System.out.println("Enter furniture type: ");
-        furnitureType = scanner.nextLine();
-        System.out.println("Enter number of items needed: ");
-        quantity = scanner.nextInt();
+        try {
+            System.out.println("Enter furniture category: ");
+            furnitureCategory = scanner.nextLine().toUpperCase().trim();
+            System.out.println("Enter furniture type: ");
+            furnitureType = scanner.nextLine().toUpperCase().trim();
+            System.out.println("Enter number of items needed: ");
+            quantity = scanner.nextInt();
+            scanner.close();
 
-        if(!new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory.toUpperCase()))
+        } catch (InputMismatchException e) {
+            throw new IllegalArgumentException("Category and type must be strings, number of items must be an integer number.");
+        }
+
+
+        if (!furnitureCategory.chars().allMatch(Character::isLetter) || !new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory))
             throw new IllegalArgumentException(String.format("Furniture category \"%s\" is invalid.", furnitureCategory));
-        var test = Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase());
-        if(!Inventory.furnitureTypesMap.get(furnitureCategory.toUpperCase()).contains(furnitureType.toUpperCase()))
+       // var test = Inventory.furnitureTypesMap.get(furnitureCategory);
+        if (!furnitureType.chars().allMatch(Character::isLetter) || !Inventory.furnitureTypesMap.get(furnitureCategory).contains(furnitureType))
             throw new IllegalArgumentException(String.format("Furniture type \"%s\" is invalid.", furnitureType));
-        if(quantity < 0)
-            throw new IllegalArgumentException(String.format("Number of items \"%d\" is invalid.", quantity));
+        if (quantity < 1)
+            throw new IllegalArgumentException("Number of items must be greater than 0.");
 
         System.out.println("\n\tRequest received for:");
         System.out.println("---------------------------------------\n");
         System.out.println("Furniture Category: " + furnitureCategory);
         System.out.println("Furniture Type: " + furnitureType);
         System.out.println("Quantity: " + quantity);
-        scanner.close();
+
+        this.fulfillOrder();
     }
 
     /**
@@ -253,21 +186,12 @@ public class OrderForm {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-
         OrderForm orderForm = new OrderForm();
-//        orderForm.getRequest();
+        orderForm.requestOrder();
+
         // set dummy data for the corresponding values
-        orderForm.furnitureCategory = "lamp";
-        orderForm.furnitureType = "desk";
-        orderForm.quantity = 2;
-        int cost = orderForm.calculateOrder();
-        if (cost == -1) {
-        	System.out.println("You messed up");
-        } else {
-            orderForm.setOrder(cost);
-            orderForm.printOrder();
-        }
- 
-        
+//        orderForm.furnitureCategory = "Chair";
+//        orderForm.furnitureType = "Mesh";
+//        orderForm.quantity = 2;
     }
 }
