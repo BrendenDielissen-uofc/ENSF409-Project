@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.io.*;
 
 /**
  * The type Order form.
@@ -83,22 +84,57 @@ public class OrderForm {
             // UNCOMMENT TO TEST DELETION
             // this.inventory.deleteFurniture(array);
 
-            System.out.println("Furniture Order Form \n");
-            System.out.println("Faculty Name: ");
-            System.out.println("Contact: ");
-            System.out.println("Date: \n");
-            System.out.println("Original Request: " + this.furnitureType + " " + this.furnitureCategory + ", "
-                    + this.quantity + "\n");
-            System.out.println("Items Ordered");
+            // Parsing order
+            String order = "";
+            order = order + "Furniture Order Form \n\n";
+            order = order + "Faculty Name: \n";
+            order = order + "Contact: \n";
+            order = order + "Date: \n\n";
+            order = order + "Original Request: " + this.furnitureType + " " + this.furnitureCategory + ", "
+                    + this.quantity + "\n\n";
             for (Furniture furniture : cheapestCombo) {
-                System.out.println("ID: " + furniture.getId());
+                order = order + "ID: " + furniture.getId() + "\n";
             }
-            System.out.println();
-            System.out.println("Total Price: " + cost);
+            order = order + "\n";
+            order = order + "Total Price: $" + cost;
+            printOrder(order);
         }
         this.inventory.closeConnection();
     }
 
+    /**
+     * Output order form file for successful orders
+     * 
+     * @param order Customer order
+     */
+    private void printOrder(String order) {
+        // Creating the file
+        try {
+            File orderFile = new File("orderform.txt");
+            if (orderFile.createNewFile()) {
+                System.out.println("File created: " + orderFile.getName());
+
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Writing to the file
+        try {
+            FileWriter orderWrite = new FileWriter("orderform.txt");
+            orderWrite.write(order);
+            orderWrite.close();
+            System.out.println("Succesfully wrote to the file");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Prints out list of manufacturers if order cannot be fulfilled
+     */
     private void printManufacturers() {
         var furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
         String[] manufacturerNames = (String[]) furnitureManufacturers.stream().map(manufacturer -> manufacturer.name)
