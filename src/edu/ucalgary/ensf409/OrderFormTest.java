@@ -2,6 +2,7 @@ package edu.ucalgary.ensf409;
 
 import org.junit.*;
 import org.junit.Test;
+//import org.junit.contrib.java.lang.system.ProvideSystemProperty;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import static org.junit.Assert.*;
@@ -11,7 +12,6 @@ import java.util.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrderFormTest {
-    public final static String DIR = "order";
     public final static String FILE = "orderform.txt";
     private Inventory testJDBC = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
     private Connection testDbConnect = null;
@@ -20,17 +20,15 @@ public class OrderFormTest {
     /**
      * Pre- and Post-test processes
      */
-    @Before
-    public void start() {
-        // dropDb();
-        // createDb();
-    }
+    // @Before
+    // public void start() {
+    // removeAllData(FILE);
+    // }
 
-    @After
-    public void end() {
-        // dropDb();
-        // createDb();
-    }
+    // @After
+    // public void end() {
+    // removeAllData(FILE);
+    // }
 
     /*
      * Utility methods to perform common routines
@@ -38,28 +36,50 @@ public class OrderFormTest {
 
     // Add a directory path to a file
     public String addPath(String file) {
-        File path = new File(DIR);
-        File full = new File(path, file);
+        File full = new File(file);
         return full.getPath();
     }
 
-    public void writeFile(String[] data) throws Exception {
-        BufferedWriter file = null;
-        File directory = new File(DIR);
+    // public void writeFile(String[] data) throws Exception {
+    // BufferedWriter file = null;
+    // File directory = new File(DIR);
 
-        // Create directory if it doesn't exist
-        if (!directory.exists()) {
-            directory.mkdir();
+    // // Create directory if it doesn't exist
+    // if (!directory.exists()) {
+    // directory.mkdir();
+    // }
+
+    // String fn = addPath(FILE);
+    // file = new BufferedWriter(new FileWriter(fn));
+
+    // for (String txt : data) {
+    // file.write(txt, 0, txt.length());
+    // file.newLine();
+    // }
+    // file.close();
+    // }
+
+    // Read in generated file and store output in string
+    public String readFile(String file) throws IOException {
+        StringBuilder fileContents = new StringBuilder();
+        // Ensure file exists
+        File testFile = new File(file);
+        if (!testFile.exists()) {
+            System.err.println("File " + testFile + " could not be opened as it does not exist.");
+
         }
-
-        String fn = addPath(FILE);
-        file = new BufferedWriter(new FileWriter(fn));
-
-        for (String txt : data) {
-            file.write(txt, 0, txt.length());
-            file.newLine();
+        Scanner in = null;
+        try {
+            in = new Scanner(new File(file));
+            while (in.hasNextLine()) {
+                fileContents.append(in.nextLine() + "\n");
+            }
+        } catch (IOException e) {
+            System.err.println("I/O error opening/reading file " + file + ".");
+            in.close();
+            e.printStackTrace();
         }
-        file.close();
+        return fileContents.toString();
     }
 
     public void removeAllData(String file) {
@@ -92,8 +112,10 @@ public class OrderFormTest {
     public void testGetRequest_AllValidUserInputs_ReturnsUserInput() {
         OrderForm testOrder = new OrderForm();
         // Simulates potential user input
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "DESK";
+        String furniture = "Lamp";
+        String furnitureType = "Desk";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
         int orderPrice = testOrder.calculateOrder();
         System.out.println(orderPrice);
@@ -103,16 +125,16 @@ public class OrderFormTest {
     @Test(expected = IllegalArgumentException.class)
     public void testGetRequest_InvalidFurnitureCategory_ExceptionThrown() {
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "BED";
-        testOrder.furnitureType = "STANDING";
+        testOrder.furnitureCategory = "Bed";
+        testOrder.furnitureType = "Standing";
         testOrder.quantity = 2;
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetRequest_InvalidFurnitureQuantity_ExceptionThrown() {
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "DESK";
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Desk";
         testOrder.quantity = -1;
 
     }
@@ -120,33 +142,32 @@ public class OrderFormTest {
     @Test(expected = IllegalArgumentException.class)
     public void testGetRequest_InvalidFurnitureType_ExceptionThrown() {
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "STANDING";
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Standing";
         testOrder.quantity = 2;
     }
 
     // Testing desk lamp orders
     @Test
-    public void testGetOrder_1LampDesk_OutputOrderForm() {
-        // Placing one desk lamp order
+    public void testGetOrder_1LampDesk_OutputOrderForm() throws IOException {
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "DESK";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Desk";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(20, cost);
-
+        testOrder.fulfillOrder();
+        System.out.println(readFile(FILE));
     }
 
     @Test
     public void testGetOrder_2LampDesk_OutputOrderForm() {
         // Placing two desk lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "DESK";
+        testOrder.furnitureCategory = "Lamp";
+        testOrder.furnitureType = "Desk";
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(40, cost);
 
     }
 
@@ -158,7 +179,6 @@ public class OrderFormTest {
         testOrder.furnitureCategory = "Lamp";
         testOrder.furnitureType = "Desk";
         testOrder.quantity = 4;
-
     }
 
     // Testing study lamp orders
@@ -536,7 +556,7 @@ public class OrderFormTest {
         testOrder.quantity = 1;
         int cost = testOrder.calculateOrder();
         assertEquals(200, cost);
-        
+
     }
 
     @Test

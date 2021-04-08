@@ -1,5 +1,8 @@
 package edu.ucalgary.ensf409;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * The type Manufacturer.
  */
@@ -20,6 +23,34 @@ public class Manufacturer {
      * The Province.
      */
     public final String province;
+    /**
+     * The Query string.
+     */
+    public static final String queryString = "SELECT * FROM MANUFACTURER";
+
+    /**
+     * Instantiates a new Manufacturer from a SQL ResultSet.
+     *
+     * @param manufacturerRs the manufacturer rs
+     */
+    public Manufacturer(ResultSet manufacturerRs) {
+        String manuId = null;
+        String name = null;
+        String phone = null;
+        String province = null;
+        try {
+            manuId = manufacturerRs.getString("ManuID");
+            name = manufacturerRs.getString("Name");
+            phone = manufacturerRs.getString("Phone");
+            province = manufacturerRs.getString("Province");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        this.manuId = manuId;
+        this.name = name;
+        this.phone = phone;
+        this.province = province;
+    }
 
     /**
      * Instantiates a new Manufacturer.
