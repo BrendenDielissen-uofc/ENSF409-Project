@@ -66,7 +66,7 @@ public class OrderFormTest {
         File testFile = new File(file);
         if (!testFile.exists()) {
             System.err.println("File " + testFile + " could not be opened as it does not exist.");
-         
+
         }
         Scanner in = null;
         try {
@@ -186,9 +186,11 @@ public class OrderFormTest {
     public void testGetOrder_1LampStudy_OutputOrderForm() {
         // Placing one study lamp order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Study";
+        testOrder.furnitureCategory = "LAMP";
+        testOrder.furnitureType = "STUDY";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(10, cost);
 
     }
 
@@ -196,9 +198,11 @@ public class OrderFormTest {
     public void testGetOrder_2LampStudy_OutputOrderForm() {
         // Placing two study lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Study";
+        testOrder.furnitureCategory = "LAMP";
+        testOrder.furnitureType = "STUDY";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(20, cost);
 
     }
 
@@ -217,18 +221,22 @@ public class OrderFormTest {
     public void testGetOrder_1LampSwingArm_OutputOrderForm() {
         // Placing one swing arm lamp order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Swing Arm";
+        testOrder.furnitureCategory = "LAMP";
+        testOrder.furnitureType = "SWING ARM";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(30, cost);
     }
 
     @Test
     public void testGetOrder_2LampSwingArm_OutputOrderForm() {
         // Placing two swing arm lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Swing Arm";
+        testOrder.furnitureCategory = "LAMP";
+        testOrder.furnitureType = "SWING ARM";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(60, cost);
     }
 
     // Check for manufacturer list output
@@ -236,8 +244,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyLampSwingArm_OutputOrderForm() {
         // Placing many swing arm lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Swing Arm";
+        testOrder.furnitureCategory = "LAMP";
+        testOrder.furnitureType = "SWING ARM";
         testOrder.quantity = 4;
     }
 
@@ -246,18 +254,22 @@ public class OrderFormTest {
     public void testGetOrder_1FilingSmall_OutputOrderForm() {
         // Placing one small filing cabinet order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Small";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "SMALL";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(100, cost);
     }
 
     @Test
     public void testGetOrder_2FilingSmall_OutputOrderForm() {
         // Place two small filing cabinet orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Small";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "SMALL";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(225, cost);
     }
 
     // Check for manufacturer list output
@@ -265,8 +277,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyFilingSmall_OutputOrderForm() {
         // Place many small filing cabinet orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Small";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "SMALL";
         testOrder.quantity = 4;
     }
 
@@ -275,18 +287,22 @@ public class OrderFormTest {
     public void testGetOrder_1FilingMedium_OutputOrderForm() {
         // Placing one medium filing cabinet order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Medium";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(200, cost);
     }
 
     @Test
     public void testGetOrder_2FilingMedium_OutputOrderForm() {
         // Placing two medium filing cabinet orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Medium";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(400, cost);
     }
 
     // Check for manufacturer list output
@@ -304,18 +320,22 @@ public class OrderFormTest {
     public void testGetOrder_1FilingLarge_OutputOrderForm() {
         // Placing one large filing cabinet order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Large";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "LARGE";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(300, cost);
     }
 
     @Test
     public void testGetOrder_2FilingLarge_OutputOrderForm() {
         // Placing two large filing cabinet order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Large";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "LARGE";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(600, cost);
     }
 
     // Check for manufacturer list output
@@ -323,8 +343,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyFilingLarge_OutputOrderForm() {
         // Placing many large filing cabinet order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Large";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "LARGE";
         testOrder.quantity = 4;
     }
 
@@ -333,18 +353,22 @@ public class OrderFormTest {
     public void testGetOrder_1DeskAdjustable_OutputOrderForm() {
         // Placing one adjustable desk order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Adjustable";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(400, cost);
     }
 
     @Test
     public void testGetOrder_2DeskAdjustable_OutputOrderForm() {
         // Placing two adjustable desk orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Adjustable";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(800, cost);
     }
 
     // Check for manufacturer list output
@@ -352,8 +376,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyDeskAdjustable_OutputOrderForm() {
         // Placing many adjustable desk orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Adjustable";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 4;
     }
 
@@ -362,18 +386,22 @@ public class OrderFormTest {
     public void testGetOrder_1DeskStanding_OutputOrderForm() {
         // Placing one standing desk order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Standing";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "STANDING";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(300, cost);
     }
 
     @Test
     public void testGetOrder_2DeskStanding_OutputOrderForm() {
         // Placing two standing desk orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Standing";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "STANDING";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(600, cost);
     }
 
     // Check for manufacturer list output
@@ -381,8 +409,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyDeskStanding_OutputOrderForm() {
         // Placing many standing desk orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Standing";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "STANDING";
         testOrder.quantity = 4;
     }
 
@@ -391,18 +419,22 @@ public class OrderFormTest {
     public void testGetOrder_1DeskTraditional_OutputOrderForm() {
         // Placing one traditional desk order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Traditional";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(100, cost);
     }
 
     @Test
     public void testGetOrder_2DeskTraditional_OutputOrderForm() {
         // Placing two traditional desk order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Traditional";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(200, cost);
     }
 
     // Check for manufacturer list output
@@ -410,8 +442,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyDeskTraditional_OutputOrderForm() {
         // Placing many traditional desk orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Desk";
-        testOrder.furnitureType = "Traditional";
+        testOrder.furnitureCategory = "DESK";
+        testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 4;
 
     }
@@ -421,18 +453,22 @@ public class OrderFormTest {
     public void testGetOrder_1ChairErgonomic_OutputOrderForm() {
         // Placing one ergonomic chair order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Ergonomic";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "ERGONOMIC";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(250, cost);
     }
 
     @Test
     public void testGetOrder_2ChairErgonomic_OutputOrderForm() {
         // Placing two ergonomic chair order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Ergonomic";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "ERGONOMIC";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(-1, cost);
     }
 
     // Check for manufacturer list output
@@ -440,8 +476,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyChairErgonomic_OutputOrderForm() {
         // Placing many ergonomic chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Ergonomic";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "ERGONOMIC";
         testOrder.quantity = 4;
     }
 
@@ -450,18 +486,22 @@ public class OrderFormTest {
     public void testGetOrder_1ChairExecutive_OutputOrderForm() {
         // Placing one executive chair order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Executive";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "EXECUTIVE";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(400, cost);
     }
 
     @Test
     public void testGetOrder_2ChairExecutive_OutputOrderForm() {
         // Placing two executive chair order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Executive";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "EXECUTIVE";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(-1, cost);
     }
 
     // Check for manufacturer list output
@@ -469,8 +509,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyChairExecutive_OutputOrderForm() {
         // Placing many executive chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Executive";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "EXECUTIVE";
         testOrder.quantity = 4;
     }
 
@@ -479,9 +519,11 @@ public class OrderFormTest {
     public void testGetOrder_1ChairKneeling_OutputOrderForm() {
         // Placing one kneeling chair order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Kneeling";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "KNEELING";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(-1, cost);
     }
 
     // Check for manufacturer list output
@@ -489,8 +531,8 @@ public class OrderFormTest {
     public void testGetOrder_2ChairKneeling_OutputOrderForm() {
         // Placing two kneeling chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Kneeling";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "KNEELING";
         testOrder.quantity = 2;
     }
 
@@ -499,8 +541,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyChairKneeling_OutputOrderForm() {
         // Placing many kneeling chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Kneeling";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "KNEELING";
         testOrder.quantity = 4;
     }
 
@@ -509,18 +551,23 @@ public class OrderFormTest {
     public void testGetOrder_1ChairMesh_OutputOrderForm() {
         // Placing one mesh chair order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Mesh";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "MESH";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(200, cost);
+
     }
 
     @Test
     public void testGetOrder_2ChairMesh_OutputOrderForm() {
         // Placing two mesh chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Mesh";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "MESH";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(-1, cost);
     }
 
     // Check for manufacturer list output
@@ -528,8 +575,8 @@ public class OrderFormTest {
     public void testGetOrder_ManyChairMesh_OutputOrderForm() {
         // Placing many mesh chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Mesh";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "MESH";
         testOrder.quantity = 4;
     }
 
@@ -538,18 +585,22 @@ public class OrderFormTest {
     public void testGetOrder_1ChairTask_OutputOrderForm() {
         // Placing one task chair order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Task";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "TASK";
         testOrder.quantity = 1;
+        int cost = testOrder.calculateOrder();
+        assertEquals(150, cost);
     }
 
     @Test
     public void testGetOrder_2ChairTask_OutputOrderForm() {
         // Placing two task chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Task";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "TASK";
         testOrder.quantity = 2;
+        int cost = testOrder.calculateOrder();
+        assertEquals(-1, cost);
     }
 
     // Check for manufacturer list output
@@ -557,8 +608,9 @@ public class OrderFormTest {
     public void testGetOrder_ManyChairTask_OutputOrderForm() {
         // Placing many task chair orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Chair";
-        testOrder.furnitureType = "Task";
+        testOrder.furnitureCategory = "CHAIR";
+        testOrder.furnitureType = "TASK";
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
     }
 }
