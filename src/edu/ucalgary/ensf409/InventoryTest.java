@@ -170,7 +170,7 @@ public class InventoryTest {
 
     @Test
     public void testGetOrder_2LampDesk_OutputOrderForm() {
-        // Placing one desk lamp order
+        // Placing two desk lamp orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "Lamp";
         testOrder.furnitureType = "Desk";
@@ -199,8 +199,8 @@ public class InventoryTest {
 
     @Test
     // Check for manufacturer list output
-    public void testGetOrder_ManyDeskLamps_OutputOrderForm() {
-        // Placing one desk lamp order
+    public void testGetOrder_ManyLampDesk_OutputOrderForm() {
+        // Placing multiple desk lamp orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "Lamp";
         testOrder.furnitureType = "Desk";
@@ -210,7 +210,7 @@ public class InventoryTest {
     // Testing study lamp orders
     @Test
     public void testGetOrder_1LampStudy_OutputOrderForm() {
-        // Placing one desk lamp order
+        // Placing one study lamp order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "Lamp";
         testOrder.furnitureType = "Study";
@@ -239,7 +239,7 @@ public class InventoryTest {
 
     @Test
     public void testGetOrder_2LampStudy_OutputOrderForm() {
-        // Placing one desk lamp order
+        // Placing two study lamp orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "Lamp";
         testOrder.furnitureType = "Study";
@@ -268,7 +268,7 @@ public class InventoryTest {
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyStudyLamps_OutputOrderForm() {
+    public void testGetOrder_ManyLampStudy_OutputOrderForm() {
         // Placing one desk lamp order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "Lamp";
@@ -276,4 +276,71 @@ public class InventoryTest {
         testOrder.quantity = 4;
     }
 
+    // Testing swing arm lamp orders
+    @Test
+    public void testGetOrder_1LampSwingArm_OutputOrderForm() {
+
+    }
+
+    @Test
+    public void testGetOrder_2LampSwingArm_OutputOrderForm() {
+
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyLampSwingArm_OutputOrderForm() {
+
+    }
+
+    // Testing small filing cabinet orders
+    @Test
+    public void testGetOrder_1FilingSmall_OutputOrderForm() {
+
+    }
+
+    @Test
+    public void testGetOrder_2FilingSmall_OutputOrderForm() {
+
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyFilingSmall_OutputOrderForm() {
+
+    }
+
+    // Testing medium filing cabinet orders
+    @Test
+    public void testGetOrder_1FilingMedium_OutputOrderForm() {
+
+    }
+
+    @Test
+    public void testGetOrder_2FilingMedium_OutputOrderForm() {
+
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyFilingMedium_OutputOrderForm() {
+
+    }
+
+    // Testing large filing cabinet orders
+    @Test
+    public void testGetOrder_1FilingLarge_OutputOrderForm() {
+
+    }
+
+    @Test
+    public void testGetOrder_2FilingLarge_OutputOrderForm() {
+
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyFilingLarge_OutputOrderForm() {
+
+    }
 }
