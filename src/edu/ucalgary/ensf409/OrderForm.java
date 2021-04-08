@@ -10,10 +10,9 @@ public class OrderForm {
 	public String furnitureType;
 	public int quantity;
 	private final Inventory inventory = new Inventory(
-			"jdbc:mysql://localhost:3306/inventory", "root", "Bfluff3!");
+			"jdbc:mysql://localhost/inventory", "scm", "ensf409");
 
 	public void getOrder() throws SQLException {
-
 		int numberOfParts = 0;
 		HashSet<String> completed = new HashSet<String>();
 		boolean filled = true;
@@ -31,16 +30,11 @@ public class OrderForm {
 			// make temporary table, all combinations, sort by price in
 			// ascending
 			if (this.furnitureCategory.equalsIgnoreCase("lamp")) {
-				createTable = "CREATE TABLE T AS SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
-						+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
-						+ "ELSE l1.Price + l2.Price\r\n"
-						+ "END AS TotalPrice\r\n"
-						+ "FROM (SELECT l1.ID, l1.Price\r\n"
-						+ "FROM LAMP as l1\r\n"
-						+ "WHERE l1.Bulb = 'Y' and l1.Type = ?) AS l1\r\n"
-						+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
-						+ "FROM LAMP as l2\r\n"
-						+ "WHERE l2.Base = 'Y' and l2.Type = ?) AS l2\r\n"
+				createTable = "CREATE TABLE T AS \r\n"
+						+ "SELECT l1.ID AS c0, l2.ID AS c1, CASE WHEN l1.ID = l2.ID THEN l1.Price\r\n"
+						+ "ELSE l1.Price + l2.Price END AS TotalPrice\r\n"
+						+ "FROM (SELECT l1.ID, l1.Price FROM LAMP as l1 WHERE l1.Bulb = 'Y' and l1.Type = ?) AS l1\r\n"
+						+ "CROSS JOIN (SELECT l2.ID, l2.Price FROM LAMP as l2 WHERE l2.Base = 'Y' and l2.Type = ?) AS l2\r\n"
 						+ "ORDER BY TotalPrice ASC;";
 				numberOfPartsTable = "CREATE TABLE C AS\r\n"
 						+ "SELECT ID, COUNT(ID) AS NumParts FROM \r\n"
@@ -128,48 +122,23 @@ public class OrderForm {
 						+ "ORDER BY NumParts DESC LIMIT 1;";
 				numberOfParts = 3;
 			} else {
-				createTable = "CREATE TABLE T AS SELECT c0, c1, c2, l4.ID AS c3, CASE\r\n"
-						+ "WHEN l4.ID = c0 OR l4.ID = c1 OR l4.ID = c2 THEN f.Price\r\n"
-						+ "ELSE f.Price + l4.Price\r\n"
-						+ "END AS TotalPrice\r\n"
-						+ "FROM (SELECT l4.ID, l4.Price\r\n"
-						+ "FROM CHAIR as l4\r\n"
-						+ "WHERE l4.Cushion = 'Y' and l4.Type = ?) AS l4\r\n"
-						+ "CROSS JOIN\r\n"
-						+ "(SELECT c0, c1, l3.ID AS c2, CASE\r\n"
-						+ "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
-						+ "ELSE l.Price + l3.Price\r\n" + "END AS Price\r\n"
-						+ "FROM (SELECT l3.ID, l3.Price\r\n"
-						+ "FROM CHAIR as l3\r\n"
-						+ "WHERE l3.Seat = 'Y' and l3.Type = ?) AS l3\r\n"
-						+ "CROSS JOIN\r\n"
-						+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
-						+ "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
-						+ "ELSE l1.Price + l2.Price\r\n" + "END AS Price\r\n"
-						+ "FROM (SELECT l1.ID, l1.Price\r\n"
-						+ "FROM CHAIR as l1\r\n"
-						+ "WHERE l1.Legs = 'Y' and l1.Type = ?) AS l1\r\n"
-						+ "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
-						+ "FROM CHAIR as l2\r\n"
-						+ "WHERE l2.Arms = 'Y' and l2.Type = ?) AS l2) AS l) AS f\r\n"
+				createTable = "CREATE TABLE T AS SELECT c0, c1, c2, l4.ID AS c3, CASE WHEN l4.ID = c0 OR l4.ID = c1 OR l4.ID = c2 THEN f.Price\r\n"
+						+ "ELSE f.Price + l4.Price END AS TotalPrice\r\n"
+						+ "FROM (SELECT l4.ID, l4.Price FROM CHAIR as l4 WHERE l4.Cushion = 'Y' and l4.Type = ?) AS l4 CROSS JOIN\r\n"
+						+ "(SELECT c0, c1, l3.ID AS c2, CASE WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price ELSE l.Price + l3.Price END AS Price \r\n"
+						+ "FROM (SELECT l3.ID, l3.Price FROM CHAIR as l3 WHERE l3.Seat = 'Y' and l3.Type = ?) AS l3 CROSS JOIN\r\n"
+						+ "(SELECT l1.ID AS c0, l2.ID AS c1, CASE WHEN l1.ID = l2.ID THEN l1.Price ELSE l1.Price + l2.Price END AS Price\r\n"
+						+ "FROM (SELECT l1.ID, l1.Price FROM CHAIR as l1 WHERE l1.Legs = 'Y' and l1.Type = ?) AS l1 CROSS JOIN \r\n"
+						+ "(SELECT l2.ID, l2.Price FROM CHAIR as l2 WHERE l2.Arms = 'Y' and l2.Type = ?) AS l2) AS l) AS f\r\n"
 						+ "ORDER BY TotalPrice ASC;";
 				numberOfPartsTable = "CREATE TABLE C AS\r\n"
-						+ "SELECT ID, COUNT(ID) AS NumParts FROM \r\n"
-						+ "(SELECT * FROM CHAIR WHERE Legs = 'Y'\r\n"
-						+ "UNION ALL\r\n"
-						+ "SELECT * FROM CHAIR WHERE Arms = 'Y'\r\n"
-						+ "UNION ALL\r\n"
-						+ "SELECT * FROM CHAIR WHERE Seat = 'Y'\r\n"
-						+ "UNION ALL\r\n"
-						+ "SELECT * FROM CHAIR WHERE Cushion = 'Y') AS t1\r\n"
-						+ "GROUP BY ID ORDER BY NumParts DESC;";
+						+ "SELECT ID, COUNT(ID) AS NumParts FROM (SELECT * FROM CHAIR WHERE Legs = 'Y'\r\n"
+						+ "UNION ALL SELECT * FROM CHAIR WHERE Arms = 'Y' UNION ALL SELECT * FROM CHAIR WHERE Seat = 'Y'\r\n"
+						+ "UNION ALL SELECT * FROM CHAIR WHERE Cushion = 'Y') AS t1 GROUP BY ID ORDER BY NumParts DESC;";
 				getOrder = "SELECT t.c0, t.c1, t.c2, t.c3, t.TotalPrice, c0.NumParts + c1.NumParts + c2.NumParts + c3.NumParts AS NumParts\r\n"
 						+ "FROM (SELECT * FROM T WHERE TotalPrice = (SELECT MIN(TotalPrice) FROM T)) AS t\r\n"
-						+ "LEFT JOIN C AS c0 ON c0.ID = t.c0\r\n"
-						+ "LEFT JOIN C AS c1 ON c1.ID = t.c1\r\n"
-						+ "LEFT JOIN C AS c2 ON c2.ID = t.c2\r\n"
-						+ "LEFT JOIN C AS c3 ON c3.ID = t.c3\r\n"
-						+ "ORDER BY NumParts DESC LIMIT 1;";
+						+ "LEFT JOIN C AS c0 ON c0.ID = t.c0 LEFT JOIN C AS c1 ON c1.ID = t.c1 LEFT JOIN C AS c2 ON c2.ID = t.c2\r\n"
+						+ "LEFT JOIN C AS c3 ON c3.ID = t.c3 ORDER BY NumParts DESC LIMIT 1;";
 				numberOfParts = 4;
 			}
 			//creates table with ID and corresponding # of parts
@@ -283,14 +252,14 @@ public class OrderForm {
 			}
 
 			// delete furniture taken
-//			Statement deleteQuery = this.inventory.initializeConnection()
-//					.createStatement();
-//			deleteQuery.executeUpdate(delete);
+			Statement deleteQuery = this.inventory.initializeConnection()
+					.createStatement();
+			deleteQuery.executeUpdate(delete);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		System.out.println("_____________________________________________");
 		System.out.println("Furniture Order Form \n");
 		System.out.println("Faculty Name: ");
 		System.out.println("Contact: ");
