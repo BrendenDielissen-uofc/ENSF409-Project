@@ -1,16 +1,23 @@
 package edu.ucalgary.ensf409;
 
 import java.sql.SQLException;
-import java.util.Scanner;
-import java.sql.*;
 import java.util.*;
 
+/**
+ * The type Order form.
+ */
 public class OrderForm {
     /**
      * The Furniture category.
      */
     public String furnitureCategory;
+    /**
+     * The Furniture type.
+     */
     public String furnitureType;
+    /**
+     * The Quantity.
+     */
     public int quantity;
     private final Inventory inventory;
     /**
@@ -18,12 +25,17 @@ public class OrderForm {
      */
     public ArrayList<Furniture> cheapestCombo;
 
-    try
-    {
-            // drop temporary table if exists
-            Statement dropTableQuery = this.inventory.initializeConnection().createStatement();
-            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
-            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS C");
+    /**
+     * Instantiates a new Order form.
+     */
+    public OrderForm() {
+        this.inventory = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
+        try {
+            this.inventory.initializeConnection();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     /**
      * Calculates the total cost of the order
@@ -120,20 +132,30 @@ public class OrderForm {
             System.out.println("Enter number of items needed: ");
             quantity = scanner.nextInt();
         } catch (InputMismatchException e) {
+            scanner.close();
             throw new IllegalArgumentException(
                     "Category and type must be strings, number of items must be an integer number.");
         }
 
         if (!furnitureCategory.chars().allMatch(Character::isLetter)
-                || !new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory))
+                || !new ArrayList<String>(Inventory.furnitureTypesMap.keySet()).contains(furnitureCategory)) {
+            scanner.close();
             throw new IllegalArgumentException(
                     String.format("Furniture category \"%s\" is invalid.", furnitureCategory));
+        }
+
         var test = Inventory.furnitureTypesMap.get(furnitureCategory);
+
         if (!furnitureType.chars().allMatch(Character::isLetter)
-                || !Inventory.furnitureTypesMap.get(furnitureCategory).contains(furnitureType))
+                || !Inventory.furnitureTypesMap.get(furnitureCategory).contains(furnitureType)) {
+            scanner.close();
             throw new IllegalArgumentException(String.format("Furniture type \"%s\" is invalid.", furnitureType));
-        if (quantity < 1)
+        }
+
+        if (quantity < 1) {
+            scanner.close();
             throw new IllegalArgumentException("Number of items must be greater than 0.");
+        }
 
         System.out.println("\n\tRequest received for:");
         System.out.println("---------------------------------------\n");
@@ -145,66 +167,18 @@ public class OrderForm {
         this.fulfillOrder();
     }
 
-    public static void main(String[] args) throws SQLException {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
         OrderForm orderForm = new OrderForm();
         orderForm.requestOrder();
 
         // set dummy data for the corresponding values
-//        orderForm.furnitureCategory = "Chair";
-//        orderForm.furnitureType = "Mesh";
-//        orderForm.quantity = 2;
+        // orderForm.furnitureCategory = "Chair";
+        // orderForm.furnitureType = "Mesh";
+        // orderForm.quantity = 2;
     }
 }
-
-
-    
-    
-            
-    
-    
-    
-        
-    
-
-    
-
-    
-    
-    
-    
-        
-        
-        
-        
-        
-            
-            
-        
-        
-        
-            
-            
-                
-                
-            
-            
-            
-            
-                
-            
-            
-            
-            
-        
-
-    
-
-    
-    
-    
-    
-        
-    
-    
-        
-    

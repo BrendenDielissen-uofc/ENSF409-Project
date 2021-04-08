@@ -115,7 +115,7 @@ public class Inventory {
      * 
      * @throws SQLException if SQL related error is encountered
      */
-    public Connection initializeConnection() throws SQLException {
+    public void initializeConnection() throws SQLException {
         try {
             this.dbConnect = DriverManager.getConnection(getDBURL(), getUSERNAME(), getPASSWORD());
         } catch (SQLException ex) {
