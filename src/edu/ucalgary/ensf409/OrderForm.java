@@ -313,10 +313,10 @@ public class OrderForm {
 		
 		// Parsing order
 		String order= "";
-		order = order + "Furniture Order Form \n";
-		order = order + "Faculty Name: ";
-		order = order + "Contact: ";
-		order = order + "Date: \n";
+		order = order + "Furniture Order Form \n\n";
+		order = order + "Faculty Name: \n";
+		order = order + "Contact: \n";
+		order = order + "Date: \n\n";
 		order = order + "Original Request: " + this.furnitureType + " "
 				+ this.furnitureCategory + ", " + this.quantity + "\n\n";
 		for(String item:completed){
