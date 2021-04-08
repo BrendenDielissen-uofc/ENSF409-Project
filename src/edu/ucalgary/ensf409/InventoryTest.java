@@ -343,4 +343,55 @@ public class InventoryTest {
     public void testGetOrder_ManyFilingLarge_OutputOrderForm() {
 
     }
+
+    // Testing adjustable desk orders
+    @Test
+    public void testGetOrder_1DeskAdjustable_OutputOrderForm() {
+
+    }
+
+    @Test
+    public void testGetOrder_2DeskAdjustable_OutputOrderForm() {
+
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyDeskAdjustable_OutputOrderForm() {
+
+    }
+
+    // Testing standing desk orders
+    @Test
+    public void testGetOrder_1DeskStanding_OutputOrderForm() {
+
+    }
+
+    @Test
+    public void testGetOrder_2DeskStanding_OutputOrderForm() {
+
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyDeskStanding_OutputOrderForm() {
+
+    }
+
+    // Check for traditional desk orders
+    @Test
+    public void testGetOrder_1DeskTraditional_OutputOrderForm() {
+
+    }
+
+    @Test
+    public void testGetOrder_2DeskTraditional_OutputOrderForm() {
+
+    }
+
+    // Check for manufacturer list output
+    @Test
+    public void testGetOrder_ManyDeskTraditional_OutputOrderForm() {
+
+    }
 }
