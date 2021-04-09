@@ -21,14 +21,14 @@ import static java.util.Map.entry;
  * The type Desk.
  */
 class Desk extends Furniture {
-    public static ArrayList<String> TYPES = new ArrayList<>() {
+    public static final ArrayList<String> TYPES = new ArrayList<>() {
         {
             add("STANDING");
             add("ADJUSTABLE");
             add("TRADITIONAL");
         }
     };
-    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
+    public static final ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
         {
             add(new Manufacturer("001", "Academic Desks", "236-145-2542", "BC"));
             add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
@@ -39,17 +39,17 @@ class Desk extends Furniture {
     /**
      * The Legs.
      */
-    private final boolean legs;
+    private boolean legs;
 
-    private final boolean top;
+    private boolean top;
     /**
      * The Drawers.
      */
-    private final boolean drawer;
+    private boolean drawer;
     /**
      * The constant queryString.
      */
-    private static final String queryString = "SELECT * FROM DESK";
+    private static String queryString = "SELECT * FROM DESK";
 
     /**
      * Default constructor for Desk.

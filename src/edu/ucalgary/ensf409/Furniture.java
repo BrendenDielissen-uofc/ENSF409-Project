@@ -21,19 +21,19 @@ public abstract class Furniture {
     /**
      * The Id.
      */
-    private final String id;
+    private String id;
     /**
      * The Type.
      */
-    private final String type;
+    private String type;
     /**
      * The Price.
      */
-    private final Integer price;
+    private Integer price;
     /**
      * The Manu id.
      */
-    private final String manuId;
+    private String manuId;
 
     /**
      * Default constructor for Furniture.

@@ -16,19 +16,19 @@ public class Manufacturer {
     /**
      * The Manu id.
      */
-    public final String manuId;
+    public String manuId;
     /**
      * The Name.
      */
-    public final String name;
+    public String name;
     /**
      * The Phone.
      */
-    public final String phone;
+    public String phone;
     /**
      * The Province.
      */
-    public final String province;
+    public String province;
 
     /**
      * Instantiates a new Manufacturer.

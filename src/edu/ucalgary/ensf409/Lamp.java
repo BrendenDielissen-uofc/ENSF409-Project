@@ -21,14 +21,14 @@ import static java.util.Map.entry;
  * The type Lamp.
  */
 public class Lamp extends Furniture {
-    public static ArrayList<String> LAMP_TYPES = new ArrayList<>() {
+    public static final ArrayList<String> LAMP_TYPES = new ArrayList<>() {
         {
             add("DESK");
             add("STUDY");
             add("SWING ARM");
         }
     };
-    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
+    public static final ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
         {
             add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
             add(new Manufacturer("004", "Furniture Goods", "306-512-5508", "SK"));
@@ -38,15 +38,15 @@ public class Lamp extends Furniture {
     /**
      * The Base.
      */
-    private final boolean base;
+    private boolean base;
     /**
      * The Bulb.
      */
-    private final boolean bulb;
+    private boolean bulb;
     /**
      * The constant queryString.
      */
-    private static final String queryString = "SELECT * FROM LAMP";
+    private static String queryString = "SELECT * FROM LAMP";
 
     /**
      * Default constructor for Lamp.
