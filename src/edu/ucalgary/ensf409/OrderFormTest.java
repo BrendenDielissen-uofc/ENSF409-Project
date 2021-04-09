@@ -2,7 +2,6 @@ package edu.ucalgary.ensf409;
 
 import org.junit.*;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.ProvideSystemProperty;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import static org.junit.Assert.*;
@@ -72,13 +71,14 @@ public class OrderFormTest {
         try {
             in = new Scanner(new File(file));
             while (in.hasNextLine()) {
-                fileContents.append(in.nextLine() + "\n");
+                fileContents.append(in.nextLine());
             }
         } catch (IOException e) {
             System.err.println("I/O error opening/reading file " + file + ".");
             in.close();
             e.printStackTrace();
         }
+        in.close();
         return fileContents.toString();
     }
 
@@ -149,7 +149,8 @@ public class OrderFormTest {
 
     // Testing desk lamp orders
     @Test
-    public void testGetOrder_1LampDesk_OutputOrderForm() throws IOException {
+    public void testGetOrder_1LampDesk_OutputOrderForm() throws Exception {
+        // Placing one desk lamp order
         OrderForm testOrder = new OrderForm();
         // Simulates potential user input
         String furniture = "Lamp";
@@ -158,283 +159,406 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        System.out.println(readFile(FILE));
+
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Desk Lamp",
+                readFile(FILE).contains("L564Total Price: $20"));
     }
 
     @Test
-    public void testGetOrder_2LampDesk_OutputOrderForm() {
+    public void testGetOrder_2LampDesk_OutputOrderForm() throws Exception {
         // Placing two desk lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Desk";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Desk";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 2;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Desk Lamps",
+                readFile(FILE).contains("ID: L013ID: L342ID: L564Total Price: $40"));
 
     }
 
     @Test
     // Check for manufacturer list output
-    public void testGetOrder_ManyLampDesk_OutputOrderForm() {
+    public void testGetOrder_ManyLampDesk_OutputOrderForm() throws Exception {
         // Placing multiple desk lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Desk";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Desk";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE)
+                .contains("Suggested manufacturers:Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing study lamp orders
     @Test
-    public void testGetOrder_1LampStudy_OutputOrderForm() {
+    public void testGetOrder_1LampStudy_OutputOrderForm() throws Exception {
         // Placing one study lamp order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "STUDY";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Study";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(10, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Study Lamp",
+                readFile(FILE).contains("L928Total Price: $10"));
 
     }
 
     @Test
-    public void testGetOrder_2LampStudy_OutputOrderForm() {
+    public void testGetOrder_2LampStudy_OutputOrderForm() throws Exception {
         // Placing two study lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "STUDY";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Study";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(20, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Study Lamps",
+                readFile(FILE).contains("Total Price: $20"));
 
     }
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyLampStudy_OutputOrderForm() {
-        // Placing one desk lamp order
+    public void testGetOrder_ManyLampStudy_OutputOrderForm() throws Exception {
+        // Placing many study lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Lamp";
-        testOrder.furnitureType = "Study";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Study";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE)
+                .contains("Suggested manufacturers:Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing swing arm lamp orders
     @Test
-    public void testGetOrder_1LampSwingArm_OutputOrderForm() {
+    public void testGetOrder_1LampSwingArm_OutputOrderForm() throws Exception {
         // Placing one swing arm lamp order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "SWING ARM";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Swing Arm";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(30, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Swing Arm Lamp",
+                readFile(FILE).contains("Total Price: $30"));
     }
 
     @Test
-    public void testGetOrder_2LampSwingArm_OutputOrderForm() {
+    public void testGetOrder_2LampSwingArm_OutputOrderForm() throws Exception {
         // Placing two swing arm lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "SWING ARM";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Swing Arm";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(60, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Swing Arm Lamps",
+                readFile(FILE).contains("Total Price: $60"));
     }
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyLampSwingArm_OutputOrderForm() {
+    public void testGetOrder_ManyLampSwingArm_OutputOrderForm() throws Exception {
         // Placing many swing arm lamp orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "LAMP";
-        testOrder.furnitureType = "SWING ARM";
+        // Simulates potential user input
+        String furniture = "Lamp";
+        String furnitureType = "Swing Arm";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE)
+                .contains("Suggested manufacturers:Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing small filing cabinet orders
     @Test
-    public void testGetOrder_1FilingSmall_OutputOrderForm() {
+    public void testGetOrder_1FilingSmall_OutputOrderForm() throws Exception {
         // Placing one small filing cabinet order
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "FILING";
-        testOrder.furnitureType = "SMALL";
+        // Simulates potential user input
+        String furniture = "Filing";
+        String furnitureType = "Small";
+        testOrder.furnitureCategory = furniture.toUpperCase();
+        testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(100, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Small Filing Cabinet",
+                readFile(FILE).contains("Total Price: $100"));
     }
 
     @Test
-    public void testGetOrder_2FilingSmall_OutputOrderForm() {
+    public void testGetOrder_2FilingSmall_OutputOrderForm() throws Exception {
         // Place two small filing cabinet orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "FILING";
         testOrder.furnitureType = "SMALL";
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(225, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Small Filing Cabinets",
+                readFile(FILE).contains("Total Price: $225"));
     }
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyFilingSmall_OutputOrderForm() {
+    public void testGetOrder_ManyFilingSmall_OutputOrderForm() throws Exception {
         // Place many small filing cabinet orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "FILING";
         testOrder.furnitureType = "SMALL";
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE)
+                .contains("Suggested manufacturers:Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing medium filing cabinet orders
     @Test
-    public void testGetOrder_1FilingMedium_OutputOrderForm() {
+    public void testGetOrder_1FilingMedium_OutputOrderForm() throws Exception {
         // Placing one medium filing cabinet order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "FILING";
         testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(200, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Medium Filing Cabinet",
+                readFile(FILE).contains("Total Price: $200"));
     }
 
     @Test
-    public void testGetOrder_2FilingMedium_OutputOrderForm() {
+    public void testGetOrder_2FilingMedium_OutputOrderForm() throws Exception {
         // Placing two medium filing cabinet orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "FILING";
         testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(400, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Medium Filing Cabinets",
+                readFile(FILE).contains("Total Price: $400"));
     }
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyFilingMedium_OutputOrderForm() {
+    public void testGetOrder_ManyFilingMedium_OutputOrderForm() throws Exception {
         // Placing many medium filing cabinet orders
         OrderForm testOrder = new OrderForm();
-        testOrder.furnitureCategory = "Filing";
-        testOrder.furnitureType = "Medium";
+        testOrder.furnitureCategory = "FILING";
+        testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE)
+                .contains("Suggested manufacturers:Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing large filing cabinet orders
     @Test
-    public void testGetOrder_1FilingLarge_OutputOrderForm() {
+    public void testGetOrder_1FilingLarge_OutputOrderForm() throws Exception {
         // Placing one large filing cabinet order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "FILING";
         testOrder.furnitureType = "LARGE";
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(300, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Large Filing Cabinet",
+                readFile(FILE).contains("Total Price: $300"));
     }
 
     @Test
-    public void testGetOrder_2FilingLarge_OutputOrderForm() {
+    public void testGetOrder_2FilingLarge_OutputOrderForm() throws Exception {
         // Placing two large filing cabinet order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "FILING";
         testOrder.furnitureType = "LARGE";
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(600, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Large Filing Cabinets",
+                readFile(FILE).contains("Total Price: $600"));
     }
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyFilingLarge_OutputOrderForm() {
+    public void testGetOrder_ManyFilingLarge_OutputOrderForm() throws Exception {
         // Placing many large filing cabinet order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "FILING";
         testOrder.furnitureType = "LARGE";
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE)
+                .contains("Suggested manufacturers:Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing adjustable desk orders
     @Test
-    public void testGetOrder_1DeskAdjustable_OutputOrderForm() {
+    public void testGetOrder_1DeskAdjustable_OutputOrderForm() throws Exception {
         // Placing one adjustable desk order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(400, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Adjustable Desk",
+                readFile(FILE).contains("Total Price: $400"));
     }
 
     @Test
-    public void testGetOrder_2DeskAdjustable_OutputOrderForm() {
+    public void testGetOrder_2DeskAdjustable_OutputOrderForm() throws Exception {
         // Placing two adjustable desk orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(800, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Adjustable Desks",
+                readFile(FILE).contains("Total Price: $800"));
     }
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyDeskAdjustable_OutputOrderForm() {
+    public void testGetOrder_ManyDeskAdjustable_OutputOrderForm() throws Exception {
         // Placing many adjustable desk orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE).contains(
+                "Suggested manufacturers:Academic Desks, Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing standing desk orders
     @Test
-    public void testGetOrder_1DeskStanding_OutputOrderForm() {
+    public void testGetOrder_1DeskStanding_OutputOrderForm() throws Exception {
         // Placing one standing desk order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "STANDING";
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(300, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Standing Desk",
+                readFile(FILE).contains("Total Price: $300"));
     }
 
     @Test
-    public void testGetOrder_2DeskStanding_OutputOrderForm() {
+    public void testGetOrder_2DeskStanding_OutputOrderForm() throws Exception {
         // Placing two standing desk orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "STANDING";
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(600, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Standing Desks",
+                readFile(FILE).contains("Total Price: $600"));
     }
 
     // Check for manufacturer list output
     @Test
-    public void testGetOrder_ManyDeskStanding_OutputOrderForm() {
+    public void testGetOrder_ManyDeskStanding_OutputOrderForm() throws Exception {
         // Placing many standing desk orders
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "STANDING";
         testOrder.quantity = 4;
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not produce form with listed manufacturers", readFile(FILE).contains(
+                "Suggested manufacturers:Academic Desks, Office Furnishings, Furniture Goods, Fine Office Supplies"));
     }
 
     // Testing traditional desk orders
     @Test
-    public void testGetOrder_1DeskTraditional_OutputOrderForm() {
+    public void testGetOrder_1DeskTraditional_OutputOrderForm() throws Exception {
         // Placing one traditional desk order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 1;
-        int cost = testOrder.calculateOrder();
-        assertEquals(100, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 1 Traditional Desk",
+                readFile(FILE).contains("Total Price: $100"));
     }
 
     @Test
-    public void testGetOrder_2DeskTraditional_OutputOrderForm() {
+    public void testGetOrder_2DeskTraditional_OutputOrderForm() throws Exception {
         // Placing two traditional desk order
         OrderForm testOrder = new OrderForm();
         testOrder.furnitureCategory = "DESK";
         testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 2;
-        int cost = testOrder.calculateOrder();
-        assertEquals(200, cost);
+        testOrder.fulfillOrder();
+
+        System.out.println(readFile(FILE));
+        assertTrue("fulfillOrder() does not correctly produce form for 2 Traditional Desks",
+                readFile(FILE).contains("Total Price: $200"));
     }
 
     // Check for manufacturer list output
