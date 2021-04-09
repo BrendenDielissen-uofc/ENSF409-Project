@@ -1,5 +1,6 @@
 /**
  * This class acts as a data container for furniture manufacturer information
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum

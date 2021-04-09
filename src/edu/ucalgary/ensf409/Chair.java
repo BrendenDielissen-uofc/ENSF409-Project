@@ -1,5 +1,6 @@
 /**
  * This class acts as a data container for chair furniture types
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import static java.util.Map.entry;
 
 /**
@@ -127,11 +129,6 @@ public class Chair extends Furniture {
      */
     public boolean hasCushion() {
         return this.cushion;
-    }
-
-    @Override
-    public HashMap<String, String> getAllCombinationsQueryMap() {
-        return this.allCombinationsQueryMap;
     }
 
     /**

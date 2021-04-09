@@ -1,5 +1,6 @@
 /**
  * This class processes a user's order request and outputs the cheapest price
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -19,10 +20,6 @@ import java.util.stream.Collectors;
  * The type Order form.
  */
 public class OrderForm {
-    /**
-     * The Furniture id.
-     */
-    public String[] furnitureID = new String[10];
     /**
      * The Furniture category.
      */

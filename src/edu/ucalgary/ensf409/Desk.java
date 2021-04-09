@@ -1,5 +1,6 @@
 /**
  * This class acts as a data container for desk furniture types
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -12,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -108,11 +108,6 @@ class Desk extends Furniture {
      */
     public boolean hasTop() {
         return this.top;
-    }
-
-    @Override
-    public HashMap<String, String> getAllCombinationsQueryMap() {
-        return this.allCombinationsQueryMap;
     }
 
     /**

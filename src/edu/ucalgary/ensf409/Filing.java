@@ -1,5 +1,6 @@
 /**
  * This class acts as a data container for filing cabinet furniture types
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -108,11 +109,6 @@ public class Filing extends Furniture {
      */
     public boolean hasCabinet() {
         return this.cabinet;
-    }
-
-    @Override
-    public HashMap<String, String> getAllCombinationsQueryMap() {
-        return this.allCombinationsQueryMap;
     }
 
     /**

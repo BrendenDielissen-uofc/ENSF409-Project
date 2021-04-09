@@ -1,5 +1,6 @@
 /**
  * This class acts a data container for all furniture types
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -8,19 +9,15 @@
  */
 package edu.ucalgary.ensf409;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
+import java.util.HashMap;
 
-import static java.util.Map.entry;
 
 /**
  * The type Furniture.
  */
 public abstract class Furniture {
-    private HashMap<String, String> allCombinationsQueryMap;
     /**
      * The Id.
      */
