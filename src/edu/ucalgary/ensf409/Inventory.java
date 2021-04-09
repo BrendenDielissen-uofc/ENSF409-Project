@@ -4,20 +4,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
 
+/**
+ * The type Inventory.
+ */
 public class Inventory {
-    /**
-     * The constant furnitureTypesMap.
-     */
+
     public static HashMap<String, List<String>> furnitureTypesMap = new HashMap<>(
-            Map.ofEntries(entry("DESK", Desk.TYPES), entry("FILING", Filing.TYPES), entry("LAMP", Lamp.TYPES),
+            Map.ofEntries(entry("DESK", Desk.TYPES), entry("FILING", Filing.TYPES), entry("LAMP", Lamp.LAMP_TYPES),
                     entry("CHAIR", Chair.TYPES)));
-    /**
-     * The constant furnitureManufacturersMap.
-     */
     public static HashMap<String, List<Manufacturer>> furnitureManufacturersMap = new HashMap<>(
             Map.ofEntries(entry("DESK", Desk.MANUFACTURERS), entry("FILING", Filing.MANUFACTURERS),
                     entry("LAMP", Lamp.MANUFACTURERS), entry("CHAIR", Chair.MANUFACTURERS)));
@@ -42,25 +39,26 @@ public class Inventory {
      * @param args the input arguments
      * @throws SQLException the sql exception
      */
-    public static void main(String[] args) throws SQLException {
-        Inventory myJDBC = new Inventory("jdbc:mysql://localhost/inventory", "scm", "ensf409");
-        myJDBC.initializeConnection();
-        Furniture[] testLamps = myJDBC.getAllFurniture("Desk", "Lamp");
-        var testLampMap = testLamps[0].getComponents();
-        var testLampArrayMap = Arrays.stream(testLamps).map(Furniture::getComponents).toArray();
-        System.out.println(Arrays.toString(testLamps));
-        Furniture[] testDesks = myJDBC.getAllFurniture("Standing", "Desk");
-        var testDeskMap = testDesks[0].getComponents();
-        var testDeskArrayMap = Arrays.stream(testDesks).map(Furniture::getComponents).toArray();
-        System.out.println(Arrays.toString(testDesks));
-    }
+    /*
+     * // * public static void main(String[] args) throws SQLException { Inventory
+     * myJDBC // * = new Inventory("jdbc:mysql://localhost/inventory", "scm",
+     * "ensf409"); // * myJDBC.initializeConnection(); Furniture[] testLamps = // *
+     * myJDBC.getAllFurniture("Desk", "Lamp"); var testLampMap = // *
+     * testLamps[0].getComponents(); var testLampArrayMap = // *
+     * Arrays.stream(testLamps).map(Furniture::getComponents).toArray(); // *
+     * System.out.println(Arrays.toString(testLamps)); Furniture[] testDesks = // *
+     * myJDBC.getAllFurniture("Standing", "Desk"); var testDeskMap = // *
+     * testDesks[0].getComponents(); var testDeskArrayMap = // *
+     * Arrays.stream(testDesks).map(Furniture::getComponents).toArray(); // *
+     * System.out.println(Arrays.toString(testDesks)); }
+     */
 
     /**
      * Constructor for Inventory Class
-     * 
-     * @param DBURL
-     * @param USERNAME
-     * @param PASSWORD
+     *
+     * @param DBURL    the dburl
+     * @param USERNAME the username
+     * @param PASSWORD the password
      */
     public Inventory(String DBURL, String USERNAME, String PASSWORD) {
         this.DBURL = DBURL;
@@ -84,7 +82,7 @@ public class Inventory {
 
     /**
      * Getter method for DBURL
-     * 
+     *
      * @return String DBURL
      */
     public String getDBURL() {
@@ -93,7 +91,7 @@ public class Inventory {
 
     /**
      * Getter method for username
-     * 
+     *
      * @return String USERNAME
      */
     public String getUSERNAME() {
@@ -102,7 +100,7 @@ public class Inventory {
 
     /**
      * Getter method for password
-     * 
+     *
      * @return String PASSWORD
      */
     public String getPASSWORD() {
@@ -112,7 +110,7 @@ public class Inventory {
 
     /**
      * Connects java program to the SQL database
-     * 
+     *
      * @throws SQLException if SQL related error is encountered
      */
     public void initializeConnection() throws SQLException {
@@ -130,8 +128,8 @@ public class Inventory {
      */
     public void deleteFurniture(Furniture[] furniture) {
         // iterates through each furniture object and deletes in from db
-        try {
-            for (Furniture value : furniture) {
+        for (Furniture value : furniture) {
+            try {
                 String furnitureCat = value.getClass().getSimpleName().toUpperCase();
                 String query = "DELETE FROM " + furnitureCat + " where ID = ?";
                 PreparedStatement myStmt = dbConnect.prepareStatement(query);
@@ -139,14 +137,15 @@ public class Inventory {
                 myStmt.setString(1, value.getId());
 
                 int rowCount = myStmt.executeUpdate();
-                // System.out.println("Deleting Furniture. Rows affected: " + rowCount);
+                System.out.println("Deleting " + furnitureCat + ". Rows affected: " + rowCount);
 
                 myStmt.close();
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            this.closeConnection();
         }
+
     }
 
     /**
@@ -162,8 +161,7 @@ public class Inventory {
     }
 
     /**
-     * Gets corresponding furniture's hash map that can be used to count the amount
-     * of components per order.
+     * Get counting map hash map.
      *
      * @param furnitureCategory the furniture category
      * @return the hash map
@@ -171,7 +169,8 @@ public class Inventory {
     public HashMap<String, Integer> getFurnitureCountingMap(String furnitureCategory) {
         HashMap<String, Integer> temp = null;
         try {
-            Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
+            Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory.toUpperCase())
+                    .newInstance();
             temp = furniture.getCountingMap();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -180,16 +179,17 @@ public class Inventory {
     }
 
     /**
-     * Grabs all furniture corresponding to the type and category.
+     * Proto-class that grabs furniture and its furniture type and returns a
+     * 2D-array of wanted info
      *
-     * @param furnitureType     String type of the specified furniture wanted
-     * @param furnitureCategory the furniture category
+     * @param furnitureType String type of the specified furniture wanted
+     * @param furniture     String furniture
      * @return Furniture[] Array
      */
-    public Furniture[] getAllFurniture(String furnitureType, String furnitureCategory) {
+    public Furniture[] getAllFurniture(String furnitureType, String furniture) {
         Furniture tempFurniture = null;
         try {
-            tempFurniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
+            tempFurniture = (Furniture) this.furnitureDefaultCtorMap.get(furniture).newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -201,10 +201,9 @@ public class Inventory {
             PreparedStatement myStmt = dbConnect.prepareStatement(query);
 
             myStmt.setString(1, furnitureType);
-            // System.out.println(myStmt);
             results = myStmt.executeQuery();
             while (results.next()) {
-                Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furnitureCategory)
+                Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furniture)
                         .newInstance(results);
                 myFurniture.add(furnitureItem);
             }
@@ -212,94 +211,10 @@ public class Inventory {
             myStmt.close();
         } catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
             ex.printStackTrace();
-            this.closeConnection();
         }
 
         Furniture[] array = new Furniture[myFurniture.size()];
         myFurniture.toArray(array);
         return array;
-    }
-
-    /**
-     * Utilizes SQL queries to get the cheapest order available for the desired
-     * furniture type and category. Returns null if order cannot be completed.
-     *
-     * @param furnitureType     the furniture type
-     * @param furnitureCategory the furniture category
-     * @param quantity          the quantity
-     * @return the furniture [ ]
-     */
-    public Furniture[] getCheapestOrder(String furnitureType, String furnitureCategory, int quantity) {
-        HashSet<String> completed = new HashSet<String>();
-        boolean filled = true;
-
-        try {
-            Statement dropTableQuery = this.dbConnect.createStatement();
-            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
-            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS C");
-
-            Furniture furniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
-            HashMap<String, String> combinationsQueryMap = furniture.getAllCombinationsQueryMap();
-
-            String createTable = combinationsQueryMap.get("createTable");
-            // System.out.println(createTable);
-            String numberOfPartsTable = combinationsQueryMap.get("numberOfPartsTable");
-            String getOrder = combinationsQueryMap.get("getOrder");
-            int numberOfParts = furniture.getComponents().size();
-
-            Statement tableQuery = this.dbConnect.createStatement();
-            tableQuery.executeUpdate(numberOfPartsTable);
-
-            PreparedStatement query = this.dbConnect.prepareStatement(createTable);
-            for (int i = 0; i < numberOfParts; i++)
-                query.setString(i + 1, furnitureType);
-            query.executeUpdate();
-
-            String[] currentPart = new String[numberOfParts];
-
-            for (int counter = 0; counter < quantity; counter++) {
-                // get one set
-                Statement resultsQuery = this.dbConnect.createStatement();
-                ResultSet results = resultsQuery.executeQuery(getOrder);
-                // no set returned, cannot fill order
-                if (!results.isBeforeFirst()) {
-                    filled = false;
-                    break;
-                }
-                // one set found
-                while (results.next()) {
-                    // place in completed and currentPart
-                    for (int i = 0; i < numberOfParts; i++) {
-                        completed.add(results.getString("c" + i));
-                        currentPart[i] = results.getString("c" + i);
-                    }
-                    // delete statement based on set taken
-                    String delete = "DELETE FROM T WHERE c0 = '" + currentPart[0] + "'";
-                    for (int i = 1; i < numberOfParts; i++) {
-                        delete += " OR c" + i + " = '" + currentPart[i] + "'";
-                    }
-                    // delete from temporary table row components
-                    Statement deleteQuery = this.dbConnect.createStatement();
-                    deleteQuery.executeUpdate(delete);
-                }
-            }
-            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS T");
-            dropTableQuery.executeUpdate("DROP TABLE IF EXISTS C");
-
-        } catch (SQLException | IllegalAccessException | InstantiationException
-                | InvocationTargetException throwables) {
-            throwables.printStackTrace();
-            this.closeConnection();
-        }
-        if (filled) {
-            ArrayList<Furniture> cheapestCombo = new ArrayList<Furniture>(
-                    Arrays.asList(this.getAllFurniture(furnitureType, furnitureCategory)));
-            cheapestCombo = (ArrayList<Furniture>) cheapestCombo.stream()
-                    .filter(item -> completed.contains(item.getId())).collect(Collectors.toList());
-            Furniture[] array = new Furniture[cheapestCombo.size()];
-            cheapestCombo.toArray(array);
-            return array;
-        } else
-            return null;
     }
 }

@@ -45,18 +45,17 @@ public abstract class Furniture {
      *
      * @param furnitureRs the furniture rs
      */
-    public Furniture(ResultSet furnitureRs){
+    public Furniture(ResultSet furnitureRs) {
         String id = null;
         String type = null;
         Integer price = null;
         String manuId = null;
-        try{
+        try {
             id = furnitureRs.getString("ID");
             type = furnitureRs.getString("Type");
             price = furnitureRs.getInt("Price");
             manuId = furnitureRs.getString("ManuID");
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         this.id = id;
@@ -70,28 +69,36 @@ public abstract class Furniture {
      *
      * @return the string
      */
-    public String getId(){ return this.id;}
+    public String getId() {
+        return this.id;
+    }
 
     /**
      * Gets type.
      *
      * @return the type
      */
-    public String getType() { return this.type;}
+    public String getType() {
+        return this.type;
+    }
 
     /**
      * Gets price.
      *
      * @return the price
      */
-    public Integer getPrice() {return this.price;}
+    public Integer getPrice() {
+        return this.price;
+    }
 
     /**
      * Get manu id string.
      *
      * @return the string
      */
-    public String getManuId(){ return this.manuId;}
+    public String getManuId() {
+        return this.manuId;
+    }
 
     /**
      * Gets query string.
@@ -99,8 +106,6 @@ public abstract class Furniture {
      * @return the query string
      */
     public abstract String getQueryString();
-
-    public abstract HashMap<String, String> getAllCombinationsQueryMap();
 
     /**
      * Gets counting map.
@@ -116,4 +121,3 @@ public abstract class Furniture {
      */
     public abstract HashMap<String, Boolean> getComponents();
 }
-

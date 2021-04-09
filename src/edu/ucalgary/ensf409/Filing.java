@@ -12,55 +12,20 @@ import static java.util.Map.entry;
  * The type Filing.
  */
 public class Filing extends Furniture {
-    public static ArrayList<String> TYPES = new ArrayList<>(){{
-        add("SMALL");
-        add("MEDIUM");
-        add("LARGE");
-    }};
-    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>(){{
-        add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
-        add(new Manufacturer("004", "Furniture Goods", "306-512-5508", "SK"));
-        add(new Manufacturer("005", "Fine Office Supplies", "403-980-9876", "AB"));
-    }};
-    private final HashMap<String, String> allCombinationsQueryMap = new HashMap<>(Map.ofEntries(
-            entry("createTable", "CREATE TABLE T AS SELECT c0, c1, l3.ID AS c2, CASE\r\n"
-                    + "WHEN l3.ID = c0 OR l3.ID = c1 THEN l.Price\r\n"
-                    + "ELSE l.Price + l3.Price\r\n"
-                    + "END AS TotalPrice\r\n"
-                    + "FROM (SELECT l3.ID, l3.Price\r\n"
-                    + "FROM FILING as l3\r\n"
-                    + "WHERE l3.Rails = 'Y' and l3.Type = ?) AS l3\r\n"
-                    + "CROSS JOIN\r\n"
-                    + "(SELECT l1.ID AS c0, l2.ID AS c1, CASE\r\n"
-                    + "WHEN l1.ID = l2.ID THEN l1.Price\r\n"
-                    + "ELSE l1.Price + l2.Price\r\n" + "END AS Price\r\n"
-                    + "FROM (SELECT l1.ID, l1.Price\r\n"
-                    + "FROM FILING as l1\r\n"
-                    + "WHERE l1.Drawers = 'Y' and l1.Type = ?) AS l1\r\n"
-                    + "CROSS JOIN (SELECT l2.ID, l2.Price\r\n"
-                    + "FROM FILING as l2\r\n"
-                    + "WHERE l2.Cabinet = 'Y' and l2.Type = ?) AS l2) AS l\r\n"
-                    + "ORDER BY TotalPrice ASC;"),
-            entry("numberOfPartsTable", "CREATE TABLE C AS\r\n"
-                    + "SELECT ID, COUNT(ID) AS NumParts FROM \r\n"
-                    + "(SELECT * FROM FILING WHERE Rails = 'Y'\r\n"
-                    + "UNION ALL\r\n"
-                    + "SELECT * FROM FILING WHERE Drawers = 'Y'\r\n"
-                    + "UNION ALL\r\n"
-                    + "SELECT * FROM FILING WHERE Cabinet = 'Y') AS t1\r\n"
-                    + "GROUP BY ID;"),
-            entry("getOrder", "SELECT t.c0, t.c1, t.c2, t.TotalPrice, c0.NumParts + c1.NumParts + c2.NumParts AS NumParts\r\n"
-                    + "FROM (SELECT * \r\n"
-                    + "FROM T \r\n"
-                    + "WHERE TotalPrice = (SELECT MIN(TotalPrice) FROM T)) AS t\r\n"
-                    + "LEFT JOIN C AS c0\r\n"
-                    + "ON c0.ID = t.c0\r\n"
-                    + "LEFT JOIN C AS c1\r\n"
-                    + "ON c1.ID = t.c1\r\n"
-                    + "LEFT JOIN C AS c2\r\n"
-                    + "ON c2.ID = t.c2\r\n"
-                    + "ORDER BY NumParts DESC LIMIT 1;")
-    ));
+    public static ArrayList<String> TYPES = new ArrayList<>() {
+        {
+            add("SMALL");
+            add("MEDIUM");
+            add("LARGE");
+        }
+    };
+    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
+        {
+            add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
+            add(new Manufacturer("004", "Furniture Goods", "306-512-5508", "SK"));
+            add(new Manufacturer("005", "Fine Office Supplies", "403-980-9876", "AB"));
+        }
+    };
     /**
      * The Rails.
      */
@@ -138,7 +103,9 @@ public class Filing extends Furniture {
     }
 
     @Override
-    public HashMap<String, String> getAllCombinationsQueryMap(){ return this.allCombinationsQueryMap;}
+    public HashMap<String, String> getAllCombinationsQueryMap() {
+        return this.allCombinationsQueryMap;
+    }
 
     /**
      * Get query string string.
@@ -146,25 +113,18 @@ public class Filing extends Furniture {
      * @return the string
      */
     @Override
-    public  String getQueryString() {
+    public String getQueryString() {
         return Filing.queryString;
     }
 
     @Override
     public HashMap<String, Integer> getCountingMap() {
-        return new HashMap<String, Integer>(Map.ofEntries(
-                entry("rails", 0),
-                entry("drawers", 0),
-                entry("cabinet", 0)
-        ));
+        return new HashMap<String, Integer>(Map.ofEntries(entry("rails", 0), entry("drawers", 0), entry("cabinet", 0)));
     }
 
     @Override
     public HashMap<String, Boolean> getComponents() {
-        return new HashMap<>(Map.ofEntries(
-                entry("rails", this.rails),
-                entry("drawers", this.drawers),
-                entry("cabinet", this.cabinet)
-        ));
+        return new HashMap<>(Map.ofEntries(entry("rails", this.rails), entry("drawers", this.drawers),
+                entry("cabinet", this.cabinet)));
     }
 }
