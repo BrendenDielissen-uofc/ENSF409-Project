@@ -1,3 +1,11 @@
+/**
+ * Application Unit Tests
+ * @author Brenden Dielissen
+ * @author Maria Martine Baclig
+ * @author Nafisa Tabassum
+ * @author Ronn Delos Reyes
+ * @version 1.0
+ */
 package edu.ucalgary.ensf409;
 
 import org.junit.*;
@@ -16,7 +24,7 @@ public class OrderFormTest {
     private ResultSet results = null;
 
     /**
-     * Pre and Post-test processes
+     * Pre and Post-test processes to clean up files and roll back database changes
      */
     @Before
     public void start() {

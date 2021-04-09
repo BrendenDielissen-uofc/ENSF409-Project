@@ -1,3 +1,11 @@
+/**
+ * This class processes a user's order request and outputs the cheapest price
+ * @author Brenden Dielissen
+ * @author Maria Martine Baclig
+ * @author Nafisa Tabassum
+ * @author Ronn Delos Reyes
+ * @version 1.0
+ */
 package edu.ucalgary.ensf409;
 
 import java.io.File;

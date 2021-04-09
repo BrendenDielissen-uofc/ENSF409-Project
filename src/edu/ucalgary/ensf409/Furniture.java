@@ -1,3 +1,11 @@
+/**
+ * This class acts a data container for all furniture types
+ * @author Brenden Dielissen
+ * @author Maria Martine Baclig
+ * @author Nafisa Tabassum
+ * @author Ronn Delos Reyes
+ * @version 1.0
+ */
 package edu.ucalgary.ensf409;
 
 import java.util.ArrayList;

@@ -1,3 +1,11 @@
+/**
+ * This class represents all currently available furniture inventory and handles connections to inventory.sql database
+ * @author Brenden Dielissen
+ * @author Maria Martine Baclig
+ * @author Nafisa Tabassum
+ * @author Ronn Delos Reyes
+ * @version 1.0
+ */
 package edu.ucalgary.ensf409;
 
 import java.lang.reflect.Constructor;
@@ -19,11 +27,11 @@ public class Inventory {
             Map.ofEntries(entry("DESK", Desk.MANUFACTURERS), entry("FILING", Filing.MANUFACTURERS),
                     entry("LAMP", Lamp.MANUFACTURERS), entry("CHAIR", Chair.MANUFACTURERS)));
     /**
-     * The Furniture result set ctor map.
+     * The Furniture result set constructor map.
      */
     public HashMap<String, Constructor> furnitureResultSetCtorMap;
     /**
-     * The Furniture default ctor map.
+     * The Furniture default constructor map.
      */
     public HashMap<String, Constructor> furnitureDefaultCtorMap;
     private Connection dbConnect;
@@ -31,27 +39,6 @@ public class Inventory {
     private String DBURL = "";
     private String USERNAME = "";
     private String PASSWORD = "";
-
-    /**
-     * Main used for inventory and debugging. COmment this out if main is somewhere
-     * else
-     *
-     * @param args the input arguments
-     * @throws SQLException the sql exception
-     */
-    /*
-     * // * public static void main(String[] args) throws SQLException { Inventory
-     * myJDBC // * = new Inventory("jdbc:mysql://localhost/inventory", "scm",
-     * "ensf409"); // * myJDBC.initializeConnection(); Furniture[] testLamps = // *
-     * myJDBC.getAllFurniture("Desk", "Lamp"); var testLampMap = // *
-     * testLamps[0].getComponents(); var testLampArrayMap = // *
-     * Arrays.stream(testLamps).map(Furniture::getComponents).toArray(); // *
-     * System.out.println(Arrays.toString(testLamps)); Furniture[] testDesks = // *
-     * myJDBC.getAllFurniture("Standing", "Desk"); var testDeskMap = // *
-     * testDesks[0].getComponents(); var testDeskArrayMap = // *
-     * Arrays.stream(testDesks).map(Furniture::getComponents).toArray(); // *
-     * System.out.println(Arrays.toString(testDesks)); }
-     */
 
     /**
      * Constructor for Inventory Class
