@@ -1,5 +1,6 @@
 /**
  * This class represents all currently available furniture inventory and handles connections to inventory.sql database
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -11,7 +12,10 @@ package edu.ucalgary.ensf409;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Map.entry;
 
@@ -170,13 +174,13 @@ public class Inventory {
      * 2D-array of wanted info
      *
      * @param furnitureType String type of the specified furniture wanted
-     * @param furniture     String furniture
+     * @param furnitureCategory     String furniture
      * @return Furniture[] Array
      */
-    public Furniture[] getAllFurniture(String furnitureType, String furniture) {
+    public Furniture[] getAllFurniture(String furnitureType, String furnitureCategory) {
         Furniture tempFurniture = null;
         try {
-            tempFurniture = (Furniture) this.furnitureDefaultCtorMap.get(furniture).newInstance();
+            tempFurniture = (Furniture) this.furnitureDefaultCtorMap.get(furnitureCategory).newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -190,7 +194,7 @@ public class Inventory {
             myStmt.setString(1, furnitureType);
             results = myStmt.executeQuery();
             while (results.next()) {
-                Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furniture)
+                Furniture furnitureItem = (Furniture) this.furnitureResultSetCtorMap.get(furnitureCategory)
                         .newInstance(results);
                 myFurniture.add(furnitureItem);
             }

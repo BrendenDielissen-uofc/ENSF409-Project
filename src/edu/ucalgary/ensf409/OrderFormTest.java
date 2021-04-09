@@ -1,5 +1,6 @@
 /**
  * Application Unit Tests
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -8,14 +9,20 @@
  */
 package edu.ucalgary.ensf409;
 
-import org.junit.*;
-import org.junit.Test;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import static org.junit.Assert.*;
-import java.io.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
+
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrderFormTest {
@@ -253,7 +260,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "L013", "L208", "Total Price: $20" };
+        String[] expectedOutput = {"L013", "L208", "Total Price: $20"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Desk Lamp",
                 containsWords(readFile(FILE), expectedOutput));
@@ -270,7 +277,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "L013", "L112", "L208", "Total Price: $40" };
+        String[] expectedOutput = {"L013", "L112", "L208", "Total Price: $40"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Desk Lamps",
                 containsWords(readFile(FILE), expectedOutput));
@@ -289,7 +296,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -307,7 +314,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "L223", "L982", "Total Price: $10" };
+        String[] expectedOutput = {"L223", "L982", "Total Price: $10"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Study Lamp",
                 containsWords(readFile(FILE), expectedOutput));
@@ -325,7 +332,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "L223", "L928", "L982", "Total Price: $20" };
+        String[] expectedOutput = {"L223", "L928", "L982", "Total Price: $20"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Study Lamps",
                 containsWords(readFile(FILE), expectedOutput));
@@ -344,7 +351,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -362,7 +369,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "L053", "L096", "Total Price: $30" };
+        String[] expectedOutput = {"L053", "L096", "Total Price: $30"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Swing Arm Lamp",
                 containsWords(readFile(FILE), expectedOutput));
@@ -379,7 +386,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "L053", "L096", "L487", "L879", "Total Price: $60" };
+        String[] expectedOutput = {"L053", "L096", "L487", "L879", "Total Price: $60"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Swing Arm Lamps",
                 containsWords(readFile(FILE), expectedOutput));
@@ -397,7 +404,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -415,7 +422,7 @@ public class OrderFormTest {
         testOrder.furnitureType = furnitureType.toUpperCase();
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "F001", "F013", "Total Price: $100" };
+        String[] expectedOutput = {"F001", "F013", "Total Price: $100"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Small Filing Cabinet",
                 containsWords(readFile(FILE), expectedOutput));
@@ -429,7 +436,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "SMALL";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "F001", "F004", "F005", "Total Price: $200" };
+        String[] expectedOutput = {"F001", "F004", "F005", "Total Price: $200"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Small Filing Cabinets",
                 containsWords(readFile(FILE), expectedOutput));
@@ -444,7 +451,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "SMALL";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -459,7 +466,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "F002", "F009", "Total Price: $200" };
+        String[] expectedOutput = {"F002", "F009", "Total Price: $200"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Medium Filing Cabinet",
                 containsWords(readFile(FILE), expectedOutput));
@@ -473,7 +480,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "F002", "F007", "F008", "F009", "Total Price: $400" };
+        String[] expectedOutput = {"F002", "F007", "F008", "F009", "Total Price: $400"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Medium Filing Cabinets",
                 containsWords(readFile(FILE), expectedOutput));
@@ -488,7 +495,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "MEDIUM";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -503,7 +510,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "LARGE";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "F003", "F012", "F015", "Total Price: $300" };
+        String[] expectedOutput = {"F003", "F012", "F015", "Total Price: $300"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Large Filing Cabinet",
                 containsWords(readFile(FILE), expectedOutput));
@@ -517,7 +524,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "LARGE";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "F010", "F011", "F012", "F015", "Total Price: $600" };
+        String[] expectedOutput = {"F010", "F011", "F012", "F015", "Total Price: $600"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Large Filing Cabinets",
                 containsWords(readFile(FILE), expectedOutput));
@@ -532,7 +539,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "LARGE";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -547,7 +554,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "D1030", "D3682", "D5437", "Total Price: $400" };
+        String[] expectedOutput = {"D1030", "D3682", "D5437", "Total Price: $400"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Adjustable Desk",
                 containsWords(readFile(FILE), expectedOutput));
@@ -561,7 +568,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "D1030", "D2746", "D3682", "D7373", "Total Price: $800" };
+        String[] expectedOutput = {"D1030", "D2746", "D3682", "D7373", "Total Price: $800"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Adjustable Desks",
                 containsWords(readFile(FILE), expectedOutput));
@@ -576,7 +583,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "ADJUSTABLE";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Academic Desks", "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Academic Desks", "Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -591,7 +598,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "STANDING";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "D1927", "D2341", "Total Price: $300" };
+        String[] expectedOutput = {"D1927", "D2341", "Total Price: $300"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Standing Desk",
                 containsWords(readFile(FILE), expectedOutput));
@@ -605,7 +612,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "STANDING";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "D1927", "D2341", "D3820", "D4438", "Total Price: $600" };
+        String[] expectedOutput = {"D1927", "D2341", "D3820", "D4438", "Total Price: $600"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Standing Desks",
                 containsWords(readFile(FILE), expectedOutput));
@@ -620,7 +627,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "STANDING";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Academic Desks", "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Academic Desks", "Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -635,7 +642,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "D0890", "D8675", "Total Price: $100" };
+        String[] expectedOutput = {"D0890", "D8675", "Total Price: $100"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Traditional Desk",
                 containsWords(readFile(FILE), expectedOutput));
@@ -649,7 +656,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "D4231", "D8675", "D9352", "Total Price: $200" };
+        String[] expectedOutput = {"D4231", "D8675", "D9352", "Total Price: $200"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 2 Traditional Desks",
                 containsWords(readFile(FILE), expectedOutput));
@@ -664,7 +671,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "TRADITIONAL";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Academic Desks", "Office Furnishings", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Academic Desks", "Office Furnishings", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -679,7 +686,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "ERGONOMIC";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "C4839", "C5409", "Total Price: $250" };
+        String[] expectedOutput = {"C4839", "C5409", "Total Price: $250"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Ergonomic Chair",
                 containsWords(readFile(FILE), expectedOutput));
@@ -693,7 +700,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "ERGONOMIC";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -708,7 +715,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "ERGONOMIC";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -723,7 +730,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "EXECUTIVE";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "C2483", "C5784", "C7268", "Total Price: $400" };
+        String[] expectedOutput = {"C2483", "C5784", "C7268", "Total Price: $400"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Executive Chair",
                 containsWords(readFile(FILE), expectedOutput));
@@ -737,7 +744,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "EXECUTIVE";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -752,7 +759,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "EXECUTIVE";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -767,7 +774,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "KNEELING";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -782,7 +789,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "KNEELING";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -797,7 +804,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "KNEELING";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -812,7 +819,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "MESH";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "C6748", "C8138", "C9890", "Total Price: $200" };
+        String[] expectedOutput = {"C6748", "C8138", "C9890", "Total Price: $200"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Mesh Chair",
                 containsWords(readFile(FILE), expectedOutput));
@@ -827,7 +834,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "MESH";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -842,7 +849,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "MESH";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -857,7 +864,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "TASK";
         testOrder.quantity = 1;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "C0914", "C3405", "Total Price: $150" };
+        String[] expectedOutput = {"C0914", "C3405", "Total Price: $150"};
 
         assertTrue("fulfillOrder() does not correctly produce form for 1 Task Chair",
                 containsWords(readFile(FILE), expectedOutput));
@@ -871,7 +878,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "TASK";
         testOrder.quantity = 2;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));
@@ -886,7 +893,7 @@ public class OrderFormTest {
         testOrder.furnitureType = "TASK";
         testOrder.quantity = 4;
         testOrder.fulfillOrder();
-        String[] expectedOutput = { "Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies" };
+        String[] expectedOutput = {"Office Furnishings", "Chairs R Us", "Furniture Goods", "Fine Office Supplies"};
 
         assertTrue("fulfillOrder() does not produce form with listed manufacturers",
                 containsWords(readFile(FILE), expectedOutput));

@@ -1,5 +1,6 @@
 /**
  * This class acts as a data container for chair furniture types
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -13,13 +14,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import static java.util.Map.entry;
 
 /**
  * The type Chair.
  */
 public class Chair extends Furniture {
-    public static ArrayList<String> TYPES = new ArrayList<>() {
+    public static final ArrayList<String> TYPES = new ArrayList<>() {
         {
             add("KNEELING");
             add("TASK");
@@ -28,7 +30,7 @@ public class Chair extends Furniture {
             add("ERGONOMIC");
         }
     };
-    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
+    public static final ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
         {
             add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
             add(new Manufacturer("003", "Chairs R Us", "705-667-9481", "ON"));
@@ -39,23 +41,23 @@ public class Chair extends Furniture {
     /**
      * The Legs.
      */
-    private final boolean legs;
+    private boolean legs;
     /**
      * The Arms.
      */
-    private final boolean arms;
+    private boolean arms;
     /**
      * The Seat.
      */
-    private final boolean seat;
+    private boolean seat;
     /**
      * The Cushion.
      */
-    private final boolean cushion;
+    private boolean cushion;
     /**
      * The constant queryString.
      */
-    private static final String queryString = "SELECT * FROM CHAIR";
+    private static String queryString = "SELECT * FROM CHAIR";
 
     /**
      * Default constructor for Chair.

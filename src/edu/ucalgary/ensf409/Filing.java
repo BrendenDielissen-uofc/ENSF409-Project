@@ -1,5 +1,6 @@
 /**
  * This class acts as a data container for filing cabinet furniture types
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -20,14 +21,14 @@ import static java.util.Map.entry;
  * The type Filing.
  */
 public class Filing extends Furniture {
-    public static ArrayList<String> TYPES = new ArrayList<>() {
+    public static final ArrayList<String> TYPES = new ArrayList<>() {
         {
             add("SMALL");
             add("MEDIUM");
             add("LARGE");
         }
     };
-    public static ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
+    public static final ArrayList<Manufacturer> MANUFACTURERS = new ArrayList<>() {
         {
             add(new Manufacturer("002", "Office Furnishings", "587-890-4387", "AB"));
             add(new Manufacturer("004", "Furniture Goods", "306-512-5508", "SK"));
@@ -37,19 +38,19 @@ public class Filing extends Furniture {
     /**
      * The Rails.
      */
-    private final boolean rails;
+    private boolean rails;
     /**
      * The Drawers.
      */
-    private final boolean drawers;
+    private boolean drawers;
     /**
      * The Cabinet.
      */
-    private final boolean cabinet;
+    private boolean cabinet;
     /**
      * The constant queryString.
      */
-    private static final String queryString = "SELECT * FROM FILING";
+    private static String queryString = "SELECT * FROM FILING";
 
     /**
      * Default constructor for Filing.

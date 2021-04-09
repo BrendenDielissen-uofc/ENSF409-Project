@@ -1,5 +1,6 @@
 /**
  * This class acts a data container for all furniture types
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -8,32 +9,31 @@
  */
 package edu.ucalgary.ensf409;
 
-import java.util.HashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 
 /**
  * The type Furniture.
  */
 public abstract class Furniture {
-    private HashMap<String, String> allCombinationsQueryMap;
     /**
      * The Id.
      */
-    private final String id;
+    private String id;
     /**
      * The Type.
      */
-    private final String type;
+    private String type;
     /**
      * The Price.
      */
-    private final Integer price;
+    private Integer price;
     /**
      * The Manu id.
      */
-    private final String manuId;
+    private String manuId;
 
     /**
      * Default constructor for Furniture.
@@ -125,11 +125,4 @@ public abstract class Furniture {
      * @return the components
      */
     public abstract HashMap<String, Boolean> getComponents();
-    /**
-     * Get all combinations.
-     * @return all combinations
-     */
-	public HashMap<String, String> getAllCombinationsQueryMap(){
-		return this.allCombinationsQueryMap;
-	}
 }

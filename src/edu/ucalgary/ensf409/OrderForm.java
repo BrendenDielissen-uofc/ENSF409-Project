@@ -1,5 +1,6 @@
 /**
  * This class processes a user's order request and outputs the cheapest price
+ *
  * @author Brenden Dielissen
  * @author Maria Martine Baclig
  * @author Nafisa Tabassum
@@ -20,10 +21,6 @@ import java.util.stream.Collectors;
  */
 public class OrderForm {
     /**
-     * The Furniture id.
-     */
-    public String[] furnitureID = new String[10];
-    /**
      * The Furniture category.
      */
     public String furnitureCategory;
@@ -35,7 +32,7 @@ public class OrderForm {
      * The Quantity.
      */
     public int quantity;
-    private final Inventory inventory;
+    private Inventory inventory;
     /**
      * The Cheapest combo.
      */
@@ -153,6 +150,9 @@ public class OrderForm {
         return allCombinations;
     }
 
+    /**
+     * Fulfill order.
+     */
     public void fulfillOrder() {
         int cost = this.calculateOrder();
         if (cost == -1) {
@@ -183,6 +183,8 @@ public class OrderForm {
 
     /**
      * Print order.
+     *
+     * @param order the order
      */
     public void printOrder(String order) {
 
@@ -210,12 +212,20 @@ public class OrderForm {
         }
     }
 
+    /**
+     * Get furniture list furniture [ ].
+     *
+     * @return the furniture [ ]
+     */
     public Furniture[] getFurnitureList() {
         Furniture[] array = new Furniture[this.cheapestCombo.size()];
         this.cheapestCombo.toArray(array);
         return array;
     }
 
+    /**
+     * Print manufacturers.
+     */
     public void printManufacturers() {
         List<Manufacturer> furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
         List<String> manufacturerNames = furnitureManufacturers.stream().map(manufacturer -> manufacturer.name)
