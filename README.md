@@ -1,5 +1,11 @@
 # Furniture Inventory Management Application
 
+> **Authors**
+- Brenden Dielissen
+- Maria Martine Baclig
+- Nafisa Tabassum
+- Ronn Delos Reyes
+
 > **Description**
 
 This application calculates the cheapest combination of available inventory items that can be used to fill a specific order. It takes in user input for:
@@ -17,7 +23,7 @@ If a request cannot be filled, the names of suggested manufacturers are included
 ```bash
 $ cd ENSF409-Project/src
 $ javac edu/ucalgary/ensf409/OrderForm.java
-$ java java edu.ucalgary.ensf409.OrderForm
+$ java edu.ucalgary.ensf409.OrderForm
 ```
 > **Windows**
 ```cmd
