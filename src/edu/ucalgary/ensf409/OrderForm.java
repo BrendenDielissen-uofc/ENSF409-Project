@@ -153,7 +153,7 @@ public class OrderForm {
 
             Furniture[] furnitureCombo = getFurnitureList();
 
-            // this.inventory.deleteFurniture(furnitureCombo);
+            this.inventory.deleteFurniture(furnitureCombo);
 
             // Parsing order
             String order = "";
