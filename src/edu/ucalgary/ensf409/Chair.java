@@ -129,11 +129,6 @@ public class Chair extends Furniture {
         return this.cushion;
     }
 
-    @Override
-    public HashMap<String, String> getAllCombinationsQueryMap() {
-        return this.allCombinationsQueryMap;
-    }
-
     /**
      * Get query string string.
      *

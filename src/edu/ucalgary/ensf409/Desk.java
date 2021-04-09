@@ -21,7 +21,7 @@ import static java.util.Map.entry;
  * The type Desk.
  */
 class Desk extends Furniture {
-    public static ArrayList<String> TYPES = new ArrayList<>() {
+    public static ArrayList<String> TYPES = new ArrayList<String>() {
         {
             add("STANDING");
             add("ADJUSTABLE");
@@ -108,11 +108,6 @@ class Desk extends Furniture {
      */
     public boolean hasTop() {
         return this.top;
-    }
-
-    @Override
-    public HashMap<String, String> getAllCombinationsQueryMap() {
-        return this.allCombinationsQueryMap;
     }
 
     /**

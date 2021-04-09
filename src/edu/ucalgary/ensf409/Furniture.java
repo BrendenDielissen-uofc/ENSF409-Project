@@ -8,13 +8,10 @@
  */
 package edu.ucalgary.ensf409;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
-import static java.util.Map.entry;
 
 /**
  * The type Furniture.
@@ -128,4 +125,11 @@ public abstract class Furniture {
      * @return the components
      */
     public abstract HashMap<String, Boolean> getComponents();
+    /**
+     * Get all combinations.
+     * @return all combinations
+     */
+	public HashMap<String, String> getAllCombinationsQueryMap(){
+		return this.allCombinationsQueryMap;
+	}
 }

@@ -110,11 +110,6 @@ public class Filing extends Furniture {
         return this.cabinet;
     }
 
-    @Override
-    public HashMap<String, String> getAllCombinationsQueryMap() {
-        return this.allCombinationsQueryMap;
-    }
-
     /**
      * Get query string string.
      *

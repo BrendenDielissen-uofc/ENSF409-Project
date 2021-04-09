@@ -45,7 +45,7 @@ public class OrderForm {
      * Instantiates a new Order form.
      */
     public OrderForm() {
-        this.inventory = new Inventory("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
+        this.inventory = new Inventory("jdbc:mysql://localhost:3306/inventory", "root", "Bfluff3!");
         try {
             this.inventory.initializeConnection();
         } catch (SQLException throwables) {
