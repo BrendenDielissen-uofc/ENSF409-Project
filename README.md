@@ -21,12 +21,14 @@ If a request cannot be filled, the names of suggested manufacturers are included
 
 > **Linux/Mac OS X**
 ```bash
+$ git clone https://github.com/BrendenDielissen-uofc/ENSF409-Project.git
 $ cd ENSF409-Project/src
 $ javac edu/ucalgary/ensf409/OrderForm.java
 $ java edu.ucalgary.ensf409.OrderForm
 ```
 > **Windows**
 ```cmd
+git clone https://github.com/BrendenDielissen-uofc/ENSF409-Project.git
 cd ENSF409-Project\src
 javac edu\ucalgary\ensf409\OrderForm.java
 java edu.ucalgary.ensf409.OrderForm
