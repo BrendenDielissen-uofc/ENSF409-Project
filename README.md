@@ -54,11 +54,11 @@ The project is coded using a simple and intuitive structure presented below:
       │           ├── OrderForm.java
       │           └── OrderFormTest.java
       ├── lib
-      |   ├── hamcrest-core-1.3.jar
-      |   ├── junit-4.13.2.jar
-      |   ├── mysql-connector-java-8.0.23.jar
-      |   └── system-rules-1.19.0.jar
-      |
+      │   ├── hamcrest-core-1.3.jar
+      │   ├── junit-4.13.2.jar
+      │   ├── mysql-connector-java-8.0.23.jar
+      │   └── system-rules-1.19.0.jar
+      │
       └── orderform.txt
 ```
 ## How to Run Unit Tests
