@@ -27,6 +27,9 @@ $ java edu.ucalgary.ensf409.OrderForm
 ```
 > **Windows**
 ```cmd
+cd ENSF409-Project\src
+javac edu\ucalgary\ensf409\OrderForm.java
+java edu.ucalgary.ensf409.OrderForm
 ```
 ## Code-base Structure
 
@@ -61,4 +64,7 @@ $ java -cp .:junit-4.XX.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore edu
 ```
 > **Windows**
 ```cmd
+cd ENSF409-Project\src
+javac -cp .;junit-4.XX.jar;hamcrest-core-1.3.jar edu\ucalgary\ensf409\OrderFormTest.java
+java -cp .;junit-4.XX.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore edu.ucalgary.ensf409.OrderFormTest
 ```
