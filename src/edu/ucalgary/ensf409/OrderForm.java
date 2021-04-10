@@ -51,7 +51,7 @@ public class OrderForm {
     }
 
     /**
-     * Calculate order int.
+     * Calculates the minimum cost furniture combination, if it is possible, otherwise returns -1.
      *
      * @return the int
      */
@@ -71,9 +71,12 @@ public class OrderForm {
                 HashMap<String, Boolean> componentMap = furniture.getComponents();
                 for (String component : countingMap.keySet()) {
                     if (componentMap.get(component).equals(true))
+                        // the counting map shows us the quantity per component for the furniture combination
                         countingMap.put(component, countingMap.get(component) + 1);
                 }
             }
+            // desirable combinations must contain the proper amount of components to satisfy the quantity requested,
+            // so we can filter out anything that does not satisfy this requirement
             if (!countingMap.entrySet().stream().anyMatch(entry -> entry.getValue() < quantity)) {
                 // this is our initial value to compare other combos to
                 if (lowestPrice == -1) {
@@ -87,8 +90,6 @@ public class OrderForm {
             }
         }
         // this means we cannot fulfill the order
-        // countingMap should show which components we are missing (if we wanted to get
-        // fancy)
         if (flag)
             return -1;
 
@@ -96,12 +97,11 @@ public class OrderForm {
         return lowestPrice;
     }
 
-    /**
-     * Get all possible furniture combos of the furniture type requested.
-     *
-     * @return the array list
-     */
     private ArrayList<ArrayList<Furniture>> getAllFurnitureCombos() {
+        // This method maps the relevant furniture items to the N-combination index lists,
+        // essentially making the operation of creating the N-combinations slightly cheaper
+        // in memory usage.
+
         // get all relevant furniture items from database
         ArrayList<Furniture> allFurnitureList = new ArrayList<Furniture>(
                 Arrays.asList(inventory.getAllFurniture(furnitureType, furnitureCategory)));
@@ -124,9 +124,7 @@ public class OrderForm {
         // DO NOT USE FOR A DATABASE WITH 30+ FURNITURE ITEMS PER CATEGORY -> NOT ENOUGH
         // HEAP MEMORY
         // this method generates a list of arrays, corresponding to all possible
-        // combinations
-        // of an n-lengthed array that is comprised of elements 0 to (n-1)
-
+        // combinations of an n-lengthed array that is comprised of elements 0 to (n-1)
         // example: generateIndexLists(2) -> List( [0], [1], [0, 1], [1, 0] )
         int r = n;
         List<int[]> allCombinations = new ArrayList<>();
@@ -151,7 +149,8 @@ public class OrderForm {
     }
 
     /**
-     * Fulfill order.
+     * Tries to fulfill the order based on requested user input. Prints order if it is possible,
+     * otherwise prints the relevant furniture manufacturers.
      */
     public void fulfillOrder() {
         int cost = this.calculateOrder();
@@ -182,7 +181,7 @@ public class OrderForm {
     }
 
     /**
-     * Print order.
+     * Prints order consisting of the cheapest used furniture combination.
      *
      * @param order the order
      */
@@ -213,7 +212,7 @@ public class OrderForm {
     }
 
     /**
-     * Get furniture list furniture [ ].
+     * Getter for the cheapest furniture list.
      *
      * @return the furniture [ ]
      */
@@ -224,7 +223,7 @@ public class OrderForm {
     }
 
     /**
-     * Print manufacturers.
+     * Print manufacturers corresponding to the requested furniture type and category.
      */
     public void printManufacturers() {
         List<Manufacturer> furnitureManufacturers = Inventory.furnitureManufacturersMap.get(this.furnitureCategory);
@@ -245,7 +244,7 @@ public class OrderForm {
     }
 
     /**
-     * Gets request.
+     * Gets user input for a requested order. Handles error handling of inputs.
      */
     public void requestOrder() {
         Scanner scanner = new Scanner(System.in);
@@ -296,11 +295,12 @@ public class OrderForm {
     }
 
     /**
-     * The entry point of application.
+     * The entry point of application. Please see the README.md for detailed instructions on running the application.
      *
      * @param args the input arguments
      */
     public static void main(String[] args) {
+        // Please see README.md for detailed instructions on running the application.
         OrderForm orderForm = new OrderForm();
         orderForm.requestOrder();
         orderForm.inventory.closeConnection();

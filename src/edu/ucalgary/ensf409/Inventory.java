@@ -24,18 +24,24 @@ import static java.util.Map.entry;
  */
 public class Inventory {
 
+    /**
+     * Maps furniture category string to the corresponding furniture categories furniture types.
+     */
     public static HashMap<String, List<String>> furnitureTypesMap = new HashMap<>(
             Map.ofEntries(entry("DESK", Desk.TYPES), entry("FILING", Filing.TYPES), entry("LAMP", Lamp.LAMP_TYPES),
                     entry("CHAIR", Chair.TYPES)));
+    /**
+     * Maps furniture category string to the corresponding furniture categories Manufacturers.
+     */
     public static HashMap<String, List<Manufacturer>> furnitureManufacturersMap = new HashMap<>(
             Map.ofEntries(entry("DESK", Desk.MANUFACTURERS), entry("FILING", Filing.MANUFACTURERS),
                     entry("LAMP", Lamp.MANUFACTURERS), entry("CHAIR", Chair.MANUFACTURERS)));
     /**
-     * The Furniture result set constructor map.
+     * Maps furniture category string to the corresponding furniture categories ResultSet constructor.
      */
     public HashMap<String, Constructor> furnitureResultSetCtorMap;
     /**
-     * The Furniture default constructor map.
+     * Maps furniture category string to the corresponding furniture categories default constructor.
      */
     public HashMap<String, Constructor> furnitureDefaultCtorMap;
     private Connection dbConnect;
@@ -100,7 +106,7 @@ public class Inventory {
     }
 
     /**
-     * Connects java program to the SQL database
+     * Connects java program to the SQL database.
      *
      * @throws SQLException if SQL related error is encountered
      */
@@ -113,7 +119,7 @@ public class Inventory {
     }
 
     /**
-     * Deletes listed furniture
+     * Deletes the furniture items corresponding to the input Furniture array.
      *
      * @param furniture the furniture
      */
@@ -140,7 +146,7 @@ public class Inventory {
     }
 
     /**
-     * Close database connections after everything is done
+     * Closes database connection.
      */
     public void closeConnection() {
         try {
@@ -152,7 +158,7 @@ public class Inventory {
     }
 
     /**
-     * Get counting map hash map.
+     * Get counting map corresponding to furniture category string.
      *
      * @param furnitureCategory the furniture category
      * @return the hash map
@@ -170,11 +176,10 @@ public class Inventory {
     }
 
     /**
-     * Proto-class that grabs furniture and its furniture type and returns a
-     * 2D-array of wanted info
+     * Gets all furniture from database matching the input furniture category and type.
      *
-     * @param furnitureType String type of the specified furniture wanted
-     * @param furnitureCategory     String furniture
+     * @param furnitureType     String type of the specified furniture wanted
+     * @param furnitureCategory String furniture
      * @return Furniture[] Array
      */
     public Furniture[] getAllFurniture(String furnitureType, String furnitureCategory) {

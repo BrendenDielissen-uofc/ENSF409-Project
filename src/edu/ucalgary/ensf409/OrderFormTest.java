@@ -24,8 +24,14 @@ import java.util.Scanner;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * The type Order form test.
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrderFormTest {
+    /**
+     * The constant FILE.
+     */
     public final static String FILE = "orderform.txt";
     private Connection testDbConnect = null;
     private ResultSet results = null;
@@ -39,6 +45,9 @@ public class OrderFormTest {
         restoreDatabase();
     }
 
+    /**
+     * End.
+     */
     @After
     public void end() {
         removeAllData(FILE);
@@ -49,7 +58,14 @@ public class OrderFormTest {
      * Utility methods to perform common routines
      */
 
-    // Read in generated file and store output in string
+    /**
+     * Read file string.
+     *
+     * @param file the file
+     * @return the string
+     * @throws IOException the io exception
+     */
+// Read in generated file and store output in string
     public String readFile(String file) throws IOException {
         StringBuilder fileContents = new StringBuilder();
         // Ensure file exists
@@ -73,7 +89,12 @@ public class OrderFormTest {
         return fileContents.toString();
     }
 
-    // Removes generated order forms
+    /**
+     * Remove all data.
+     *
+     * @param file the file
+     */
+// Removes generated order forms
     public void removeAllData(String file) {
         // Get current working directory and append the provided
         // file/dir
@@ -83,7 +104,12 @@ public class OrderFormTest {
         removeAllData(path);
     }
 
-    // Removes generated order forms
+    /**
+     * Remove all data.
+     *
+     * @param path the path
+     */
+// Removes generated order forms
     public void removeAllData(File path) {
         // If there are files in the directory, delete them first
         if (path.isDirectory()) {
@@ -100,12 +126,22 @@ public class OrderFormTest {
         path.delete();
     }
 
-    // Checking if component IDs and total price are in file output string
+    /**
+     * Contains words boolean.
+     *
+     * @param input the input
+     * @param words the words
+     * @return the boolean
+     */
+// Checking if component IDs and total price are in file output string
     public static boolean containsWords(String input, String[] words) {
         return Arrays.stream(words).allMatch(input::contains);
     }
 
-    // Rolls back database modifications
+    /**
+     * Restore database.
+     */
+// Rolls back database modifications
     public void restoreDatabase() {
         try {
             testDbConnect = DriverManager.getConnection("jdbc:mysql://localhost/INVENTORY", "scm", "ensf409");
@@ -214,7 +250,10 @@ public class OrderFormTest {
         }
     }
 
-    // Testing User input
+    /**
+     * Test request order all valid user inputs returns user input.
+     */
+// Testing User input
     @Test
     public void testRequestOrder_AllValidUserInputs_ReturnsUserInput() {
         OrderForm testOrder = new OrderForm();
@@ -223,6 +262,9 @@ public class OrderFormTest {
         testOrder.requestOrder();
     }
 
+    /**
+     * Test request order invalid furniture category exception thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testRequestOrder_InvalidFurnitureCategory_ExceptionThrown() {
         OrderForm testOrder = new OrderForm();
@@ -231,6 +273,9 @@ public class OrderFormTest {
         testOrder.requestOrder();
     }
 
+    /**
+     * Test request order invalid furniture quantity exception thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testRequestOrder_InvalidFurnitureQuantity_ExceptionThrown() {
         OrderForm testOrder = new OrderForm();
@@ -240,6 +285,9 @@ public class OrderFormTest {
 
     }
 
+    /**
+     * Test request order invalid furniture type exception thrown.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testRequestOrder_InvalidFurnitureType_ExceptionThrown() {
         OrderForm testOrder = new OrderForm();
@@ -248,7 +296,12 @@ public class OrderFormTest {
         testOrder.requestOrder();
     }
 
-    // Testing desk lamp orders
+    /**
+     * Test fulfill order 1 lamp desk output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing desk lamp orders
     @Test
     public void testFulfillOrder_1LampDesk_OutputOrderForm() throws Exception {
         // Placing one desk lamp order
@@ -266,6 +319,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 lamp desk output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2LampDesk_OutputOrderForm() throws Exception {
         // Placing two desk lamp orders
@@ -284,6 +342,11 @@ public class OrderFormTest {
 
     }
 
+    /**
+     * Test fulfill order many lamp desk output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     // Check for manufacturer list output
     public void testFulfillOrder_ManyLampDesk_OutputOrderForm() throws Exception {
@@ -302,7 +365,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing study lamp orders
+    /**
+     * Test fulfill order 1 lamp study output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing study lamp orders
     @Test
     public void testFulfillOrder_1LampStudy_OutputOrderForm() throws Exception {
         // Placing one study lamp order
@@ -321,6 +389,11 @@ public class OrderFormTest {
 
     }
 
+    /**
+     * Test fulfill order 2 lamp study output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2LampStudy_OutputOrderForm() throws Exception {
         // Placing two study lamp orders
@@ -339,7 +412,12 @@ public class OrderFormTest {
 
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many lamp study output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyLampStudy_OutputOrderForm() throws Exception {
         // Placing many study lamp orders
@@ -357,7 +435,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing swing arm lamp orders
+    /**
+     * Test fulfill order 1 lamp swing arm output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing swing arm lamp orders
     @Test
     public void testFulfillOrder_1LampSwingArm_OutputOrderForm() throws Exception {
         // Placing one swing arm lamp order
@@ -375,6 +458,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 lamp swing arm output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2LampSwingArm_OutputOrderForm() throws Exception {
         // Placing two swing arm lamp orders
@@ -392,7 +480,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many lamp swing arm output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyLampSwingArm_OutputOrderForm() throws Exception {
         // Placing many swing arm lamp orders
@@ -410,7 +503,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing small filing cabinet orders
+    /**
+     * Test fulfill order 1 filing small output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing small filing cabinet orders
     @Test
     public void testFulfillOrder_1FilingSmall_OutputOrderForm() throws Exception {
         // Placing one small filing cabinet order
@@ -428,6 +526,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 filing small output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2FilingSmall_OutputOrderForm() throws Exception {
         // Place two small filing cabinet orders
@@ -442,7 +545,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many filing small output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyFilingSmall_OutputOrderForm() throws Exception {
         // Place many small filing cabinet orders
@@ -457,7 +565,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing medium filing cabinet orders
+    /**
+     * Test fulfill order 1 filing medium output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing medium filing cabinet orders
     @Test
     public void testFulfillOrder_1FilingMedium_OutputOrderForm() throws Exception {
         // Placing one medium filing cabinet order
@@ -472,6 +585,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 filing medium output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2FilingMedium_OutputOrderForm() throws Exception {
         // Placing two medium filing cabinet orders
@@ -486,7 +604,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many filing medium output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyFilingMedium_OutputOrderForm() throws Exception {
         // Placing many medium filing cabinet orders
@@ -502,6 +625,11 @@ public class OrderFormTest {
 
     }
 
+    /**
+     * Test fulfill order 1 filing large output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_1FilingLarge_OutputOrderForm() throws Exception {
         // Placing one large filing cabinet order
@@ -516,6 +644,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 filing large output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2FilingLarge_OutputOrderForm() throws Exception {
         // Placing two large filing cabinet order
@@ -530,7 +663,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many filing large output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyFilingLarge_OutputOrderForm() throws Exception {
         // Placing many large filing cabinet order
@@ -545,7 +683,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing adjustable desk orders
+    /**
+     * Test fulfill order 1 desk adjustable output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing adjustable desk orders
     @Test
     public void testFulfillOrder_1DeskAdjustable_OutputOrderForm() throws Exception {
         // Placing one adjustable desk order
@@ -560,6 +703,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 desk adjustable output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2DeskAdjustable_OutputOrderForm() throws Exception {
         // Placing two adjustable desk orders
@@ -574,7 +722,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many desk adjustable output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyDeskAdjustable_OutputOrderForm() throws Exception {
         // Placing many adjustable desk orders
@@ -589,7 +742,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing standing desk orders
+    /**
+     * Test fulfill order 1 desk standing output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing standing desk orders
     @Test
     public void testFulfillOrder_1DeskStanding_OutputOrderForm() throws Exception {
         // Placing one standing desk order
@@ -604,6 +762,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 desk standing output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2DeskStanding_OutputOrderForm() throws Exception {
         // Placing two standing desk orders
@@ -618,7 +781,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many desk standing output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyDeskStanding_OutputOrderForm() throws Exception {
         // Placing many standing desk orders
@@ -633,7 +801,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing traditional desk orders
+    /**
+     * Test fulfill order 1 desk traditional output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing traditional desk orders
     @Test
     public void testFulfillOrder_1DeskTraditional_OutputOrderForm() throws Exception {
         // Placing one traditional desk order
@@ -648,6 +821,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 desk traditional output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2DeskTraditional_OutputOrderForm() throws Exception {
         // Placing two traditional desk order
@@ -662,7 +840,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many desk traditional output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyDeskTraditional_OutputOrderForm() throws Exception {
         // Placing many traditional desk orders
@@ -677,7 +860,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing ergonomic chair orders
+    /**
+     * Test fulfill order 1 chair ergonomic output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing ergonomic chair orders
     @Test
     public void testFulfillOrder_1ChairErgonomic_OutputOrderForm() throws Exception {
         // Placing one ergonomic chair order
@@ -692,6 +880,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 chair ergonomic output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2ChairErgonomic_OutputOrderForm() throws Exception {
         // Placing two ergonomic chair order
@@ -706,7 +899,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many chair ergonomic output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyChairErgonomic_OutputOrderForm() throws Exception {
         // Placing many ergonomic chair orders
@@ -721,7 +919,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing executive chair orders
+    /**
+     * Test fulfill order 1 chair executive output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing executive chair orders
     @Test
     public void testFulfillOrder_1ChairExecutive_OutputOrderForm() throws Exception {
         // Placing one executive chair order
@@ -736,6 +939,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 chair executive output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2ChairExecutive_OutputOrderForm() throws Exception {
         // Placing two executive chair order
@@ -750,7 +958,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many chair executive output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyChairExecutive_OutputOrderForm() throws Exception {
         // Placing many executive chair orders
@@ -765,7 +978,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing kneeling chair orders
+    /**
+     * Test fulfill order 1 chair kneeling output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing kneeling chair orders
     @Test
     public void testFulfillOrder_1ChairKneeling_OutputOrderForm() throws Exception {
         // Placing one kneeling chair order
@@ -780,7 +998,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order 2 chair kneeling output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_2ChairKneeling_OutputOrderForm() throws Exception {
         // Placing two kneeling chair orders
@@ -795,7 +1018,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many chair kneeling output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyChairKneeling_OutputOrderForm() throws Exception {
         // Placing many kneeling chair orders
@@ -810,7 +1038,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing mesh chair orders
+    /**
+     * Test fulfill order 1 chair mesh output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing mesh chair orders
     @Test
     public void testFulfillOrder_1ChairMesh_OutputOrderForm() throws Exception {
         // Placing one mesh chair order
@@ -826,6 +1059,11 @@ public class OrderFormTest {
 
     }
 
+    /**
+     * Test fulfill order 2 chair mesh output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2ChairMesh_OutputOrderForm() throws Exception {
         // Placing two mesh chair orders
@@ -840,7 +1078,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many chair mesh output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyChairMesh_OutputOrderForm() throws Exception {
         // Placing many mesh chair orders
@@ -855,7 +1098,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing task chair orders
+    /**
+     * Test fulfill order 1 chair task output order form.
+     *
+     * @throws Exception the exception
+     */
+// Testing task chair orders
     @Test
     public void testFulfillOrder_1ChairTask_OutputOrderForm() throws Exception {
         // Placing one task chair order
@@ -870,6 +1118,11 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
+    /**
+     * Test fulfill order 2 chair task output order form.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFulfillOrder_2ChairTask_OutputOrderForm() throws Exception {
         // Placing two task chair orders
@@ -884,7 +1137,12 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Check for manufacturer list output
+    /**
+     * Test fulfill order many chair task output order form.
+     *
+     * @throws Exception the exception
+     */
+// Check for manufacturer list output
     @Test
     public void testFulfillOrder_ManyChairTask_OutputOrderForm() throws Exception {
         // Placing many task chair orders
@@ -899,7 +1157,10 @@ public class OrderFormTest {
                 containsWords(readFile(FILE), expectedOutput));
     }
 
-    // Testing whether entries are removed after successful orders
+    /**
+     * Test delete furniture 1 lamp order no returned rows.
+     */
+// Testing whether entries are removed after successful orders
     @Test
     public void testDeleteFurniture_1LampOrder_NoReturnedRows() {
         OrderForm testOrder = new OrderForm();
