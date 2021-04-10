@@ -53,6 +53,12 @@ The project is coded using a simple and intuitive structure presented below:
       │           ├── Manufacturer.java
       │           ├── OrderForm.java
       │           └── OrderFormTest.java
+      ├── lib
+      |   ├── hamcrest-core-1.3.jar
+      |   ├── junit-4.13.2.jar
+      |   ├── mysql-connector-java-8.0.23.jar
+      |   └── system-rules-1.19.0.jar
+      |
       └── orderform.txt
 ```
 ## How to Run Unit Tests
@@ -60,6 +66,7 @@ The unit tests can be run in any order, but we have used the `@FixMethodOrder` a
 
 > **Linux/Mac OS X**
 ```bash
+# .jar files are located in ENSF409-Project/lib
 # Replace .XX with your respective JUnit driver version number
 $ cd ENSF409-Project/src
 $ javac -cp .:junit-4.XX.jar:hamcrest-core-1.3.jar edu/ucalgary/ensf409/OrderFormTest.java
@@ -67,6 +74,7 @@ $ java -cp .:junit-4.XX.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore edu
 ```
 > **Windows**
 ```cmd
+# .jar files are located in ENSF409-Project\lib
 # Replace .XX with your respective JUnit driver version number
 cd ENSF409-Project\src
 javac -cp .;junit-4.XX.jar;hamcrest-core-1.3.jar edu\ucalgary\ensf409\OrderFormTest.java
