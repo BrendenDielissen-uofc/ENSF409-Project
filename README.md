@@ -60,12 +60,14 @@ The unit tests can be run in any order, but we have used the `@FixMethodOrder` a
 
 > **Linux/Mac OS X**
 ```bash
+# Replace .XX with your respective JUnit driver version number
 $ cd ENSF409-Project/src
 $ javac -cp .:junit-4.XX.jar:hamcrest-core-1.3.jar edu/ucalgary/ensf409/OrderFormTest.java
 $ java -cp .:junit-4.XX.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore edu.ucalgary.ensf409.OrderFormTest
 ```
 > **Windows**
 ```cmd
+# Replace .XX with your respective JUnit driver version number
 cd ENSF409-Project\src
 javac -cp .;junit-4.XX.jar;hamcrest-core-1.3.jar edu\ucalgary\ensf409\OrderFormTest.java
 java -cp .;junit-4.XX.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore edu.ucalgary.ensf409.OrderFormTest
