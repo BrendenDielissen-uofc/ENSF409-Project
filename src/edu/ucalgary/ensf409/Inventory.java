@@ -46,9 +46,9 @@ public class Inventory {
     public HashMap<String, Constructor> furnitureDefaultCtorMap;
     private Connection dbConnect;
     private ResultSet results;
-    private String DBURL = "";
-    private String USERNAME = "";
-    private String PASSWORD = "";
+    private final String DBURL;
+    private final String USERNAME;
+    private final String PASSWORD;
 
     /**
      * Constructor for Inventory Class
